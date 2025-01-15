@@ -1,0 +1,64 @@
+<?php
+
+namespace App\Actions\Fortify;
+
+use App\Models\Address;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use Laravel\Fortify\Contracts\CreatesNewUsers;
+
+class CreateNewUser implements CreatesNewUsers
+{
+    use PasswordValidationRules;
+
+    /**
+     * Validate and create a newly registered user.
+     *
+     * @param  array<string, string>  $input
+     */
+    public function create(array $input): DB
+    {
+        Validator::make($input, [
+            'first_name' => ['required', 'string', 'alpha', 'max:255'],
+            'middle_name' => ['nullable', 'string', 'alpha', 'max:255'],
+            'last_name' => ['required', 'string', 'alpha', 'max:255'],
+            'birth_date' => ['required', 'date', 'before:today'],
+            'gender' => ['required', 'in:0,1'],
+            'contact_number' => ['required', 'max:10'],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique(User::class)],
+            'password' => $this->passwordRules(),
+            'role' => ['required', 'in:0,1,2'],
+            'housing_number' => ['required', 'string'],
+            'street' => ['required', 'string', 'alpha'],
+            'city' => ['required', 'string', 'alpha'],
+            'profile_photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048']
+        ])->validate();
+
+        return DB::transaction(function () use ($input) {
+            $user = User::create([
+                'first_name' => $input['first_name'],
+                'middle_name' => $input['middle_name'],
+                'last_name' => $input['first_name'],
+                'birth_date' => $input['birth_date'],
+                'gender' => $input['gender'],
+                'contact_number' => $input['contact_number'],
+                'email' => $input['email'],
+                'password' => Hash::make($input['password']),
+                'role' => $input['role']
+            ]);
+    
+            $address = Address::create([
+                'housing_number' => $input['housing_number'],
+                'street' => $input['street'],
+                'city' => $input['city']
+            ]);
+    
+            $user->addresses->attach($address->id);
+
+            return $user;
+        });
+    }
+}
