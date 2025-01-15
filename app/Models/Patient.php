@@ -2,11 +2,16 @@
 
 namespace App\Models;
 
+<<<<<<< HEAD
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+=======
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+>>>>>>> 6e27fc8f819ab12cb9a87b13b18e6246c488fc80
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -18,6 +23,7 @@ class Patient extends Model
         'first_name',
         'middle_name',
         'last_name',
+<<<<<<< HEAD
         'gender',
         'contact_number',
         'birth_date',
@@ -84,3 +90,29 @@ class Patient extends Model
         );
     }
 }
+=======
+        'sex',
+        'birthdate',
+        'is_4ps',
+        'is_NHTS',
+        'contact_num',
+        'email',
+    ];
+
+    protected $casts = [
+        'birthdate' => 'date',
+        'is_4ps' => 'boolean',
+        'is_NHTS' => 'boolean',
+    ];
+
+    public function treatmentRecords(): HasMany
+    {
+        return $this->hasMany(TreatmentRecord::class);
+    }
+
+    public function vitalSignRecords(): HasMany
+    {
+        return $this->hasMany(VitalSignRecord::class);
+    }
+} 
+>>>>>>> 6e27fc8f819ab12cb9a87b13b18e6246c488fc80

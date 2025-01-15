@@ -13,6 +13,7 @@ trait PasswordValidationRules
      */
     protected function passwordRules(): array
     {
+<<<<<<< HEAD
         return [
             'required',
             'string',
@@ -23,5 +24,8 @@ trait PasswordValidationRules
                 ->uncompromised(),
             'confirmed'
         ];
+=======
+        return ['required', 'string', Password::default(), 'confirmed'];
+>>>>>>> 6e27fc8f819ab12cb9a87b13b18e6246c488fc80
     }
 }

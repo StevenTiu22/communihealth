@@ -9,7 +9,10 @@ export default {
         './vendor/laravel/jetstream/**/*.blade.php',
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
+<<<<<<< HEAD
         "./resources/**/*.js",
+=======
+>>>>>>> 6e27fc8f819ab12cb9a87b13b18e6246c488fc80
     ],
 
     theme: {
@@ -20,8 +23,12 @@ export default {
         },
     },
 
+<<<<<<< HEAD
     plugins: [
         forms,
         typography,
     ],
+=======
+    plugins: [forms, typography],
+>>>>>>> 6e27fc8f819ab12cb9a87b13b18e6246c488fc80
 };

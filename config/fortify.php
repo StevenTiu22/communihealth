@@ -144,7 +144,11 @@ return [
     */
 
     'features' => [
+<<<<<<< HEAD
         // Features::registration(),
+=======
+        Features::registration(),
+>>>>>>> 6e27fc8f819ab12cb9a87b13b18e6246c488fc80
         Features::resetPasswords(),
         Features::emailVerification(),
         Features::updateProfileInformation(),

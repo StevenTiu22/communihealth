@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 <x-guest-layout title="Login">
+=======
+<x-guest-layout>
+>>>>>>> 6e27fc8f819ab12cb9a87b13b18e6246c488fc80
     <x-authentication-card>
         <x-slot name="logo">
             <x-authentication-card-logo />
@@ -6,15 +10,22 @@
 
         <x-validation-errors class="mb-4" />
 
+<<<<<<< HEAD
         <h2 class="text-2xl font-bold mt-4 mb-3 text-center text-gray-800 dark:text-gray-200">Login to CommuniHealth</h2>
 
+=======
+>>>>>>> 6e27fc8f819ab12cb9a87b13b18e6246c488fc80
         @session('status')
             <div class="mb-4 font-medium text-sm text-green-600 dark:text-green-400">
                 {{ $value }}
             </div>
         @endsession
 
+<<<<<<< HEAD
         <form method="POST" action="{{ route('login') }}" class="space-y-6">
+=======
+        <form method="POST" action="{{ route('login') }}">
+>>>>>>> 6e27fc8f819ab12cb9a87b13b18e6246c488fc80
             @csrf
 
             <div>

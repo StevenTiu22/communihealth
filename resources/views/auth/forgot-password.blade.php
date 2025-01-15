@@ -1,9 +1,14 @@
+<<<<<<< HEAD
 <x-guest-layout title="Forgot Password">
+=======
+<x-guest-layout>
+>>>>>>> 6e27fc8f819ab12cb9a87b13b18e6246c488fc80
     <x-authentication-card>
         <x-slot name="logo">
             <x-authentication-card-logo />
         </x-slot>
 
+<<<<<<< HEAD
         <div class="relative">
             <a href="{{ route('login') }}" class="absolute top-0 left-0 flex items-center text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:font-bold transition-all duration-200">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -18,6 +23,10 @@
         </div>
         <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
             {{ __('No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
+=======
+        <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
+            {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
+>>>>>>> 6e27fc8f819ab12cb9a87b13b18e6246c488fc80
         </div>
 
         @session('status')

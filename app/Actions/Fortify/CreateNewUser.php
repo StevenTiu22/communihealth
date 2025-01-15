@@ -2,6 +2,7 @@
 
 namespace App\Actions\Fortify;
 
+<<<<<<< HEAD
 use App\Models\Address;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -9,6 +10,13 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
+=======
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Laravel\Fortify\Contracts\CreatesNewUsers;
+use Laravel\Jetstream\Jetstream;
+>>>>>>> 6e27fc8f819ab12cb9a87b13b18e6246c488fc80
 
 class CreateNewUser implements CreatesNewUsers
 {
@@ -19,6 +27,7 @@ class CreateNewUser implements CreatesNewUsers
      *
      * @param  array<string, string>  $input
      */
+<<<<<<< HEAD
     public function create(array $input): DB
     {
         Validator::make($input, [
@@ -60,5 +69,21 @@ class CreateNewUser implements CreatesNewUsers
 
             return $user;
         });
+=======
+    public function create(array $input): User
+    {
+        Validator::make($input, [
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => $this->passwordRules(),
+            'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
+        ])->validate();
+
+        return User::create([
+            'name' => $input['name'],
+            'email' => $input['email'],
+            'password' => Hash::make($input['password']),
+        ]);
+>>>>>>> 6e27fc8f819ab12cb9a87b13b18e6246c488fc80
     }
 }

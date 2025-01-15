@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+<<<<<<< HEAD
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -11,12 +12,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+=======
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+>>>>>>> 6e27fc8f819ab12cb9a87b13b18e6246c488fc80
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 
+<<<<<<< HEAD
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens;
@@ -24,6 +30,16 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasRoles;
     use Notifiable;
     use HasProfilePhoto;
+=======
+class User extends Authenticatable
+{
+    use HasApiTokens;
+
+    /** @use HasFactory<\Database\Factories\UserFactory> */
+    use HasFactory;
+    use HasProfilePhoto;
+    use Notifiable;
+>>>>>>> 6e27fc8f819ab12cb9a87b13b18e6246c488fc80
     use TwoFactorAuthenticatable;
 
     /**
@@ -32,6 +48,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array<int, string>
      */
     protected $fillable = [
+<<<<<<< HEAD
         'first_name',
         'middle_name',
         'last_name',
@@ -43,6 +60,11 @@ class User extends Authenticatable implements MustVerifyEmail
         'contact_number',
         'profile_photo_path',
         'user_type',
+=======
+        'name',
+        'email',
+        'password',
+>>>>>>> 6e27fc8f819ab12cb9a87b13b18e6246c488fc80
     ];
 
     /**
@@ -74,6 +96,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected function casts(): array
     {
         return [
+<<<<<<< HEAD
             'sex' => 'string',
             'birth_date' => 'date',
             'password' => 'hashed',
@@ -158,4 +181,10 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->barangayOfficial()?->isActive ?? false;
     }
+=======
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
+    }
+>>>>>>> 6e27fc8f819ab12cb9a87b13b18e6246c488fc80
 }
