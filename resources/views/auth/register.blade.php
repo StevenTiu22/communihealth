@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-<x-guest-layout title="Register">    
-=======
-<x-guest-layout>
->>>>>>> 6e27fc8f819ab12cb9a87b13b18e6246c488fc80
+<x-guest-layout title="Register">
     <x-authentication-card>
         <x-slot name="logo">
             <x-authentication-card-logo />

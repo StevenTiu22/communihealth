@@ -1,13 +1,10 @@
 <?php
 
-<<<<<<< HEAD
 use App\Http\Controllers\AuditTrailController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\PatientController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\TBPredictionController;
 use App\Http\Controllers\SchedulingController;
 use Illuminate\Support\Facades\Route;
 
@@ -29,10 +26,6 @@ Route::prefix('user-accounts')->group(function () {
     Route::get('/', [UserController::class, 'index'])->name('user-accounts.index');
 });
 
-Route::prefix('patients')->group(function () {
-    Route::get('/', [PatientController::class, 'index'])->name('patient-records.index');
-});
-
 Route::prefix('medicines')->group(function () {
     Route::get('/', [MedicineController::class, 'index'])->name('medicines.index');
 });
@@ -43,14 +36,6 @@ Route::prefix('profile')->group(function () {
 
 Route::get('/scheduling', [SchedulingController::class, 'index'])->name('scheduling.index');
 
-=======
-use Illuminate\Support\Facades\Route;
-
-Route::get('/', function () {
-    return view('welcome');
-});
-
->>>>>>> 6e27fc8f819ab12cb9a87b13b18e6246c488fc80
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
@@ -61,15 +46,13 @@ Route::middleware([
     })->name('dashboard');
 });
 
-<<<<<<< HEAD
 Route::middleware(['auth'])->group(function () {
     Route::get('/appointments/schedule', App\Livewire\ScheduleAppointment::class)->name('appointments.schedule');
-    Route::get('/appointments', App\Livewire\AppointmentList::class)->name('appointments.index');   
+    Route::get('/appointments', App\Livewire\AppointmentList::class)->name('appointments.index');
 });
 
 require_once __DIR__ . '/fortify.php';
-=======
+
 Route::get('/patients', function () {
     return view('patients.index');
 })->name('patients');
->>>>>>> 6e27fc8f819ab12cb9a87b13b18e6246c488fc80

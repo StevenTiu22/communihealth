@@ -5,13 +5,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-<<<<<<< HEAD
         <title>{{ $title }} | CommuniHealth+</title>
 
         <link rel="icon" type="image/png" href="{{ asset('logo/sjc.png') }}">
-=======
-        <title>{{ config('app.name', 'Laravel') }}</title>
->>>>>>> 6e27fc8f819ab12cb9a87b13b18e6246c488fc80
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">

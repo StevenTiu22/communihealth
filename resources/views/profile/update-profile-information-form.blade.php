@@ -28,20 +28,12 @@
 
                 <!-- Current Profile Photo -->
                 <div class="mt-2" x-show="! photoPreview">
-<<<<<<< HEAD
                     <img src="{{ $this->user->profile_photo_url }}" alt="{{ $this->user->name }}" class="rounded-full h-20 w-20 object-cover">
-=======
-                    <img src="{{ $this->user->profile_photo_url }}" alt="{{ $this->user->name }}" class="rounded-full size-20 object-cover">
->>>>>>> 6e27fc8f819ab12cb9a87b13b18e6246c488fc80
                 </div>
 
                 <!-- New Profile Photo Preview -->
                 <div class="mt-2" x-show="photoPreview" style="display: none;">
-<<<<<<< HEAD
                     <span class="block rounded-full w-20 h-20 bg-cover bg-no-repeat bg-center"
-=======
-                    <span class="block rounded-full size-20 bg-cover bg-no-repeat bg-center"
->>>>>>> 6e27fc8f819ab12cb9a87b13b18e6246c488fc80
                           x-bind:style="'background-image: url(\'' + photoPreview + '\');'">
                     </span>
                 </div>
