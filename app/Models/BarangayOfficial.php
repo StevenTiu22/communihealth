@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -24,14 +25,35 @@ class BarangayOfficial extends Model
         'term_end' => 'date'
     ];
 
-    /**
-     * Get the user who is a barangay official.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
+    // Relationship
     public function user() : BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    // Accessors and mutators
+    protected function position(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => ucfirst($value),
+            set: fn ($value) => strtolower($value)
+        );
+    }
+
+    protected function termStart(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => Carbon::parse($value)->format('F j, Y'),
+            set: fn ($value) => Carbon::parse($value)->format('Y-m-d')
+        );
+    }
+
+    protected function termEnd(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => Carbon::parse($value)->format('F j, Y'),
+            set: fn ($value) => Carbon::parse($value)->format('Y-m-d')
+        );
     }
 
     /**
@@ -47,7 +69,7 @@ class BarangayOfficial extends Model
     /**
      * Get the remaining term duration in months
      */
-    public function getRemainingTermDuration(): int
+    public function remainingTermDuration(): int
     {
         return Carbon::now()->diffInMonths($this->term_end, false);
     }

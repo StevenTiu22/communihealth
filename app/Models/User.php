@@ -92,6 +92,15 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(BarangayOfficial::class);
     }
 
+    public function bhw(): HasOne
+    {
+        return $this->hasOne(BHW::class);
+    }
+
+    public function doctor(): HasOne
+    {
+        return $this->hasOne(Doctor::class);
+    }
 
     // Accessors and mutators
     protected function firstName() : Attribute
