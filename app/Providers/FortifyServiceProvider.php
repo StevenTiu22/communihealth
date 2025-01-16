@@ -20,11 +20,7 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-<<<<<<< HEAD
-        Fortify::ignoreRoutes();
-=======
         //
->>>>>>> 6e27fc8f819ab12cb9a87b13b18e6246c488fc80
     }
 
     /**

@@ -92,25 +92,12 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(BarangayOfficial::class);
     }
 
-    /**
-     * Check if the user is a barangay official.
-     *
-     * @return bool
-     */
-    public function isBarangayOfficial() : bool
-    {
-        return $this->barangayOfficial()->exists();
-    }
-
-    public function isActiveBarangayOfficial() : bool
-    {
-        return $this->barangayOfficial()?->isActive ?? false;
-    }
 
     // Accessors and mutators
     protected function firstName() : Attribute
     {
         return Attribute::make(
+            get: fn ($value) => ucfirst($value),
             set: fn ($value) => strtolower($value)
         );
     }
@@ -118,6 +105,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected function lastName() : Attribute
     {
         return Attribute::make(
+            get: fn ($value) => ucfirst($value),
             set: fn ($value) => strtolower($value)
         );
     }
@@ -125,6 +113,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected function middleName() : Attribute
     {
         return Attribute::make(
+            get: fn ($value) => $value ? ucfirst($value) : '',
             set: fn ($value) => $value ? strtolower($value) : ''
         );
     }
@@ -133,18 +122,44 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return Attribute::make(
             get: function () {
-                $middleName = $this->middle_name ? ' ' . $this->middle_name . ' ' : ' ';
-                return $this->last_name . ', ' . $this->first_name . ' ' . $middleName;
+                $middle_initial = $this->middle_name ? $this->middle_name[0] . '.' : '';
+                return "{$this->last_name}, {$this->first_name} {$middle_initial}";
             }
         );
     }
 
-    protected function birthDate() : Attribute
+    protected function sex(): Attribute
     {
         return Attribute::make(
-            get: function ($value) {
-                return Carbon::parse($value)->format('F d, Y');
-            }
+            get: fn ($value) => $value === 0 ? 'male' : 'female',
+            set: fn ($value) => $value === 'male' ? 0 : 1
+        );
+    }
+
+    protected function birthDate(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => Carbon::parse($value)->format('F j, Y'),
+            set: fn ($value) => Carbon::parse($value)->format('Y-m-d')
+        );
+    }
+
+    protected function contactNo(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => preg_replace('/^(\d{3})(\d{3})(\d{4})/', "($1) $2-$3", $value),
+            set: fn ($value) => preg_replace('/\D/', '', $value)
+        );
+    }
+
+    protected function userType(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => match($value) {
+                0 => 'Barangay Official',
+                1 => 'BHW',
+                2 => 'Doctor',
+            },
         );
     }
 }
