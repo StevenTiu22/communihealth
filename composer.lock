@@ -8325,7 +8325,6 @@
             "homepage": "https://symfony.com",
             "support": {
                 "source": "https://github.com/symfony/yaml/tree/v7.1.6"
->>>>>>> 6e27fc8f819ab12cb9a87b13b18e6246c488fc80
             },
             "funding": [
                 {
