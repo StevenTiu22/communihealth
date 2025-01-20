@@ -18,6 +18,13 @@ class BHW extends Model
         'issuance_date'
     ];
 
+    protected function casts() : array
+    {
+        return [
+            'issuance_date' => 'date'
+        ];
+    }
+
     // Relationships
     public function user() : BelongsTo
     {

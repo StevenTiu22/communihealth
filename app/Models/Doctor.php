@@ -11,7 +11,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Doctor extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'user_id',
@@ -26,11 +27,10 @@ class Doctor extends Model
 
     public function specializations() : BelongsToMany
     {
-        return $this->belongsToMany(Specialization::class, $table="doctor_specialization");
+        return $this->belongsToMany(Specialization::class, "doctor_specialization");
     }
 
     // Accessors and mutators
-
     /**
      * Get the total number of doctors.
      * @return Attribute
