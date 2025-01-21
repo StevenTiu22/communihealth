@@ -29,7 +29,7 @@
                 </div>
             </div>
 
-            <!-- User Type Distribution Chart and Recent Users -->
+            <!-- User Type Distribution Chart and Recent users -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <!-- User Type Distribution Chart -->
                 <div class="bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
@@ -91,7 +91,7 @@
                     </div>
                 </div>
 
-                <!-- Recent Users -->
+                <!-- Recent users -->
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg">
                     <div class="p-6 text-gray-900 dark:text-gray-100">
                         <h3 class="text-lg font-semibold mb-4">Recent Users</h3>
