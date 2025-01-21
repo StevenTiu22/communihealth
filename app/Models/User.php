@@ -148,15 +148,4 @@ class User extends Authenticatable
             set: fn ($value) => preg_replace('/\D/', '', $value)
         );
     }
-
-    protected function userType(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => match($value) {
-                '0' => 'Barangay Official',
-                '1' => 'BHW',
-                '2' => 'Doctor',
-            },
-        );
-    }
 }
