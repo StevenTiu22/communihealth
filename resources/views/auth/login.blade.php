@@ -6,7 +6,7 @@
 
         <x-validation-errors class="mb-4" />
 
-        <h2 class="text-2xl font-bold mt-4 mb-3 text-center text-gray-800 dark:text-gray-200">Login to CommuniHealth</h2>
+        <h2 class="text-2xl font-bold mt-4 mb-3 text-center text-gray-800 dark:text-gray-200">CommuniHealth+</h2>
 
         @session('status')
             <div class="mb-4 font-medium text-sm text-green-600 dark:text-green-400">
@@ -18,8 +18,17 @@
             @csrf
 
             <div>
-                <x-label for="email" value="{{ __('Email') }}" />
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
+                <x-label for="email" value="{{ __('Username / Email') }}" />
+                <x-input
+                    id="email"
+                    class="block mt-1 w-full"
+                    type="text"
+                    name="email"
+                    :value="old('login')"
+                    required
+                    autofocus
+                    autocomplete="username"
+                />
             </div>
 
             <div class="mt-4">
