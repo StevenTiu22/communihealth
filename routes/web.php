@@ -12,18 +12,10 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
-    Route::prefix('dashboard')->group(function () {
-        Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
+Route::middleware(['auth', 'userType:Barangay Official'])->prefix('admin')->group(function () {
+    Route::prefix('users')->group(function () {
+        Route::get('/', [UserController::class, 'index'])->name('users.index');
     });
-
-    Route::prefix('audit-trail')->group(function () {
-        Route::get('/', [AuditTrailController::class, 'index'])->name('audit-trail.index');
-    });
-});
-
-Route::prefix('user-accounts')->group(function () {
-    Route::get('/', [UserController::class, 'index'])->name('user-accounts.index');
 });
 
 Route::prefix('medicines')->group(function () {

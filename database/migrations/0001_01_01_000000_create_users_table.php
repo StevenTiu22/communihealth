@@ -17,14 +17,14 @@ return new class extends Migration
             $table->string('middle_name')->nullable();
             $table->string('last_name');
             $table->date('birth_date');
-            $table->enum('sex', ['1', '2'])->comment('1: Male, 2: Female');
+            $table->enum('sex', [0, 1])->comment('1: Male, 2: Female');
             $table->string('contact_no', 13)->comment('Format: +63XXXXXXXXXX');
             $table->string('email')->unique();
             $table->string('username', 20)->unique();
             $table->string('password');
             $table->string('profile_photo_path', 2048)->nullable();
-            $table->enum('user_type', ['1', '2', '3'])->comment('1: Admin, 2: Doctor, 3: Staff');
-            $table->timestamp('email_verified_at')->nullable();
+            $table->enum('user_type', [0, 1, 2])->comment('1: Admin, 2: Doctor, 3: Staff');
+            $table->dateTime('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

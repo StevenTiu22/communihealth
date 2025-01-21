@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Team;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -27,15 +28,21 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
+            'first_name' => fake()->firstName(),
+            'middle_name' => fake()->name(),
+            'last_name' => fake()->lastName(),
+            'birth_date' => fake()->date(),
+            'sex' => fake()->randomElement([0, 1]),
             'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
+            'username' => fake()->unique()->userName(),
+            'contact_no' => fake()->phoneNumber(),
             'password' => static::$password ??= Hash::make('password'),
+            'email_verified_at' => Carbon::parse(now()),
             'two_factor_secret' => null,
             'two_factor_recovery_codes' => null,
             'remember_token' => Str::random(10),
             'profile_photo_path' => null,
-            'current_team_id' => null,
+            'user_type' => fake()->randomElement([0, 1, 2]),
         ];
     }
 
