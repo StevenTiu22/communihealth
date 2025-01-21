@@ -13,24 +13,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-<<<<<<< HEAD
-        $roles = [
-            'patient',
-            'bhw',
-            'barangay_official', 
-            'doctor'
-        ];
-
-        foreach ($roles as $role) {
-            \Spatie\Permission\Models\Role::create(['name' => $role]);
-        }
-=======
-        // User::factory(10)->create();
-
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'first_name' => 'Barangay',
+            'middle_name' => '',
+            'last_name' => 'Admin',
+            'sex' => '0',
+            'email' => 'barangay.admin@gmail.com',
+            'username' => 'admin',
+            'password' => 'admin123',
+            'user_type' => '1',
         ]);
->>>>>>> 6e27fc8f819ab12cb9a87b13b18e6246c488fc80
     }
 }

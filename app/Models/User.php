@@ -31,12 +31,8 @@ class User extends Authenticatable
         'contact_no',
         'email',
         'username',
-        'contact_number',
         'profile_photo_path',
         'user_type',
-        'name',
-        'email',
-        'password',
     ];
 
     /**
@@ -68,11 +64,9 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'sex' => 'string',
             'birth_date' => 'date',
             'password' => 'hashed',
             'email_verified_at' => 'datetime',
-            'user_type' => 'string',
         ];
     }
 
@@ -136,7 +130,6 @@ class User extends Authenticatable
     {
         return Attribute::make(
             get: fn ($value) => $value === 0 ? 'male' : 'female',
-            set: fn ($value) => $value === 'male' ? 0 : 1
         );
     }
 
@@ -153,17 +146,6 @@ class User extends Authenticatable
         return Attribute::make(
             get: fn ($value) => preg_replace('/^(\d{3})(\d{3})(\d{4})/', "($1) $2-$3", $value),
             set: fn ($value) => preg_replace('/\D/', '', $value)
-        );
-    }
-
-    protected function userType(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => match($value) {
-                0 => 'Barangay Official',
-                1 => 'BHW',
-                2 => 'Doctor',
-            },
         );
     }
 }
