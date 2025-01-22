@@ -2,8 +2,11 @@
 <aside id="sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
     <div class="h-full flex flex-col px-3 py-4 overflow-y-auto bg-white dark:bg-gray-900">
         <div class="mt-5">
-            <a href="#" class="flex items-center ps-2.5 mb-5">
-                <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">CommuniHealth+</span>
+            <a href="#" class="flex items-center ps-2 mb-4">
+                <div class="w-10 h-10">
+                    <x-application-logo class="w-full h-full" />
+                </div>
+                <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white ml-2">CommuniHealth+</span>
             </a>
         </div>
         <ul class="space-y-2 font-medium mt-11">

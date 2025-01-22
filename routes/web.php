@@ -10,7 +10,7 @@ Route::get('/', function () {
 });
 
 Route::get('/patients', [PatientController::class, 'index'])->name('patients');
-
+Route::get('/users', [UserController::class, 'index'])->name('users');
 Route::get('/medicines', [MedicineController::class, 'index'])->name('medicines');
 
 Route::middleware([
@@ -18,5 +18,5 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/users', [UserController::class, 'index'])->name('users');
+
 });
