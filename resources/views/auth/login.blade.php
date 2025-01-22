@@ -6,7 +6,7 @@
 
         <x-validation-errors class="mb-4" />
 
-        <h2 class="text-2xl font-bold mt-4 mb-3 text-center text-gray-800 dark:text-gray-200">CommuniHealth+</h2>
+        <h2 class="text-2xl font-bold mt-4 mb-3 text-center text-gray-800 dark:text-gray-200">{{__('CommuniHealth+')}}</h2>
 
         @session('status')
             <div class="mb-4 font-medium text-sm text-green-600 dark:text-green-400">
