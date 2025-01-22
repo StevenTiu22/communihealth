@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Users;
 
-use App\Models\User;
 use App\Models\Address;
 use App\Models\ParentInfo;
 use App\Models\Specialization;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
-class AddUserModal extends Component
+class Add extends Component
 {
     use WithFileUploads;
 
@@ -145,7 +145,7 @@ class AddUserModal extends Component
 
     public function updated($propertyName)
     {
-        
+
 
         $this->validateOnly($propertyName, $this->rules(), $this->messages());
     }
@@ -155,7 +155,7 @@ class AddUserModal extends Component
         $this->validate();
 
         try {
-            
+
             $path = $this->profile_photo ? $this->profile_photo->store('images', 'public') : 'images/default-avatar.png';
 
             DB::beginTransaction();
@@ -172,14 +172,14 @@ class AddUserModal extends Component
                 'role' => $this->role,
                 'profile_photo_path' => $path
             ]);
-            
+
             $address = Address::firstOrCreate([
                 'house_number' => $this->house_number,
                 'barangay' => $this->barangay,
                 'street' => $this->street,
                 'city' => $this->city
             ]);
-            
+
             $user->addresses()->attach($address->id);
 
             // Doctor
@@ -252,7 +252,7 @@ class AddUserModal extends Component
             dd($e);
         }
 
-        if ($user) { 
+        if ($user) {
             session()->flash('success', 'User created successfully.');
             $this->reset();
             $this->redirectRoute('user-accounts.index');
@@ -263,6 +263,6 @@ class AddUserModal extends Component
 
     public function render()
     {
-        return view('livewire.add-user-modal');
+        return view('livewire.users.add');
     }
 }
