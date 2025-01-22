@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 
@@ -147,5 +148,22 @@ class User extends Authenticatable
             get: fn ($value) => preg_replace('/^(\d{3})(\d{3})(\d{4})/', "($1) $2-$3", $value),
             set: fn ($value) => preg_replace('/\D/', '', $value)
         );
+    }
+
+    // Scopes
+    public function scopeByUType($query, string $user_type=null): Builder
+    {
+        return $query->where('user_type', $user_type);
+    }
+
+    public function scopeVerifiedUser($query): Builder
+    {
+        return $query->whereNotNull('email_verified_at');
+    }
+
+    public function scopeCountByType($query): Builder
+    {
+        return $query->selectRaw('user_type', 'count(*) as total')
+            ->groupBy('user_type');
     }
 }

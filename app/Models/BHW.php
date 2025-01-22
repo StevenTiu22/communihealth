@@ -38,4 +38,6 @@ class BHW extends Model
             set: fn ($value) => strtolower($value)
         );
     }
+
+    // Scopes
 }
