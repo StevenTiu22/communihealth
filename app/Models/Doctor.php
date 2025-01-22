@@ -30,18 +30,7 @@ class Doctor extends Model
         return $this->belongsToMany(Specialization::class, "doctor_specialization");
     }
 
-    // Accessors and mutators
-    /**
-     * Get the total number of doctors.
-     * @return Attribute
-     */
-    protected function totalDoctors() : Attribute
-    {
-        return Attribute::make(
-            get: fn () => self::query()->count(),
-        );
-    }
-
+    // Accessors and Mutators
     /**
      * Get the total number of specializations associated with the doctor.
      * @return Attribute

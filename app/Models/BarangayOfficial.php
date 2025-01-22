@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Builder;
 
 class BarangayOfficial extends Model
 {
@@ -76,10 +76,11 @@ class BarangayOfficial extends Model
         return Carbon::now()->diffInMonths($this->term_end, false);
     }
 
+    // Scopes
     /**
      * Scope a query to only include active barangay officials.
      */
-    public function scopeActive($query)
+    public function scopeActive($query): Builder
     {
         return $query->where('term_start', '>=', Carbon::now())
             ->andWhere('term_end', '<=', Carbon::now());
@@ -88,7 +89,7 @@ class BarangayOfficial extends Model
     /**
      * Scope a query to only include barangay officials with expired term.
      */
-    public function scopeExpired($query)
+    public function scopeExpired($query): Builder
     {
         return $query->where('term_end', '>', Carbon::now());
     }
@@ -96,7 +97,7 @@ class BarangayOfficial extends Model
     /**
      * Scope a query to only include officials by position
      */
-    public function scopeByPosition($query, string $position)
+    public function scopeByPosition($query, string $position): Builder
     {
         return $query->where('position', $position);
     }
