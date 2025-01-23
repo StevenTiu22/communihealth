@@ -3,9 +3,7 @@
 namespace Tests\Unit;
 
 use App\Models\User;
-use Carbon\Carbon;
-use Carbon\Exceptions\InvalidFormatException;
-use Illuminate\Database\QueryException;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -28,73 +26,86 @@ class UserTest extends TestCase
 
     public function test_first_name_must_not_be_null(): void
     {
-        $this->expectException(QueryException::class);
+        $this->expectException(ValidationException::class);
 
-        User::factory()->make([
+        $attributes = User::factory()->make([
             'first_name' => null,
-        ]);
+        ])->toArray();
+
+        User::make($attributes);
     }
 
     public function test_first_name_must_not_be_empty(): void
     {
-        $this->expectException(QueryException::class);
+        $this->expectException(ValidationException::class);
 
-        User::factory()->make([
+        $attributes = User::factory()->make([
             'first_name' => '',
-        ]);
+        ])->toArray();
+
+        User::make($attributes);
     }
 
     public function test_last_name_must_not_be_null(): void
     {
-        $this->expectException(QueryException::class);
+        $this->expectException(ValidationException::class);
 
-        User::factory()->make([
+        $attributes = User::factory()->make([
             'last_name' => null,
-        ]);
+        ])->toArray();
+
+        User::make($attributes);
     }
 
     public function test_last_name_must_not_be_empty(): void
     {
-        $this->expectException(QueryException::class);
+        $this->expectException(ValidationException::class);
 
-        User::factory()->make([
+        $attributes = User::factory()->make([
             'last_name' => '',
-        ]);
+        ])->toArray();
+
+        User::make($attributes);
     }
 
     public function test_birth_date_must_not_be_null(): void
     {
-        $this->expectException(QueryException::class);
+        $this->expectException(ValidationException::class);
 
-        User::factory()->make([
-            'birth_date' => null,
-        ]);
+        $attributes = User::factory()->make()->toArray();
+        $attributes['birth_date'] = null;
+
+        User::make($attributes);
     }
 
     public function test_birth_date_must_not_be_empty(): void
     {
-        $this->expectException(QueryException::class);
+        $this->expectException(ValidationException::class);
 
-        User::factory()->make([
-            'birth_date' => '',
-        ]);
+        $attributes = User::factory()->make()->toArray();
+        $attributes['birth_date'] = '';
+
+        User::make($attributes);
     }
 
     public function test_birth_date_must_be_a_date(): void
     {
-        $this->expectException(InvalidFormatException::class);
+        $this->expectException(ValidationException::class);
 
-        User::factory()->make([
-            'birth_date' => 'Not a date',
-        ]);
+        $attributes = User::factory()->make()->toArray();
+        $attributes['birth_date'] = 'not-a-date';
+
+        User::make($attributes);
     }
 
     public function test_user_type_must_be_valid(): void
     {
-        $this->expectException(QueryException::class);
+        $this->expectException(ValidationException::class);
 
-        $user = User::factory()->make([
+        $attributes = User::factory()->make([
             'user_type' => '10',
-        ]);
+        ])->toArray();
+
+        User::make($attributes);
     }
 }
