@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Requests\UserRequest;
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -11,6 +12,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 
@@ -72,6 +75,59 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',
             'email_verified_at' => 'datetime',
         ];
+    }
+
+    // Validation
+    /**
+     * Validate attributes using UserRequest rules
+     *
+     * @param array $attributes
+     * @throws ValidationException
+     */
+    public static function validateAttributes(array $attributes): void
+    {
+        $request = new UserRequest();
+        $rules = $request->rules();
+
+        // Skip validation for factory-created instances
+        if (app()->environment('testing') && isset($attributes['_skip_validation'])) {
+            unset($attributes['_skip_validation']);
+            return;
+        }
+
+        $validator = Validator::make($attributes, $rules);
+
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+    }
+
+    /**
+     * Create a new model instance.
+     *
+     * @param array $attributes
+     * @return static
+     * @throws ValidationException
+     */
+    public static function make($attributes = [])
+    {
+        static::validateAttributes($attributes);
+        return new static($attributes);
+    }
+
+    /**
+     * Create and save a new model instance.
+     *
+     * @param array $attributes
+     * @return static
+     * @throws ValidationException
+     */
+    public static function create(array $attributes = []): User
+    {
+        static::validateAttributes($attributes);
+        $model = new static($attributes);
+        $model->save();
+        return $model;
     }
 
     // Relationships
