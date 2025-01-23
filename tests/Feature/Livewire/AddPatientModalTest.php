@@ -16,7 +16,6 @@ class AddPatientModalTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
     public function can_open_modal()
     {
         Livewire::test(AddPatientModal::class)
@@ -25,7 +24,7 @@ class AddPatientModalTest extends TestCase
             ->assertSet('showModal', true);
     }
 
-    /** @test */
+
     public function can_close_modal()
     {
         Livewire::test(AddPatientModal::class)
@@ -34,7 +33,6 @@ class AddPatientModalTest extends TestCase
             ->assertSet('showModal', false);
     }
 
-    /** @test */
     public function validates_required_fields()
     {
         Livewire::test(AddPatientModal::class)
@@ -52,7 +50,6 @@ class AddPatientModalTest extends TestCase
             ]);
     }
 
-    /** @test */
     public function validates_contact_number_format()
     {
         Livewire::test(AddPatientModal::class)
@@ -62,7 +59,7 @@ class AddPatientModalTest extends TestCase
             ->assertHasErrors(['contact_number' => 'numeric']);
     }
 
-    /** @test */
+
     public function validates_name_format()
     {
         Livewire::test(AddPatientModal::class)
@@ -72,7 +69,6 @@ class AddPatientModalTest extends TestCase
             ->assertHasNoErrors(['first_name']);
     }
 
-    /** @test */
     public function validates_philhealth_number_format()
     {
         Livewire::test(AddPatientModal::class)
@@ -82,7 +78,6 @@ class AddPatientModalTest extends TestCase
             ->assertHasNoErrors(['mother_philhealth']);
     }
 
-    /** @test */
     public function can_create_patient_with_complete_data()
     {
         Livewire::test(AddPatientModal::class)
@@ -129,7 +124,6 @@ class AddPatientModalTest extends TestCase
         $this->assertCount(1, $patient->parents);
     }
 
-    /** @test */
     public function resets_form_after_submission()
     {
         Livewire::test(AddPatientModal::class)
@@ -140,7 +134,6 @@ class AddPatientModalTest extends TestCase
             ->assertSet('last_name', '');
     }
 
-    /** @test */
     public function can_create_patient_without_parent_info()
     {
         Livewire::test(AddPatientModal::class)
@@ -164,9 +157,9 @@ class AddPatientModalTest extends TestCase
         $patient = Patient::where('first_name', 'John')
                          ->where('last_name', 'Smith')
                          ->first();
-                         
+
         $this->assertNotNull($patient);
         $this->assertCount(0, $patient->parents);
         $this->assertCount(1, $patient->addresses);
     }
-} 
+}

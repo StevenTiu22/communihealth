@@ -29,10 +29,10 @@ class UserFactory extends Factory
     {
         return [
             'first_name' => fake()->firstName(),
-            'middle_name' => fake()->name(),
+            'middle_name' => rand(0, 1) ? fake()->firstName() : null,
             'last_name' => fake()->lastName(),
             'birth_date' => fake()->date(),
-            'sex' => fake()->randomElement([0, 1]),
+            'sex' => fake()->randomElement(['0', '1']),
             'email' => fake()->unique()->safeEmail(),
             'username' => fake()->unique()->userName(),
             'contact_no' => fake()->phoneNumber(),
@@ -42,7 +42,7 @@ class UserFactory extends Factory
             'two_factor_recovery_codes' => null,
             'remember_token' => Str::random(10),
             'profile_photo_path' => null,
-            'user_type' => fake()->randomElement([0, 1, 2]),
+            'user_type' => fake()->randomElement(['0', '1', '2']),
         ];
     }
 
