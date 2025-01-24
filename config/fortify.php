@@ -119,6 +119,13 @@ return [
         'two-factor' => 'two-factor',
     ],
 
+    'responses' => [
+        'throttle' => [
+            'message' => 'Too many login attempts. Please try again in :seconds seconds.',
+            'status' => 429,
+        ],
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Register View Routes

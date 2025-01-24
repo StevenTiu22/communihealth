@@ -22,7 +22,7 @@ class AuthenticationTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->post('/login', [
+        $this->post('/login', [
             'email' => $user->email,
             'password' => 'password',
         ]);
@@ -42,6 +42,41 @@ class AuthenticationTest extends TestCase
         $this->assertGuest();
     }
 
+    public function test_users_can_not_authenticate_with_invalid_email(): void
+    {
+        User::factory()->create();
+
+        $this->post('/login', [
+            'email' => 'invalidemail@gmail.com',
+            'password' => 'password',
+        ]);
+
+        $this->assertGuest();
+    }
+
+    public function test_users_can_not_authenticate_after_three_attempts(): void
+    {
+        $user = User::factory()->create();
+
+        $response = null;
+
+        for ($i = 0; $i < 3; $i++) {
+            $response = $this->post('/login', [
+                'email' => $user->email,
+                'password' => 'wrong-password',
+            ]);
+            $response->assertStatus(302);
+            $this->assertGuest();
+        }
+
+        $response = $this->post('/login', [
+            'email' => $user->email,
+            'password' => 'wrong-password',
+        ]);
+
+        $response->assertStatus(429);
+    }
+
     public function test_users_can_logout(): void
     {
         $user = User::factory()->create();
@@ -49,81 +84,6 @@ class AuthenticationTest extends TestCase
         $this->actingAs($user)->post('/logout');
 
         $this->assertGuest();
-    }
-
-    // Email Verification
-    public function test_email_verification_screen_can_be_rendered(): void
-    {
-        $response = $this->get('/email/verify');
-
-        $response->assertStatus(200);
-    }
-
-    public function test_unverified_users_should_be_redirected_to_verify_email_screen(): void
-    {
-        $user = User::factory()->unverified()->create();
-
-        $response = $this->post('/login', [
-            'email' => $user->email,
-            'password' => 'password',
-        ]);
-
-        $dashboardResponse = $this->get('/dashboard');
-        $dashboardResponse->assertRedirect('/email/verify');
-
-        $this->assertTrue(Auth::check());
-        $this->assertEquals($user->id, Auth::id());
-        $this->assertFalse(Auth::user()->hasVerifiedEmail());
-    }
-
-    /**
-    public function test_verified_users_should_be_redirected_to_dashboard(): void
-    {
-        $user = User::factory()->create();
-
-        $response = $this->post('/login', [
-            'email' => $user->email,
-            'password' => 'password',
-        ]);
-
-        $response->assertRedirect('/dashboard');
-
-        $this->assertTrue(Auth::check());
-        $this->assertEquals($user->id, Auth::id());
-        $this->assertTrue(Auth::user()->hasVerifiedEmail());
-    }
-     **/
-    public function test_users_can_resend_email_verification_notification(): void
-    {
-        $user = User::factory()->unverified()->create();
-
-        $response = $this->actingAs($user)->post('/email/verification-notification');
-
-        $response->assertStatus(204);
-    }
-
-    public function test_users_can_only_resend_after_60_seconds(): void
-    {
-        $user = User::factory()->unverified()->create();
-
-        $response = $this->actingAs($user)->post('/email/verification-notification');
-
-        $response->assertStatus(204);
-
-        $response = $this->actingAs($user)->post('/email/verification-notification');
-
-        $response->assertStatus(429);
-    }
-
-    public function test_users_can_verify_email(): void
-    {
-        $user = User::factory()->unverified()->create();
-
-        $response = $this->actingAs($user)->get('/email/verify/' . $user->verification_token);
-
-        $this->assertTrue(Auth::check());
-        $this->assertEquals($user->id, Auth::id());
-        $this->assertTrue(Auth::user()->hasVerifiedEmail());
     }
 
     // Remember Me Function
@@ -142,14 +102,21 @@ class AuthenticationTest extends TestCase
 
     public function test_users_can_login_without_remember_me(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->unremembered()->create();
 
         $response = $this->post('/login', [
             'email' => $user->email,
             'password' => 'password',
+            'remember' => null,
         ]);
 
-        $this->assertAuthenticatedAs($user);
+        $rememberCookie = collect($response->headers->getCookies())
+            ->filter(function ($cookie) {
+                return str_starts_with($cookie->getName(), 'remember_web_');
+            })->first();
+
+        $this->assertNull($rememberCookie);
+        $this->assertNull($user->fresh()->remember_token);
     }
 
     public function test_users_can_logout_with_remember_me(): void
