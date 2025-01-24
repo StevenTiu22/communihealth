@@ -56,6 +56,13 @@ class UserFactory extends Factory
         ]);
     }
 
+    public function unremembered(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'remember_token' => null,
+        ]);
+    }
+
     /**
      * Indicate that the user should have a personal team.
      */
