@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\MedicineController;
@@ -27,4 +28,6 @@ Route::middleware(['auth'])->group(function(){
    Route::get('/email/verify', function(){
          return view('auth.verify-email');
     })->name('verification.notice');
+
+   Route::post('/email/send-verification', [EmailVerificationController::class, 'store'])->name('verification.send');
 });
