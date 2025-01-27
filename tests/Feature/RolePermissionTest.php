@@ -176,4 +176,19 @@ class RolePermissionTest extends TestCase
         $this->assertFalse($user->hasRole($BORole), 'User should not have a role of barangay-official, instead have a role of bhw.');
         $this->assertCount(1, $user->roles, 'User should have only one role.');
     }
+
+    public function test_barangay_official_can_access_designated_dashboard(): void
+    {
+        $user = User::factory()->create();
+        $role = $this->roles[0];
+
+        $user->syncRoles($role);
+
+        $response = $this->actingAs($user)->get('/dashboard/barangay-official');
+
+        $response->assertStatus(200)
+            ->assertViewIs('dashboard.barangay-official')
+            ->assertSee('Barangay Official Dashboard')
+            ->assertViewHas('user', $user);
+    }
 }
