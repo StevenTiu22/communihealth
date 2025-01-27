@@ -191,4 +191,19 @@ class RolePermissionTest extends TestCase
             ->assertSee('Barangay Official Dashboard')
             ->assertViewHas('user', $user);
     }
+
+    public function test_bhw_can_access_designated_dashboard(): void
+    {
+        $user = User::factory()->create();
+        $role = $this->roles[1];
+
+        $user->syncRoles($role);
+
+        $response = $this->actingAs($user)->get('/dashboard/bhw');
+
+        $response->assertStatus(200)
+            ->assertViewIs('dashboard.bhw')
+            ->assertSee('BHW Dashboard')
+            ->assertViewHas('user', $user);
+    }
 }
