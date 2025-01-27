@@ -3,15 +3,12 @@
 namespace Tests\Feature;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class RolePermissionTest extends TestCase
 {
-    use RefreshDatabase;
-
     protected array $roles = [
         'barangay-official',
         'bhw',
@@ -95,6 +92,15 @@ class RolePermissionTest extends TestCase
         ],
     ];
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        DB::table('users')->truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+    }
+
     public function test_roles_table_has_expected_roles(): void
     {
         if ($this->assertDatabaseCount('roles', count($this->roles)))
@@ -143,30 +149,31 @@ class RolePermissionTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $role = Role::class::firstOrCreate(['name' => 'barangay-official']);
+        $role = 'barangay-official';
 
-        $user->syncRole($role);
+        $user->syncRoles($role);
 
-        $this->assertTrue($user->hasRole('barangay-official'), 'User should have a role of barangay-official.');
+        $this->assertTrue($user->hasRole($role), 'User should have a role of barangay-official.');
         $this->assertCount(1, $user->roles, 'User should have only one role.');
-        $this->assertEquals('barangay-official', $user->roles->first()->name, 'User\'s role should be barangay-official.');
+        $this->assertEquals($role, $user->roles->first()->name, 'User\'s role should be barangay-official.');
     }
 
     public function test_users_can_only_have_one_role(): void
     {
+
         $user = User::factory()->create();
 
-        $BORole = Role::class::firstOrCreate(['name' => 'barangay-official']);
-        $BHWRole = Role::class::firstOrCreate(['name' => 'bhw']);
+        $BORole = 'barangay-official';
+        $BHWRole = 'bhw';
 
-        $user->syncRole($BORole);
+        $user->syncRoles($BORole);
 
-        $this->assertTrue($user->hasRole('barangay-official'), 'User should have a role of barangay-official.');
+        $this->assertTrue($user->hasRole($BORole), 'User should have a role of barangay-official.');
 
-        $this->syncRole($BHWRole);
+        $user->syncRoles($BHWRole);
 
-        $this->assertTrue($user->hasRole('bhw'), 'User should have a role of bhw.');
-        $this->assertFalse($user->hasRole('barangay-official'), 'User should not have a role of barangay-official, instead have a role of bhw.');
+        $this->assertTrue($user->hasRole($BHWRole), 'User should have a role of bhw.');
+        $this->assertFalse($user->hasRole($BORole), 'User should not have a role of barangay-official, instead have a role of bhw.');
         $this->assertCount(1, $user->roles, 'User should have only one role.');
     }
 }

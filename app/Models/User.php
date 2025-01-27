@@ -16,10 +16,12 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory;
+    use HasRoles;
     use SoftDeletes;
     use HasProfilePhoto;
     use TwoFactorAuthenticatable;
