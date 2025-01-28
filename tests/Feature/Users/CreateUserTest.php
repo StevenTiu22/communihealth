@@ -13,7 +13,7 @@ class CreateUserTest extends TestCase
 
     public function test_barangay_officials_can_create_users_with_roles(): void
     {
-        $user = User::factory()->withRole($this->roles[0])->create();
+        $user = User::factory()->withRole('barangay-official')->create();
 
         $this->actingAs($user);
 
@@ -27,7 +27,7 @@ class CreateUserTest extends TestCase
             'username' => 'johndoe12',
             'contact_no' => '09123456789',
             'password' => 'password',
-            'role' => $this->roles[1]
+            'role' => 'bhw'
         ];
 
         Livewire::test(AddUserForm::class)
@@ -60,6 +60,6 @@ class CreateUserTest extends TestCase
         ]);
 
         $createdUser = User::where('email', $userData['email'])->first();
-        $this->assertTrue($createdUser->hasRole($this->roles[1]), 'User should have a role of bhw');
+        $this->assertTrue($createdUser->hasRole('bhw'), 'User should have a role of bhw');
     }
 }
