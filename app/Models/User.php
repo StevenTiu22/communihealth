@@ -78,13 +78,11 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
 
-        // Add this to ensure no roles are assigned at creation time
         static::created(function ($user) {
-            // Explicitly detach any roles that might have been assigned
             $user->roles()->detach();
         });
     }
