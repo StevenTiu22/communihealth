@@ -23,7 +23,6 @@ return new class extends Migration
             $table->string('username', 20)->unique();
             $table->string('password');
             $table->string('profile_photo_path', 2048)->nullable();
-            $table->enum('user_type', [0, 1, 2])->comment('1: Admin, 2: Doctor, 3: Staff');
             $table->dateTime('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
@@ -31,7 +30,6 @@ return new class extends Migration
 
             $table->index(['last_name', 'first_name', 'middle_name']);
             $table->index('username');
-            $table->index('user_type');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

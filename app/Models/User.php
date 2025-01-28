@@ -16,10 +16,12 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory;
+    use HasRoles;
     use SoftDeletes;
     use HasProfilePhoto;
     use TwoFactorAuthenticatable;
@@ -39,7 +41,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'username',
         'profile_photo_path',
-        'user_type',
     ];
 
     /**
@@ -75,6 +76,15 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',
             'email_verified_at' => 'datetime',
         ];
+    }
+
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::created(function ($user) {
+            $user->roles()->detach();
+        });
     }
 
     // Validation
@@ -210,19 +220,8 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     // Scopes
-    public function scopeByUType($query, string $user_type=null): Builder
-    {
-        return $query->where('user_type', $user_type);
-    }
-
     public function scopeVerifiedUser($query): Builder
     {
         return $query->whereNotNull('email_verified_at');
-    }
-
-    public function scopeCountByType($query): Builder
-    {
-        return $query->selectRaw('user_type', 'count(*) as total')
-            ->groupBy('user_type');
     }
 }
