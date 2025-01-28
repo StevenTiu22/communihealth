@@ -26,17 +26,17 @@ Route::middleware([
     'verified',
 ])->group(function () {
     // Barangay Official Routes
-    Route::middleware(['role:barangay-official'])->group(function() {
-        Route::get('/dashboard/barangay-official', [DashboardController::class, 'barangayOfficial'])->name('dashboard.barangay-official');
+    Route::middleware('role:barangay-official')->prefix('barangay-official')->group(function() {
+        Route::get('/dashboard', [DashboardController::class, 'barangayOfficial'])->name('barangay-official.dashboard');
     });
 
     // BHW Routes
-    Route::middleware(['role:bhw'])->group(function() {
-        Route::get('/dashboard/bhw', [DashboardController::class, 'bhw'])->name('dashboard.bhw');
+    Route::middleware('role:bhw')->prefix('bhw')->group(function() {
+        Route::get('/dashboard', [DashboardController::class, 'bhw'])->name('bhw.dashboard');
     });
 
     // Doctor Routes
-    Route::middleware(['role:doctor'])->group(function() {
-        Route::get('/dashboard/doctor', [DashboardController::class, 'doctor'])->name('dashboard.doctor');
+    Route::middleware('role:doctor')->prefix('doctor')->group(function() {
+        Route::get('/dashboard', [DashboardController::class, 'doctor'])->name('doctor.dashboard');
     });
 });

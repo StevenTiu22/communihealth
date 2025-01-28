@@ -42,7 +42,6 @@ class UserFactory extends Factory
             'two_factor_recovery_codes' => null,
             'remember_token' => Str::random(10),
             'profile_photo_path' => null,
-            'user_type' => fake()->randomElement(['0', '1', '2']),
         ];
     }
 
@@ -61,6 +60,13 @@ class UserFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'remember_token' => null,
         ]);
+    }
+
+    public function withRole(string $role)
+    {
+        return $this->afterCreating(function (User $user) use ($role) {
+            $user->syncRoles($role);
+        });
     }
 
     /**

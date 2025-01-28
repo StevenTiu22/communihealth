@@ -41,7 +41,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'username',
         'profile_photo_path',
-        'user_type',
     ];
 
     /**
@@ -77,6 +76,17 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',
             'email_verified_at' => 'datetime',
         ];
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Add this to ensure no roles are assigned at creation time
+        static::created(function ($user) {
+            // Explicitly detach any roles that might have been assigned
+            $user->roles()->detach();
+        });
     }
 
     // Validation
@@ -212,19 +222,8 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     // Scopes
-    public function scopeByUType($query, string $user_type=null): Builder
-    {
-        return $query->where('user_type', $user_type);
-    }
-
     public function scopeVerifiedUser($query): Builder
     {
         return $query->whereNotNull('email_verified_at');
-    }
-
-    public function scopeCountByType($query): Builder
-    {
-        return $query->selectRaw('user_type', 'count(*) as total')
-            ->groupBy('user_type');
     }
 }

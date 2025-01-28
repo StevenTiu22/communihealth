@@ -144,6 +144,13 @@ class RolePermissionTest extends TestCase
         }
     }
 
+    public function test_newly_created_user_has_no_role(): void
+    {
+        $user = User::factory()->create();
+
+        $this->assertCount(0, $user->roles, 'User should have no role.');
+    }
+
 
     public function test_users_can_be_assigned_to_a_role(): void
     {
@@ -184,7 +191,7 @@ class RolePermissionTest extends TestCase
 
         $user->syncRoles($role);
 
-        $response = $this->actingAs($user)->get('/dashboard/barangay-official');
+        $response = $this->actingAs($user)->get('/barangay-official/dashboard');
 
         $response->assertStatus(200)
             ->assertViewIs('dashboard.barangay-official')
@@ -199,7 +206,7 @@ class RolePermissionTest extends TestCase
 
         $user->syncRoles($role);
 
-        $response = $this->actingAs($user)->get('/dashboard/bhw');
+        $response = $this->actingAs($user)->get('/bhw/dashboard');
 
         $response->assertStatus(200)
             ->assertViewIs('dashboard.bhw')
@@ -214,11 +221,28 @@ class RolePermissionTest extends TestCase
 
         $user->syncRoles($role);
 
-        $response = $this->actingAs($user)->get('/dashboard/doctor');
+        $response = $this->actingAs($user)->get('/doctor/dashboard');
 
         $response->assertStatus(200)
             ->assertViewIs('dashboard.doctor')
             ->assertSee('Doctor Dashboard')
             ->assertViewHas('user', $user);
+    }
+
+    public function test_users_without_a_role_cannot_access_dashboard(): void
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->get('/barangay-official/dashboard');
+
+        $response->assertForbidden();
+
+        $response = $this->actingAs($user)->get('/bhw/dashboard');
+
+        $response->assertForbidden();
+
+        $response = $this->actingAs($user)->get('/doctor/dashboard');
+
+        $response->assertForbidden();
     }
 }
