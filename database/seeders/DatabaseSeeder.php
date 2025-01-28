@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory()->create([
+        $admin = User::factory()->create([
             'first_name' => 'Barangay',
             'middle_name' => '',
             'last_name' => 'Admin',
@@ -21,7 +21,8 @@ class DatabaseSeeder extends Seeder
             'email' => 'barangay.admin@gmail.com',
             'username' => 'admin',
             'password' => 'admin123',
-            'user_type' => '1',
         ]);
+
+        $admin->syncRoles('barangay-official');
     }
 }

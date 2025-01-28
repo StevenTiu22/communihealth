@@ -2,6 +2,8 @@
 
 namespace App\Http\Responses;
 
+use Illuminate\Auth\Middleware\RedirectIfAuthenticated;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
@@ -9,16 +11,12 @@ use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
 class LoginResponse implements LoginResponseContract
 {
 
-    public function toResponse($request): mixed
+    public function toResponse($request): JsonResponse|RedirectResponse
     {
+        $path = RedirectIfAuthenticated::getRedirectPath(Auth::user());
         return $request->wantsJson()
             ? response()->json(['two_factor' => false])
-            : redirect()->intended(
-                match(auth()->user()->user_type) {
-                    '0' => route('users'),
-                    default => route('dashboard')
-                }
-            );
+            : redirect()->intended($path);
     }
 
 }
