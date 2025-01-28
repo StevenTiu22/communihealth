@@ -245,4 +245,31 @@ class RolePermissionTest extends TestCase
 
         $response->assertForbidden();
     }
+
+    public function test_barangay_officials_are_redirected_to_dashboard_after_login(): void
+    {
+        $user = User::factory()->withRole($this->roles[0])->create();
+
+        $response = $this->actingAs($user)->get('/login');
+
+        $response->assertRedirect('/barangay-official/dashboard');
+    }
+
+    public function test_bhw_are_redirected_to_dashboard_after_login(): void
+    {
+        $user = User::factory()->withRole($this->roles[1])->create();
+
+        $response = $this->actingAs($user)->get('/login');
+
+        $response->assertRedirect('/bhw/dashboard');
+    }
+
+    public function test_doctors_are_redirected_to_dashboard_after_login(): void
+    {
+        $user = User::factory()->withRole($this->roles[2])->create();
+
+        $response = $this->actingAs($user)->get('/login');
+
+        $response->assertRedirect('/doctor/dashboard');
+    }
 }
