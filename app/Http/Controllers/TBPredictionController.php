@@ -6,6 +6,6 @@ class TBPredictionController extends Controller
 {
     public function index()
     {
-        return view('core.prediction');
+        return view('tb-prediction.index', ['title' => 'TB Prediction']);
     }
 }

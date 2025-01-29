@@ -8,6 +8,6 @@ class UserController extends Controller
 {
     public function index() : View
     {
-        return view('admin.user-accounts');
+        return view('barangay-official.user-accounts');
     }
 }

@@ -190,7 +190,7 @@ class UserRoleTest extends TestCase
         $response = $this->actingAs($user)->get('/patients');
 
         $response->assertStatus(200)
-            ->assertViewIs('patient-records.index')
+            ->assertViewIs('patients.index')
             ->assertSee('Patient Records');
     }
 
@@ -256,7 +256,7 @@ class UserRoleTest extends TestCase
         $response = $this->actingAs($user)->get('/patients');
 
         $response->assertStatus(200)
-            ->assertViewIs('patient-records.index')
+            ->assertViewIs('patients.index')
             ->assertSee('Patient Records');
     }
 
@@ -267,7 +267,7 @@ class UserRoleTest extends TestCase
         $response = $this->actingAs($user)->get('/medicines');
 
         $response->assertStatus(200)
-            ->assertViewIs('medicine-inventory.index')
+            ->assertViewIs('medicines.index')
             ->assertSee('Medicine Inventory');
     }
 
@@ -322,7 +322,7 @@ class UserRoleTest extends TestCase
         $response = $this->actingAs($user)->get('/patients');
 
         $response->assertStatus(200)
-            ->assertViewIs('patient-records.index')
+            ->assertViewIs('patients.index')
             ->assertSee('Patient Records');
     }
 
@@ -333,7 +333,7 @@ class UserRoleTest extends TestCase
         $response = $this->actingAs($user)->get('/medicines');
 
         $response->assertStatus(200)
-            ->assertViewIs('medicine-inventory.index')
+            ->assertViewIs('medicines.index')
             ->assertSee('Medicine Inventory');
     }
 

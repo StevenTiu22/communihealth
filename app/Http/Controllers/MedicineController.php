@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\View\View;
+
 class MedicineController extends Controller
 {
-    public function index()
+    public function index(): View
     {
-        return view('core.medicine-inventory');
+        return view('medicines.index', [
+            'title' => 'Medicines',
+        ]);
     }
 }
