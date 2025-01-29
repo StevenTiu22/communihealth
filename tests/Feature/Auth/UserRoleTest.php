@@ -201,19 +201,19 @@ class UserRoleTest extends TestCase
         $response = $this->actingAs($user)->get('/medicines');
 
         $response->assertStatus(200)
-            ->assertViewIs('medicine-inventory.index')
+            ->assertViewIs('medicines.index')
             ->assertSee('Medicine Inventory');
     }
 
-    public function test_barangay_officials_can_access_scheduling(): void
+    public function test_barangay_officials_can_access_schedules(): void
     {
         $user = User::factory()->withRole($this->roles[0])->create();
 
-        $response = $this->actingAs($user)->get('/scheduling');
+        $response = $this->actingAs($user)->get('/schedules');
 
         $response->assertStatus(200)
-            ->assertViewIs('scheduling.index')
-            ->assertSee('Scheduling');
+            ->assertViewIs('schedules.index')
+            ->assertSee('Schedules');
     }
 
     public function test_barangay_officials_can_access_tb_prediction(): void
@@ -271,14 +271,14 @@ class UserRoleTest extends TestCase
             ->assertSee('Medicine Inventory');
     }
 
-    public function test_bhw_can_access_scheduling(): void
+    public function test_bhw_can_access_schedules(): void
     {
         $user = User::factory()->withRole($this->roles[1])->create();
 
-        $response = $this->actingAs($user)->get('/scheduling');
+        $response = $this->actingAs($user)->get('/schedules');
 
         $response->assertStatus(200)
-            ->assertViewIs('scheduling.index')
+            ->assertViewIs('schedules.index')
             ->assertSee('Scheduling');
     }
 
@@ -337,14 +337,14 @@ class UserRoleTest extends TestCase
             ->assertSee('Medicine Inventory');
     }
 
-    public function test_doctor_can_access_scheduling(): void
+    public function test_doctor_can_access_schedules(): void
     {
         $user = User::factory()->withRole($this->roles[2])->create();
 
-        $response = $this->actingAs($user)->get('/scheduling');
+        $response = $this->actingAs($user)->get('/schedules');
 
         $response->assertStatus(200)
-            ->assertViewIs('scheduling.index')
+            ->assertViewIs('schedules.index')
             ->assertSee('Scheduling');
     }
 
@@ -417,11 +417,11 @@ class UserRoleTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_unauthorized_users_cannot_access_scheduling(): void
+    public function test_unauthorized_users_cannot_access_schedules(): void
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->get('/scheduling');
+        $response = $this->actingAs($user)->get('/schedules');
 
         $response->assertForbidden();
     }
