@@ -8,8 +8,10 @@ use Illuminate\Auth\Events\Verified;
 use Illuminate\Cache\RateLimiter;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
 use Laravel\Fortify\Features;
+use Spatie\Activitylog\Models\Activity;
 use Tests\TestCase;
 
 class EmailVerificationTest extends TestCase
@@ -29,6 +31,7 @@ class EmailVerificationTest extends TestCase
         }
         $this->rateLimiter = app(RateLimiter::class);
         Event::fake();
+        activity()->enableLogging();
         Carbon::setTestNow($this->timestamp = Carbon::now(config('app.timezone')));
     }
 
@@ -137,10 +140,24 @@ class EmailVerificationTest extends TestCase
         $response->assertStatus(429);
     }
 
-    public function test_email_verification_are_logged_in_audit_log(): void
+    public function test_successful_email_verification_is_logged(): void
     {
         $user = User::factory()->unverified()->create();
 
+        Mail::fake();
+        $verificationUrl = $this->tempVerificationUrl($user->id, $user->email);
+        $response = $this->actingAs($user)->get($verificationUrl);
 
+        $response->assertStatus(302);
+        Event::assertDispatched(Verified::class);
+        $this->assertTrue($user->fresh()->hasVerifiedEmail());
+
+        $activity = Activity::all()->last();
+
+        $this->assertNotNull($activity);
+        $this->assertEquals('Successful email verification.', $activity->log_name);
+        $this->assertEquals("User {{$user->id}} successfully verified his/her email.", $activity->description);
+        $this->assertEquals($user->id, $activity->causer_id);
+        $this->assertEquals(User::class, $activity->causer_type);
     }
 }
