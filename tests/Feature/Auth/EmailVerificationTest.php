@@ -136,4 +136,11 @@ class EmailVerificationTest extends TestCase
         $response = $this->actingAs($user)->post('/email/verification-notification');
         $response->assertStatus(429);
     }
+
+    public function test_email_verification_are_logged_in_audit_log(): void
+    {
+        $user = User::factory()->unverified()->create();
+
+
+    }
 }
