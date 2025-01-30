@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Auth;
 
+use App\Listeners\LogVerification;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Verified;
@@ -11,7 +12,6 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
 use Laravel\Fortify\Features;
-use Spatie\Activitylog\Models\Activity;
 use Tests\TestCase;
 
 class EmailVerificationTest extends TestCase
@@ -29,9 +29,11 @@ class EmailVerificationTest extends TestCase
         if (! Features::enabled(Features::emailVerification())) {
             $this->markTestSkipped('Email verification is not enabled.');
         }
-        $this->rateLimiter = app(RateLimiter::class);
+
         Event::fake();
-        activity()->enableLogging();
+
+        $this->rateLimiter = app(RateLimiter::class);
+
         Carbon::setTestNow($this->timestamp = Carbon::now(config('app.timezone')));
     }
 
@@ -143,21 +145,44 @@ class EmailVerificationTest extends TestCase
     public function test_successful_email_verification_is_logged(): void
     {
         $user = User::factory()->unverified()->create();
-
         Mail::fake();
         $verificationUrl = $this->tempVerificationUrl($user->id, $user->email);
+
         $response = $this->actingAs($user)->get($verificationUrl);
 
-        $response->assertStatus(302);
-        Event::assertDispatched(Verified::class);
-        $this->assertTrue($user->fresh()->hasVerifiedEmail());
+        $this->assertDatabaseHas('activity_log', [
+            'log_name' => 'Successful Email Verification',
+            'description' => "User {$user->id} has verified their email address.",
+            'subject_id' => $user->id,
+            'subject_type' => get_class($user),
+            'causer_id' => $user->id,
+            'causer_type' => get_class($user),
+        ]);
 
-        $activity = Activity::all()->last();
+    }
 
-        $this->assertNotNull($activity);
-        $this->assertEquals('Successful email verification.', $activity->log_name);
-        $this->assertEquals("User {{$user->id}} successfully verified his/her email.", $activity->description);
-        $this->assertEquals($user->id, $activity->causer_id);
-        $this->assertEquals(User::class, $activity->causer_type);
+    public function test_listener_listens_to_verified_event(): void
+    {
+        Event::fake([Verified::class]);
+
+        Event::assertListening(Verified::class, LogVerification::class);
+    }
+
+    public function test_listener_logs_verified_user(): void
+    {
+        $user = User::factory()->unverified()->create();
+
+        $verificationUrl = $this->tempVerificationUrl($user->id, $user->email);
+
+        $this->actingAs($user)->get($verificationUrl);
+
+        $this->assertDatabaseHas('activity_log', [
+            'log_name' => 'Successful Email Verification',
+            'description' => "User {$user->id} has verified their email address.",
+            'subject_id' => null,
+            'subject_type' => null,
+            'causer_id' => $user->id,
+            'causer_type' => get_class($user),
+        ]);
     }
 }
