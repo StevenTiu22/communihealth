@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -22,6 +23,7 @@ class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory;
     use HasRoles;
+    use Notifiable;
     use SoftDeletes;
     use HasProfilePhoto;
     use TwoFactorAuthenticatable;

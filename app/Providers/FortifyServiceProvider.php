@@ -39,21 +39,30 @@ class FortifyServiceProvider extends ServiceProvider
             return view('auth.login');
         });
 
+        Fortify::verifyEmailView(function () {
+            return view('auth.verify-email');
+        });
+
         Fortify::authenticateUsing(function (Request $request) {
             $user = \App\Models\User::where('email', $request->email)
                 ->orWhere('username', $request->email)
                 ->first();
 
-            if ($user &&
-                Hash::check($request->password, $user->password)) {
+            if ($user && Hash::check($request->password, $user->password)) {
                 return $user;
             }
+
+            return null;
         });
 
         RateLimiter::for('login', function (Request $request) {
             $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())).'|'.$request->ip());
 
             return Limit::perMinute(3)->by($throttleKey);
+        });
+
+        RateLimiter::for('verification', function (Request $request) {
+            return Limit::perMinute(3)->by($request->user()->id ?: $request->ip());
         });
 
         RateLimiter::for('two-factor', function (Request $request) {
