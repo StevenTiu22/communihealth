@@ -6,6 +6,7 @@ use App\Listeners\LogVerification;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Verified;
+use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Cache\RateLimiter;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
@@ -160,17 +161,28 @@ class EmailVerificationTest extends TestCase
         ]);
     }
 
-    public function test_email_verification_resend_attempt_is_logged(): void
+    public function test_email_verification_notification_is_logged(): void
     {
         $user = User::factory()->unverified()->create();
         $response = $this->actingAs($user)->post('/email/verification-notification');
 
         $response->assertStatus(302);
         $this->assertDatabaseHas('activity_log', [
-            'log_name' => 'Email Verification Attempt',
-            'description' => "User {$user->id} has requested a new email verification link.",
+            'log_name' => 'Email Verification Notification Sent',
+            'description' => "User {$user->id} has requested an email verification link.",
             'causer_id' => $user->id,
             'causer_type' => get_class($user),
         ]);
+    }
+
+    public function test_email_verification_is_sent_through_email(): void
+    {
+        Mail::fake();
+        $user = User::factory()->unverified()->create();
+
+        $response = $this->actingAs($user)->post('/email/verification-notification');
+
+        $response->assertStatus(302);
+        Mail::assertSent(VerifyMail::class);
     }
 }

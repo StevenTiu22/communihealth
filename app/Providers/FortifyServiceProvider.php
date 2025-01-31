@@ -68,6 +68,20 @@ class FortifyServiceProvider extends ServiceProvider
             return view('auth.verify-email');
         });
 
+        $this->app->instance(\Laravel\Fortify\Contracts\EmailVerificationNotificationSentResponse::class, new class implements \Laravel\Fortify\Contracts\EmailVerificationNotificationSentResponse {
+            public function toResponse($request): Response|RedirectResponse
+            {
+                activity()
+                    ->causedBy($request->user())
+                    ->useLog('Email Verification Notification Sent')
+                    ->log("User {$request->user()->id} has requested an email verification link.");
+
+                return $request->wantsJson()
+                    ? response('', 204)
+                    : back()->with('status', 'verification-link-sent');
+            }
+        });
+
         $this->app->instance(\Laravel\Fortify\Contracts\VerifyEmailResponse::class, new class implements \Laravel\Fortify\Contracts\VerifyEmailResponse {
             public function toResponse($request): Response|RedirectResponse
             {
