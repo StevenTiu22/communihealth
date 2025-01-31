@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Auth;
 
-use App\Listeners\LogVerification;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Verified;
@@ -27,7 +26,7 @@ class EmailVerificationTest extends TestCase
     {
         parent::setUp();
 
-        if (! Features::enabled(Features::emailVerification())) {
+        if (!Features::enabled(Features::emailVerification())) {
             $this->markTestSkipped('Email verification is not enabled.');
         }
 
@@ -175,14 +174,15 @@ class EmailVerificationTest extends TestCase
         ]);
     }
 
-    public function test_email_verification_is_sent_through_email(): void
+    public function test_email_verification_is_sent_through_notification(): void
     {
-        Mail::fake();
+        \Illuminate\Support\Facades\Notification::fake();
         $user = User::factory()->unverified()->create();
 
         $response = $this->actingAs($user)->post('/email/verification-notification');
 
         $response->assertStatus(302);
-        Mail::assertSent(VerifyMail::class);
+
+        \Illuminate\Support\Facades\Notification::assertSentTo($user, VerifyEmail::class);
     }
 }

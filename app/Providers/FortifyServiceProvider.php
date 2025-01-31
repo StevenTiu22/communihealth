@@ -6,8 +6,11 @@ use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
+use App\Mail\VerifyMail;
+use App\Notifications\VerifyEmailNotification;
 use Carbon\Carbon;
 use http\Client\Curl\User;
+use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
@@ -103,8 +106,6 @@ class FortifyServiceProvider extends ServiceProvider
         RateLimiter::for('verification', function (Request $request) {
             return Limit::perMinute(3)->by($request->user()->id ?: $request->ip());
         });
-
-
 
         RateLimiter::for('two-factor', function (Request $request) {
             return Limit::perMinute(5)->by($request->session()->get('login.id'));
