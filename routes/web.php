@@ -9,9 +9,7 @@ use App\Http\Controllers\PatientController;
 use App\Http\Controllers\SchedulesController;
 use App\Http\Controllers\TbPredictionController;
 use App\Http\Controllers\UserController;
-use App\Models\User;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\URL;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -59,3 +57,9 @@ Route::middleware([...$authMiddleware, 'role:doctor'])
     ->group(function() {
         Route::get('/dashboard', [DashboardController::class, 'doctor'])->name('dashboard');
     });
+
+// Test Routes
+Route::get('/test-email', function () {
+    \Illuminate\Support\Facades\Mail::to('steventiu22@gmail.com')->send(new \App\Mail\TestEmail());
+    return 'Email sent!';
+});
