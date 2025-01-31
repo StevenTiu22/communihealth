@@ -158,6 +158,19 @@ class EmailVerificationTest extends TestCase
             'causer_id' => $user->id,
             'causer_type' => get_class($user),
         ]);
+    }
 
+    public function test_email_verification_resend_attempt_is_logged(): void
+    {
+        $user = User::factory()->unverified()->create();
+        $response = $this->actingAs($user)->post('/email/verification-notification');
+
+        $response->assertStatus(302);
+        $this->assertDatabaseHas('activity_log', [
+            'log_name' => 'Email Verification Attempt',
+            'description' => "User {$user->id} has requested a new email verification link.",
+            'causer_id' => $user->id,
+            'causer_type' => get_class($user),
+        ]);
     }
 }
