@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\View\View;
 
-class PatientController extends Controller
+class SchedulesController extends Controller
 {
     public function index(): View
     {
-        return view('patients.index', [
-            'title' => 'Patient Records'
+        return view('schedules.index', [
+            'title' => 'Schedules'
         ]);
     }
 }

@@ -1,30 +1,29 @@
-<x-app-layout title="Scheduling">
+<x-app-layout title={{ __($title) }}>
     <x-staff-sidebar />
     <div class="p-4 block sm:flex items-center justify-between">
         <div class="w-full">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg h-[calc(97vh-1rem)] w-full">
                 <div class="p-6 text-gray-900 dark:text-gray-100 h-full">
                     <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-2xl font-semibold">Patient Scheduling</h2>
+                        <h2 class="text-2xl font-semibold">Schedules</h2>
                     </div>
                     <!-- Search and Action Buttons -->
                     <div class="flex flex-col gap-4 mb-6">
                         <div class="flex justify-between items-center gap-3">
                             <div class="flex-1">
-                                <livewire:scheduling-search />
+
                             </div>
-                            
+
                             <div class="flex gap-3">
-                                <livewire:add-schedule-modal />
-                                <livewire:add-walk-in-modal />
+
                             </div>
                         </div>
 
-                        <livewire:schedule-filter />
+
                     </div>
 
                     <!-- Scheduling Table -->
-                    <livewire:scheduling-table />
+
 
                     <!-- Success Message -->
                     @if (session('success'))
@@ -41,4 +40,4 @@
             </div>
         </div>
     </div>
-</x-app-layout>     
+</x-app-layout>

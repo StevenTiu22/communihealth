@@ -12,16 +12,21 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory;
     use HasRoles;
+    use LogsActivity;
+    use Notifiable;
     use SoftDeletes;
     use HasProfilePhoto;
     use TwoFactorAuthenticatable;
@@ -75,6 +80,11 @@ class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => 'datetime',
         ];
     }
+    protected static $recordEvents = [
+        'created',
+        'updated',
+        'deleted',
+    ];
 
     protected static function boot(): void
     {
@@ -221,5 +231,13 @@ class User extends Authenticatable implements MustVerifyEmail
     public function scopeVerifiedUser($query): Builder
     {
         return $query->whereNotNull('email_verified_at');
+    }
+
+    // Logging
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 }

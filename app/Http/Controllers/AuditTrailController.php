@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class AuditTrailController extends Controller
 {
     public function index(): View
     {
-        return view('admin.audit-trail');
+        return view('barangay-official.audit-trail', ['title' => 'Audit Trail']);
     }
 }

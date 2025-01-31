@@ -1,4 +1,4 @@
-<x-app-layout title="Medicine Inventory">
+<x-app-layout title={{ __($title) }}>
     <x-staff-sidebar />
     <div class="p-4 block sm:flex items-center justify-between">
         <div class="w-full">
@@ -7,7 +7,7 @@
                     <!-- Header Section -->
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-2xl font-semibold">Medicine Inventory</h2>
-                        
+
                         <!-- Action Buttons -->
                         <div class="flex items-center gap-3">
                             <livewire:add-category-modal />
@@ -33,9 +33,9 @@
 
                     <!-- Success Message -->
                     @if (session('success'))
-                        <div class="fixed bottom-4 right-4 px-4 py-2 bg-green-100 border border-green-400 text-green-700 rounded-lg flex items-center gap-2" 
-                             x-data="{ show: true }" 
-                             x-show="show" 
+                        <div class="fixed bottom-4 right-4 px-4 py-2 bg-green-100 border border-green-400 text-green-700 rounded-lg flex items-center gap-2"
+                             x-data="{ show: true }"
+                             x-show="show"
                              x-init="setTimeout(() => show = false, 3000)"
                              x-transition:enter="transition ease-out duration-300"
                              x-transition:enter-start="opacity-0 transform translate-x-2"

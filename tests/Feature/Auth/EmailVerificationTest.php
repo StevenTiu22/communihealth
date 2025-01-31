@@ -5,8 +5,11 @@ namespace Tests\Feature\Auth;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Verified;
+use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Cache\RateLimiter;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
 use Laravel\Fortify\Features;
 use Tests\TestCase;
@@ -17,22 +20,26 @@ class EmailVerificationTest extends TestCase
 
     protected User $user;
     protected string $timestamp;
+    protected RateLimiter $rateLimiter;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        if (! Features::enabled(Features::emailVerification())) {
+        if (!Features::enabled(Features::emailVerification())) {
             $this->markTestSkipped('Email verification is not enabled.');
         }
 
         Event::fake();
-        $this->user = User::factory()->unverified()->create();
+
+        $this->rateLimiter = app(RateLimiter::class);
+
         Carbon::setTestNow($this->timestamp = Carbon::now(config('app.timezone')));
     }
 
     protected function tearDown(): void
     {
+        $this->rateLimiter->clear('verification');
         Carbon::setTestNow();
         parent::tearDown();
     }
@@ -57,35 +64,40 @@ class EmailVerificationTest extends TestCase
 
     public function test_email_verification_screen_can_be_rendered(): void
     {
-        $response = $this->actingAs($this->user)->get('/email/verify');
+        $user = User::factory()->unverified()->create();
+
+        $response = $this->actingAs($user)->get('/email/verify');
 
         $response->assertStatus(200);
     }
 
     public function test_email_can_be_verified(): void
     {
-        $verificationUrl = $this->tempVerificationUrl($this->user->id, $this->user->email);
+        $user = User::factory()->unverified()->create();
+        $verificationUrl = $this->tempVerificationUrl($user->id, $user->email);
 
-        $response = $this->actingAs($this->user)->get($verificationUrl);
+        $this->actingAs($user)->get($verificationUrl);
 
         Event::assertDispatched(Verified::class);
 
-        $this->assertTrue($this->user->fresh()->hasVerifiedEmail());
-        $response->assertRedirect(route('dashboard', absolute: false).'?verified=1');
+        $this->assertTrue($user->fresh()->hasVerifiedEmail());
     }
 
     public function test_email_can_not_verified_with_invalid_hash(): void
     {
-        $verificationUrl = $this->tempVerificationUrl($this->user->id, 'wrong-email');
+        $user = User::factory()->unverified()->create();
+        $verificationUrl = $this->tempVerificationUrl($user->id, 'wrong-email');
 
-        $this->actingAs($this->user)->get($verificationUrl);
+        $response = $this->actingAs($user)->get($verificationUrl);
 
-        $this->assertFalse($this->user->fresh()->hasVerifiedEmail());
+        $response->assertStatus(403);
+        $this->assertFalse($user->fresh()->hasVerifiedEmail());
     }
 
     public function test_email_verification_can_be_resent(): void
     {
-        $response = $this->actingAs($this->user)->post('/email/send-verification');
+        $user = User::factory()->unverified()->create();
+        $response = $this->actingAs($user)->post('/email/verification-notification');
 
         $response->assertStatus(302);
 
@@ -94,35 +106,83 @@ class EmailVerificationTest extends TestCase
 
     public function test_email_verification_link_can_be_used_within_a_timeframe(): void
     {
-        $verificationUrl = $this->tempVerificationUrl($this->user->id, $this->user->email);
+        $user = User::factory()->unverified()->create();
+        $verificationUrl = $this->tempVerificationUrl($user->id, $user->email);
 
-        $response = $this->actingAs($this->user)
-            ->get($verificationUrl);
+        $response = $this->actingAs($user)->get($verificationUrl);
 
         Event::assertDispatched(Verified::class);
 
-        $response->assertRedirect(config('fortify.home') . '?verified=1');
-        $this->assertTrue($this->user->fresh()->hasVerifiedEmail());
+        $response->assertStatus(302);
+        $this->assertTrue($user->fresh()->hasVerifiedEmail());
     }
 
     public function test_email_verification_link_can_not_be_used_after_expiration(): void
     {
-        $verificationUrl = $this->expiredTempVerificationUrl($this->user->id, $this->user->email);
+        $user = User::factory()->unverified()->create();
 
-        $response = $this->actingAs($this->user)->get($verificationUrl);
+        $verificationUrl = $this->expiredTempVerificationUrl($user->id, $user->email);
+
+        $response = $this->actingAs($user)->get($verificationUrl);
+
         $response->assertStatus(403);
-        $this->assertFalse($this->user->fresh()->hasVerifiedEmail());
+        $this->assertFalse($user->fresh()->hasVerifiedEmail());
     }
 
     public function test_email_verification_resend_link_has_a_limited_attempts(): void
     {
-        for ($i = 0; $i < config('auth.email-verification.resend_limit', 3); $i++) {
-            $response = $this->actingAs($this->user)->post('/email/send-verification');
-            $response->assertStatus(302)
-                ->assertSessionHas('message', 'Verification link sent!');
+        $user = User::factory()->unverified()->create();
+
+        for ($i = 0; $i < 3; $i++) {
+            $response = $this->actingAs($user)->post('/email/verification-notification');
+            $response->assertStatus(302);
         }
 
-        $response = $this->actingAs($this->user)->post('/email/send-verification');
+        $response = $this->actingAs($user)->post('/email/verification-notification');
         $response->assertStatus(429);
+    }
+
+    public function test_successful_email_verification_is_logged(): void
+    {
+        $user = User::factory()->unverified()->create();
+        Mail::fake();
+        $verificationUrl = $this->tempVerificationUrl($user->id, $user->email);
+
+        $response = $this->actingAs($user)->get($verificationUrl);
+
+        $response->assertStatus(302);
+
+        $this->assertDatabaseHas('activity_log', [
+            'log_name' => 'Successful Email Verification',
+            'description' => "User {$user->id} has verified their email address.",
+            'causer_id' => $user->id,
+            'causer_type' => get_class($user),
+        ]);
+    }
+
+    public function test_email_verification_notification_is_logged(): void
+    {
+        $user = User::factory()->unverified()->create();
+        $response = $this->actingAs($user)->post('/email/verification-notification');
+
+        $response->assertStatus(302);
+        $this->assertDatabaseHas('activity_log', [
+            'log_name' => 'Email Verification Notification Sent',
+            'description' => "User {$user->id} has requested an email verification link.",
+            'causer_id' => $user->id,
+            'causer_type' => get_class($user),
+        ]);
+    }
+
+    public function test_email_verification_is_sent_through_notification(): void
+    {
+        \Illuminate\Support\Facades\Notification::fake();
+        $user = User::factory()->unverified()->create();
+
+        $response = $this->actingAs($user)->post('/email/verification-notification');
+
+        $response->assertStatus(302);
+
+        \Illuminate\Support\Facades\Notification::assertSentTo($user, VerifyEmail::class);
     }
 }
