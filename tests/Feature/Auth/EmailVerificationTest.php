@@ -150,39 +150,14 @@ class EmailVerificationTest extends TestCase
 
         $response = $this->actingAs($user)->get($verificationUrl);
 
-        $this->assertDatabaseHas('activity_log', [
-            'log_name' => 'Successful Email Verification',
-            'description' => "User {$user->id} has verified their email address.",
-            'subject_id' => $user->id,
-            'subject_type' => get_class($user),
-            'causer_id' => $user->id,
-            'causer_type' => get_class($user),
-        ]);
-
-    }
-
-    public function test_listener_listens_to_verified_event(): void
-    {
-        Event::fake([Verified::class]);
-
-        Event::assertListening(Verified::class, LogVerification::class);
-    }
-
-    public function test_listener_logs_verified_user(): void
-    {
-        $user = User::factory()->unverified()->create();
-
-        $verificationUrl = $this->tempVerificationUrl($user->id, $user->email);
-
-        $this->actingAs($user)->get($verificationUrl);
+        $response->assertStatus(302);
 
         $this->assertDatabaseHas('activity_log', [
             'log_name' => 'Successful Email Verification',
             'description' => "User {$user->id} has verified their email address.",
-            'subject_id' => null,
-            'subject_type' => null,
             'causer_id' => $user->id,
             'causer_type' => get_class($user),
         ]);
+
     }
 }

@@ -59,5 +59,3 @@ Route::middleware([...$authMiddleware, 'role:doctor'])
     ->group(function() {
         Route::get('/dashboard', [DashboardController::class, 'doctor'])->name('dashboard');
     });
-
-
