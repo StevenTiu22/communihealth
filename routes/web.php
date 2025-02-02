@@ -15,13 +15,15 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
+Route::get('/users', [UserController::class, 'index'])->name('users');
+
 $authMiddleware = [
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified'
 ];
 
-// Shared Routes - accessible by all roles
+// Shared Routes
 Route::middleware([...$authMiddleware, 'role:barangay-official|bhw|doctor'])
     ->group(function () {
         Route::get('/patients', [PatientController::class, 'index'])->name('patients.index');
@@ -38,7 +40,7 @@ Route::middleware([...$authMiddleware, 'role:barangay-official'])
     ->name('barangay-official.')
     ->group(function() {
         Route::get('/dashboard', [DashboardController::class, 'barangayOfficial'])->name('dashboard');
-        Route::get('/users', [UserController::class, 'index'])->name('users');
+
         Route::get('/audit-trail', [AuditTrailController::class, 'index'])->name('audit-trail');
     });
 

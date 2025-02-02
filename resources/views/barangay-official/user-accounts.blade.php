@@ -14,11 +14,12 @@
                         </p>
                     </div>
                     <div class="mb-6">
+                        <!-- Category Count Component -->
                         <livewire:users.category-count />
                     </div>
                     <hr class="border-gray-700 mb-6">
                     <div class="mt-6">
-                        <!-- Table Header -->
+                        <!-- Header -->
                         <div class="flex items-center justify-between mb-4">
                             <h2 class="text-xl font-semibold text-white">All Accounts (28)</h2>
                         </div>
