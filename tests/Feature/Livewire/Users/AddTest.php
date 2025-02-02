@@ -2,12 +2,12 @@
 
 namespace Tests\Feature\Livewire\Users;
 
-use App\Livewire\Users\CreateUserModal;
+use App\Livewire\Users\Add as CreateUserModal;
 use App\Models\User;
 use Livewire\Livewire;
 use Tests\TestCase;
 
-class CreateUserModalTest extends TestCase
+class AddTest extends TestCase
 {
     protected ?User $user;
     protected function setUp(): void
