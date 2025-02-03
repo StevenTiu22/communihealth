@@ -1,5 +1,5 @@
 <div>
-    <x-button wire:click="openModal" class="bg-blue-500 hover:bg-blue-700">
+    <x-button x-data="{ open:  }" class="bg-blue-500 hover:bg-blue-700">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
         </svg>
@@ -53,7 +53,7 @@
                                         <input id="profile_photo_input" type="file" wire:model.live="profile_photo" class="hidden" accept="image/*" wire:loading.attr="disabled">
                                     </div>
                                 </div>
-                                
+
                                 <div class="mt-2 text-sm text-gray-500">
                                     Recommended: Square image, at least 400x400 pixels
                                 </div>
@@ -210,7 +210,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>  
+                        </div>
                     </div>
                 </div>
             </form>
