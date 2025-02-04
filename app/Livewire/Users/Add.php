@@ -9,6 +9,7 @@ use App\Models\Specialization;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\View\View;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -16,26 +17,24 @@ class Add extends Component
 {
     use WithFileUploads;
 
-    public ?UserForm $form;
+    public UserForm $form;
 
-    public $showModal = false;
+    public bool $showModal = false;
 
-    public function open()
+    public function open(): void
     {
         $this->showModal = true;
     }
 
-    public function close()
+    public function close(): void
     {
         $this->showModal = false;
         $this->form->reset();
     }
 
-    public function updated($propertyName)
+    public function updated($propertyName): void
     {
-
-
-        $this->validateOnly($propertyName, $this->rules(), $this->messages());
+        $this->form->validateOnly($propertyName);
     }
 
     public function save()
@@ -149,7 +148,7 @@ class Add extends Component
         }
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.users.add');
     }
