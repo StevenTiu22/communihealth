@@ -1,7 +1,7 @@
 <div>
     <!-- Add User Button -->
     <x-button
-        wire:click="openModal"
+        wire:click="open"
         color="blue"
         :darkMode="true"
         class="px-3 py-3 text-lg"
@@ -13,7 +13,7 @@
     </x-button>
 
     <!-- Modal -->
-    <x-dialog-modal wire:model.live="showModal" maxWidth="xl" class="min-h-screen">
+    <x-dialog-modal wire:model.blur="showModal" maxWidth="xl" class="min-h-screen" wire:transition>
         <x-slot name="title">
             <div class="mt-4 border-b border-gray-300 dark:border-gray-600 pb-4">
                 <h1 class="text-2xl font-bold">Add New User</h1>
@@ -21,54 +21,47 @@
         </x-slot>
 
         <x-slot name="content">
-            <form wire:submit.prevent="save" class="relative">
+            <form wire:submit="save" class="relative">
                 <div class="h-[calc(100vh-15rem)] overflow-y-auto">
                     <div class="space-y-6 w-full">
                         <!-- Basic Information Section -->
                         <div class="bg-white dark:bg-gray-800 p-2 rounded-lg shadow-sm space-y-4 w-full">
                             <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Profile Photo</h2>
 
-                            <div class="flex flex-col items-center space-y-4">
-                                <!-- Avatar Preview -->
-                                <div class="avatar" x-data="{ photoPreview: null }">
-                                    <div class="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                                        <img
-                                            x-show="!photoPreview"
-                                            src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                                            alt="Profile photo"
-                                        />
-                                        <img
-                                            x-show="photoPreview"
-                                            :src="photoPreview"
-                                            alt="Profile photo preview"
-                                            style="display: none;"
-                                        />
-                                    </div>
-                                </div>
-
-                                <!-- File Input -->
-                                <div class="form-control w-full max-w-xs items-center">
+                            <div class="flex justify-center">
+                                <div x-data="{ photoName: null, photoPreview: true }" class="col-span-6 sm:col-span-4 text-center">
+                                    <!-- Profile Photo File Input -->
                                     <input
                                         type="file"
-                                        class="file-input file-input-bordered file-input-xs w-64 max-w-xs dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300"
-                                        accept="image/*"
-                                        wire:model.live="profile_photo"
-                                        x-ref="profile_photo"
+                                        accept="image/jpeg,image/png"
+                                        id="photo"
+                                        class="hidden"
+                                        wire:model.live="photo"
+                                        x-ref="photo"
                                         x-on:change="
+                                            photoName = $refs.photo.files[0].name;
+
                                             const reader = new FileReader();
                                             reader.onload = (e) => {
                                                 photoPreview = e.target.result;
                                             };
                                             reader.readAsDataURL($refs.photo.files[0]);
-                                        "
-                                    />
-                                    <label class="label">
-                                        <span class="label-text-alt text-gray-500 dark:text-gray-400">PNG, JPG or GIF (MAX. 1MB)</span>
-                                    </label>
+                                        " />
 
-                                    @error('profile_photo')
-                                        <x-input-error for="profile_photo" class="mt-2" />
-                                    @enderror
+                                    <!-- New Profile Photo Preview -->
+                                    <div class="flex justify-center">
+                                        <div class="mt-2 text-middle" x-show="photoPreview" style="display: none;">
+                                            <span class="block rounded-full w-32 h-32 bg-gray-900 bg-cover bg-no-repeat bg-center"
+                                                  x-bind:style="'background-image: url(\'' + photoPreview + '\');'">
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <x-button class="mt-4" type="button" x-on:click.prevent="$refs.photo.click()">
+                                        {{ __('Upload a photo') }}
+                                    </x-button>
+
+                                    <x-input-error for="photo" class="mt-2" />
                                 </div>
                             </div>
 
@@ -81,13 +74,11 @@
                                     <x-input
                                         type="text"
                                         id="first_name"
-                                        wire:model.live="form.first_name"
+                                        wire:model.blur="form.first_name"
                                         class="block w-full"
                                     />
 
-                                    @error('form.first_name')
-                                        <x-input-error for="form.first_name" class="mt-2" />
-                                    @enderror
+                                    <x-input-error for="form.first_name" class="mt-2" />
                                 </div>
 
                                 <div class="col-span-1">
@@ -96,13 +87,11 @@
                                     <x-input
                                         type="text"
                                         id="middle_name"
-                                        wire:model.live="form.middle_name"
+                                        wire:model.blur="form.middle_name"
                                         class="block w-full"
                                     />
 
-                                    @error('form.middle_name')
-                                        <x-input-error for="form.middle_name" class="mt-2" />
-                                    @enderror
+                                    <x-input-error for="form.middle_name" class="mt-2" />
                                 </div>
 
                                 <div class="col-span-1">
@@ -111,13 +100,11 @@
                                     <x-input
                                         type="text"
                                         id="last_name"
-                                        wire:model.live="form.last_name"
+                                        wire:model.blur="form.last_name"
                                         class="block w-full"
                                     />
 
-                                    @error('form.last_name')
-                                        <x-input-error for="form.last_name" class="mt-2" />
-                                    @enderror
+                                    <x-input-error for="form.last_name" class="mt-2" />
                                 </div>
 
                                 <div class="col-span-1">
@@ -126,13 +113,11 @@
                                     <x-input
                                         type="date"
                                         id="birth_date"
-                                        wire:model.live="form.birth_date"
-                                        class="block w-full [&::-webkit-calendar-picker-indicator]:filter [&::-webkit-calendar-picker-indicator]:invert"
+                                        wire:model.blur="form.birth_date"
+                                        class="block w-full [&::-webkit-calendar-picker-indicator]:[filter:brightness(0)_invert(1)]"
                                     />
 
-                                    @error('form.birth_date')
-                                        <x-input-error for="form.birth_date" class="mt-2" />
-                                    @enderror
+                                    <x-input-error for="form.birth_date" class="mt-2" />
                                 </div>
 
                                 <div class="col-span-1">
@@ -141,16 +126,14 @@
                                     <select
                                         id="sex"
                                         class="mt-1 block w-full border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-200 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
-                                        wire:model.live="form.sex"
+                                        wire:model.blur="form.sex"
                                     >
                                         <option value="">Select Sex</option>
                                         <option value="0">Male</option>
                                         <option value="1">Female</option>
                                     </select>
 
-                                    @error('form.sex')
-                                        <x-input-error for="form.sex" class="mt-2" />
-                                    @enderror
+                                    <x-input-error for="form.sex" class="mt-2" />
                                 </div>
 
                                 <div class="col-span-2">
@@ -159,17 +142,15 @@
                                     <div class="relative">
                                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16" id="book-number">
-                                                <path fill="#212121" d="M5.5 5.49536C5.5 5.7715 5.72386 5.99536 6 5.99536H6.60148L6.37904 7H5.5C5.22386 7 5 7.22386 5 7.5C5 7.77614 5.22386 8 5.5 8H6.15763L6.01634 8.63812C5.95665 8.90773 6.12682 9.17469 6.39643 9.23438C6.66604 9.29408 6.933 9.12391 6.9927 8.85429L7.18185 8H8.15061L8.00835 8.63733C7.94819 8.90684 8.1179 9.17408 8.38741 9.23424C8.65692 9.2944 8.92417 9.12469 8.98433 8.85518L9.17522 8H10C10.2761 8 10.5 7.77614 10.5 7.5C10.5 7.22386 10.2761 7 10 7H9.39844L9.62269 5.99536H10.5C10.7761 5.99536 11 5.7715 11 5.49536C11 5.21922 10.7761 4.99536 10.5 4.99536H9.84591L9.98738 4.36155C10.0475 4.09204 9.87783 3.8248 9.60832 3.76464C9.33881 3.70448 9.07156 3.87419 9.0114 4.1437L8.8213 4.99536H7.84711L7.98764 4.36066C8.04733 4.09105 7.87716 3.82409 7.60755 3.7644C7.33794 3.7047 7.07098 3.87487 7.01128 4.14449L6.82289 4.99536H6C5.72386 4.99536 5.5 5.21922 5.5 5.49536ZM8.37383 7H7.40326L7.6257 5.99536H8.59808L8.37383 7Z"></path>
-                                                <path fill="#212121" d="M5 1H11C12.1046 1 13 1.89543 13 3V12.4969C13 12.7731 12.7761 12.9969 12.5 12.9969H4V13C4 13.5523 4.44772 14 5 14H12.5C12.7761 14 13 14.2239 13 14.5C13 14.7761 12.7761 15 12.5 15H5C3.89543 15 3 14.1046 3 13V3C3 1.89543 3.89543 1 5 1ZM4 3V11.9969H12V3C12 2.44772 11.5523 2 11 2H5C4.44771 2 4 2.44771 4 3Z"></path>
+                                                <path fill="#FFFFFF" d="M5.5 5.49536C5.5 5.7715 5.72386 5.99536 6 5.99536H6.60148L6.37904 7H5.5C5.22386 7 5 7.22386 5 7.5C5 7.77614 5.22386 8 5.5 8H6.15763L6.01634 8.63812C5.95665 8.90773 6.12682 9.17469 6.39643 9.23438C6.66604 9.29408 6.933 9.12391 6.9927 8.85429L7.18185 8H8.15061L8.00835 8.63733C7.94819 8.90684 8.1179 9.17408 8.38741 9.23424C8.65692 9.2944 8.92417 9.12469 8.98433 8.85518L9.17522 8H10C10.2761 8 10.5 7.77614 10.5 7.5C10.5 7.22386 10.2761 7 10 7H9.39844L9.62269 5.99536H10.5C10.7761 5.99536 11 5.7715 11 5.49536C11 5.21922 10.7761 4.99536 10.5 4.99536H9.84591L9.98738 4.36155C10.0475 4.09204 9.87783 3.8248 9.60832 3.76464C9.33881 3.70448 9.07156 3.87419 9.0114 4.1437L8.8213 4.99536H7.84711L7.98764 4.36066C8.04733 4.09105 7.87716 3.82409 7.60755 3.7644C7.33794 3.7047 7.07098 3.87487 7.01128 4.14449L6.82289 4.99536H6C5.72386 4.99536 5.5 5.21922 5.5 5.49536ZM8.37383 7H7.40326L7.6257 5.99536H8.59808L8.37383 7Z"></path>
+                                                <path fill="#FFFFFF" d="M5 1H11C12.1046 1 13 1.89543 13 3V12.4969C13 12.7731 12.7761 12.9969 12.5 12.9969H4V13C4 13.5523 4.44772 14 5 14H12.5C12.7761 14 13 14.2239 13 14.5C13 14.7761 12.7761 15 12.5 15H5C3.89543 15 3 14.1046 3 13V3C3 1.89543 3.89543 1 5 1ZM4 3V11.9969H12V3C12 2.44772 11.5523 2 11 2H5C4.44771 2 4 2.44771 4 3Z"></path>
                                             </svg>
                                         </div>
 
                                         <x-input id="contact_no" name="form.contact_no" type="text" placeholder="Enter contact number" class="block w-full pl-10" />
                                     </div>
 
-                                    @error('form.contact_no')
-                                        <x-input-error for="form.contact_no" class="mt-2" />
-                                    @enderror
+                                    <x-input-error for="form.contact_no" class="mt-2" />
                                 </div>
 
                                 <div class="col-span-2">
@@ -185,13 +166,11 @@
                                             type="email"
                                             id="email"
                                             class="block w-full pl-10 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300"
-                                            wire:model.live="form.email"
+                                            wire:model.blur="form.email"
                                         />
                                     </div>
 
-                                    @error('form.email')
-                                        <x-input-error for="form.email" class="mt-2" />
-                                    @enderror
+                                    <x-input-error for="form.email" class="mt-2" />
                                 </div>
 
                                 <div class="col-span-2">
@@ -207,13 +186,11 @@
                                             type="text"
                                             id="username"
                                             class="block w-full pl-10 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300"
-                                            wire:model.live="form.username"
+                                            wire:model.blur="form.username"
                                         />
                                     </div>
 
-                                    @error('form.username')
-                                        <x-input-error for="form.username" class="mt-2" />
-                                    @enderror
+                                    <x-input-error for="form.username" class="mt-2" />
                                 </div>
 
                                 <div class="col-span-2 space-y-4" x-data="{ showBothPasswords: false }">
@@ -235,14 +212,12 @@
                                             <input
                                                 :type="showBothPasswords ? 'text' : 'password'"
                                                 id="password"
-                                                wire:model.live="form.password"
+                                                wire:model.blur="form.password"
                                                 class="block w-full pl-10 pr-10 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
                                             />
                                         </div>
 
-                                        @error('form.password')
-                                            <x-input-error for="form.password" class="mt-2" />
-                                        @enderror
+                                        <x-input-error for="form.password" class="mt-2" />
                                     </div>
 
                                     <!-- Confirm Password Field -->
@@ -262,20 +237,19 @@
                                             <input
                                                 :type="showBothPasswords ? 'text' : 'password'"
                                                 id="confirm_password"
-                                                wire:model.live="form.confirm_password"
+                                                wire:model.blur="form.confirm_password"
                                                 class="block w-full pl-10 pr-10 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
                                             />
                                         </div>
 
-                                        @error('form.confirm_password')
-                                            <x-input-error for="form.confirm_password" class="mt-2" />
-                                        @enderror
+                                        <x-input-error for="form.confirm_password" class="mt-2" />
                                     </div>
 
                                     <!-- Show/Hide Password -->
                                     <div class="mt-4">
-                                        <label class="inline-flex items-center text-sm text-gray-600 dark:text-gray-400">
+                                        <label for="checkbox" class="inline-flex items-center text-sm text-gray-600 dark:text-gray-400">
                                             <input
+                                                id="checkbox"
                                                 type="checkbox"
                                                 class="form-checkbox rounded border-gray-300 dark:border-gray-700 text-primary-600 shadow-sm focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 dark:bg-gray-900"
                                                 x-model="showBothPasswords"
@@ -301,13 +275,11 @@
                                         id="house_number"
                                         type="text"
                                         class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
-                                        wire:model.live="form.house_number"
+                                        wire:model.blur="form.house_number"
                                         placeholder="e.g., 123"
                                     />
 
-                                    @error('form.house_number')
-                                        <x-input-error for="form.house_number" class="mt-2" />
-                                    @enderror
+                                    <x-input-error for="form.house_number" class="mt-2" />
                                 </div>
 
                                 <!-- Street -->
@@ -317,14 +289,12 @@
                                         id="street"
                                         type="text"
                                         class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
-                                        wire:model.live="form.street"
+                                        wire:model.blur="form.street"
                                         required
                                         placeholder="e.g., Main Street"
                                     />
 
-                                    @error('form.street')
-                                        <x-input-error for="form.street" class="mt-2" />
-                                    @enderror
+                                    <x-input-error for="form.street" class="mt-2" />
                                 </div>
 
                                 <!-- Barangay -->
@@ -334,14 +304,12 @@
                                         id="barangay"
                                         type="text"
                                         class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
-                                        wire:model.live="form.barangay"
+                                        wire:model.blur="form.barangay"
                                         required
                                         placeholder="e.g., Barangay 123"
                                     />
 
-                                    @error('form.barangay')
-                                        <x-input-error for="form.barangay" class="mt-2" />
-                                    @enderror
+                                    <x-input-error for="form.barangay" class="mt-2" />
                                 </div>
 
                                 <!-- City -->
@@ -351,14 +319,13 @@
                                         id="city"
                                         type="text"
                                         class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
-                                        wire:model.live="form.city"
+                                        wire:model.blur="form.city"
                                         required
                                         placeholder="e.g., Manila"
                                     />
 
-                                    @error('form.city')
-                                        <x-input-error for="form.city" class="mt-2" />
-                                    @enderror
+
+                                    <x-input-error for="form.city" class="mt-2" />
                                 </div>
 
                                 <!-- Province -->
@@ -368,14 +335,12 @@
                                         id="province"
                                         type="text"
                                         class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
-                                        wire:model.live="form.province"
+                                        wire:model.blur="form.province"
                                         required
                                         placeholder="e.g., Metro Manila"
                                     />
 
-                                    @error('form.province')
-                                        <x-input-error for="form.province" class="mt-2" />
-                                    @enderror
+                                    <x-input-error for="form.province" class="mt-2" />
                                 </div>
 
                                 <!-- Region -->
@@ -385,14 +350,12 @@
                                         id="region"
                                         type="text"
                                         class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
-                                        wire:model.live="form.region"
+                                        wire:model.blur="form.region"
                                         required
                                         placeholder="e.g., NCR"
                                     />
 
-                                    @error('form.region')
-                                        <x-input-error for="form.region" class="mt-2" />
-                                    @enderror
+                                    <x-input-error for="form.region" class="mt-2" />
                                 </div>
 
                                 <!-- Country -->
@@ -402,15 +365,11 @@
                                         id="country"
                                         type="text"
                                         class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
-                                        wire:model.live="form.country"
-                                        required
-                                        value="Philippines"
+                                        wire:model.blur="form.country"
                                         readonly
                                     />
 
-                                    @error('form.country')
-                                        <x-input-error for="form.country" class="mt-2" />
-                                    @enderror
+                                    <x-input-error for="form.country" class="mt-2" />
                                 </div>
                             </div>
                         </div>
@@ -427,7 +386,7 @@
                                 <select
                                     id="role"
                                     class="mt-1 block w-full border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-200 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
-                                    wire:model.live="form.role"
+                                    wire:model.blur="form.role"
                                     required
                                 >
                                     <option selected="">Select Role</option>
@@ -436,9 +395,8 @@
                                     <option value="doctor">Doctor</option>
                                 </select>
 
-                                @error('form.role')
-                                    <x-input-error for="form.role" class="mt-2" />
-                                @enderror
+
+                                <x-input-error for="form.role" class="mt-2" />
                             </div>
                         </div>
                         @if(isset($form->role))
@@ -455,14 +413,12 @@
                                                 id="position"
                                                 type="text"
                                                 class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
-                                                wire:model.live="form.position"
+                                                wire:model.blur="form.position"
                                                 required
                                                 placeholder="e.g., Barangay Captain"
                                             />
 
-                                            @error('form.position')
-                                                <x-input-error for="form.position" class="mt-2" />
-                                            @enderror
+                                            <x-input-error for="form.position" class="mt-2" />
                                         </div>
 
                                         <!-- Term Start -->
@@ -473,7 +429,7 @@
                                                     id="term_start"
                                                     type="date"
                                                     class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
-                                                    wire:model.live="form.term_start"
+                                                    wire:model.blur="form.term_start"
                                                     required
                                                     min="{{ date('Y-m-d') }}"
                                                     x-on:change="$dispatch('term-start-changed', { value: $event.target.value })"
@@ -485,9 +441,7 @@
                                                 </div>
                                             </div>
 
-                                            @error('form.term_start')
-                                                <x-input-error for="form.term_start" class="mt-2" />
-                                            @enderror
+                                            <x-input-error for="form.term_start" class="mt-2" />
                                         </div>
 
                                         <!-- Term End -->
@@ -498,7 +452,7 @@
                                                     id="term_end"
                                                     type="date"
                                                     class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
-                                                    wire:model.live="form.term_end"
+                                                    wire:model.blur="form.term_end"
                                                     required
                                                     :min="$term_start ?? date('Y-m-d')"
                                                     x-on:term-start-changed.window="$el.min = $event.detail.value"
@@ -510,9 +464,7 @@
                                                 </div>
                                             </div>
 
-                                            @error('form.term_end')
-                                                <x-input-error for="form.term_end" class="mt-2" />
-                                            @enderror
+                                            <x-input-error for="form.term_end" class="mt-2" />
                                         </div>
                                     </div>
                                 </div>
@@ -529,7 +481,7 @@
                                                     id="certification_no"
                                                     type="text"
                                                     class="mt-1 block w-full uppercase dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
-                                                    wire:model.live="form.certification_no"
+                                                    wire:model.blur="form.certification_no"
                                                     required
                                                     maxlength="20"
                                                     placeholder="e.g., CERT-2025-0001"
@@ -544,9 +496,7 @@
                                                 Maximum of 20 characters. Automatically converted to uppercase.
                                             </div>
 
-                                            @error('form.certification_no')
-                                                <x-input-error for="form.certification_no" class="mt-2" />
-                                            @enderror
+                                            <x-input-error for="form.certification_no" class="mt-2" />
                                         </div>
 
                                         <!-- Barangay -->
@@ -556,18 +506,16 @@
                                                 id="barangay"
                                                 type="text"
                                                 class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
-                                                wire:model.live="barangay"
+                                                wire:model.blur="barangay"
                                                 required
                                                 placeholder="e.g., Barangay 123"
                                             />
 
-                                            @error('form.barangay')
-                                                <x-input-error for="barangay" class="mt-2" />
-                                            @enderror
+                                            <x-input-error for="barangay" class="mt-2" />
                                         </div>
                                     </div>
                                 </div>
-                            @else
+                            @elseif($form->role == 'doctor')
                                 <div class="bg-white dark:bg-gray-800 p-2 rounded-lg shadow-sm space-y-4 w-full">
                                     <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Doctor Information</h2>
 
@@ -580,7 +528,7 @@
                                                     id="license_number"
                                                     type="text"
                                                     class="mt-1 block w-full uppercase dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
-                                                    wire:model.live="form.license_number"
+                                                    wire:model.blur="form.license_number"
                                                     required
                                                     maxlength="7"
                                                     placeholder="e.g., 0123456"
@@ -601,9 +549,8 @@
                                             <div class="mt-1 text-xs text-gray-500 dark:text-gray-400">
                                                 Enter your 7-digit PRC license number
                                             </div>
-                                            @error('form.license_number')
-                                                <x-input-error for="form.license_number" class="mt-2" />
-                                            @enderror
+
+                                            <x-input-error for="form.license_number" class="mt-2" />
                                         </div>
 
                                         <!-- Specialization -->
@@ -611,7 +558,7 @@
                                             <x-label for="specialization" value="Specialization" required />
                                             <select
                                                 id="specialization"
-                                                wire:model.live="form.specialization"
+                                                wire:model.blur="form.specialization"
                                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300 focus:border-primary-500 focus:ring-primary-500"
                                                 required
                                             >
@@ -649,9 +596,7 @@
                                                 </optgroup>
                                             </select>
 
-                                            @error('form.specialization')
-                                                <x-input-error for="form.specialization" class="mt-2" />
-                                            @enderror
+                                            <x-input-error for="form.specialization" class="mt-2" />
                                         </div>
                                     </div>
                                 </div>
@@ -659,21 +604,12 @@
                         @endif
                     </div>
                 </div>
-
-                <!-- Loading State -->
-                <div
-                    wire:loading
-                    wire:target="save"
-                    class="absolute inset-0 bg-gray-200 bg-opacity-50 flex items-center justify-center backdrop-blur-sm"
-                >
-                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
-                </div>
             </form>
         </x-slot>
 
         <x-slot name="footer" class="border-t border-gray-300 dark:border-gray-600">
             <div class="flex items-center justify-end space-x-3">
-                <x-secondary-button wire:click="closeModal" wire:loading.attr="disabled">
+                <x-secondary-button wire:click="close" wire:loading.attr="disabled">
                     Cancel
                 </x-secondary-button>
 
