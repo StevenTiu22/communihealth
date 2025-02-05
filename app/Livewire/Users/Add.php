@@ -12,12 +12,17 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Livewire\Attributes\Validate;
 
 class Add extends Component
 {
     use WithFileUploads;
 
     public UserForm $form;
+
+    #[Validate('image', message: "The :attribute field must be an image.")]
+    #[Validate('max:2048', message: "The :attribute field must not be greater than :max kilobytes.")]
+    public mixed $photo = null;
 
     public bool $showModal = false;
 
@@ -32,10 +37,6 @@ class Add extends Component
         $this->form->reset();
     }
 
-    public function updated($propertyName): void
-    {
-        $this->form->validateOnly($propertyName);
-    }
 
     public function save()
     {

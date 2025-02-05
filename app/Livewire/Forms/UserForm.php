@@ -2,53 +2,33 @@
 
 namespace App\Livewire\Forms;
 
-use Carbon\Carbon;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
 
 class UserForm extends Form
 {
-    #[Validate([
-        'first_name' => ['required', 'alpha', 'max:255'],
-    ], message: [
-        'required' => "The first name field is required.",
-        'alpha' => "The first name field must contain only letters.",
-        'max' => "The first name field must not be greater than :max characters.",
-    ])]
+
+    #[Validate('required', message: 'The :attribute field is required.')]
+    #[Validate('regex:/^[A-Za-z\s.]+$/', message: 'The :attribute field must contain only letters, spaces, and dots.')]
+    #[Validate('max:255', message: 'The :attribute field must not be greater than :max characters.')]
     public string $first_name = '';
 
-    #[Validate([
-        'middle_name' => ['nullable', 'alpha', 'max:255'],
-    ], message: [
-        'alpha' => "The middle name field must contain only letters.",
-        'max' => "The middle name field must not be greater than :max characters.",
-    ])]
+    #[Validate('regex:/^[A-Za-z\s.]+$/', message: 'The middle name field must contain only letters and dots.')]
+    #[Validate('max:255', message: 'The middle name field must not be greater than :max characters.')]
     public string $middle_name = '';
 
-    #[Validate([
-        'last_name' => ['required', 'alpha', 'max:255'],
-    ], message: [
-        'required' => "The last name field is required.",
-        'alpha' => "The last name field must contain only letters.",
-        'max' => "The last name field must not be greater than :max characters.",
-    ])]
+    #[Validate('required', message: 'The :attribute field is required.')]
+    #[Validate('alpha', message: 'The :attribute field must contain only letters.')]
+    #[Validate('max:255', message: 'The :attribute field must not be greater than :max characters.')]
     public string $last_name = '';
 
-    #[Validate([
-        'birth_date' => ['required', 'date', 'before:today'],
-    ], message: [
-        'required' => "The birth date field is required.",
-        'date' => "The birth date field must be a valid date.",
-        'before' => "The birth date field must be a date before today.",
-    ])]
+    #[Validate('required', message: 'The :attribute field is required.')]
+    #[Validate('date', message: 'The :attribute field must be a valid date.')]
+    #[Validate('before:today', message: 'The :attribute field must be a date before today.')]
     public string $birth_date = '';
 
-    #[Validate([
-        'sex' => ['required', 'in:1,2'],
-    ], message: [
-        'required' => 'The :attribute field is required.',
-        'in' => 'The :attribute field must be selected from the given options.',
-    ])]
+    #[Validate('required', message: 'The :attribute field is required.')]
+    #[Validate('in:0,1', message: 'The :attribute field must be selected from the given options.')]
     public string $sex = '';
 
     #[Validate([
@@ -88,13 +68,9 @@ class UserForm extends Form
     ])]
     public string $password = '';
 
-    #[Validate([
-        'profile_photo_path' => ['nullable', 'image', 'max:2048'],
-    ], message: [
-        'image' => 'The profile photo field must be an image file.',
-        'max' => 'The profile photo field must not be greater than :max kilobytes.',
-    ])]
-    public string $profile_photo_path = '';
+    #[Validate('required', message: 'The :attribute field is required.')]
+    #[Validate('same:password', message: 'The :attribute field must match the password field.')]
+    public string $confirm_password = '';
 
     #[Validate([
         'house_number' => ['required', 'regex:/^[A-Za-z0-9\-]+$/', 'max:255'],
@@ -157,7 +133,7 @@ class UserForm extends Form
         'alpha' => 'The country field must contain only letters.',
         'max' => 'The country field must not be greater than :max characters.',
     ])]
-    public string $country = '';
+    public string $country = 'Philippines';
 
     #[Validate([
         'role' => ['required', 'in:barangay-official,bhw,doctor'],
