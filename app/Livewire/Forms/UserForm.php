@@ -2,138 +2,346 @@
 
 namespace App\Livewire\Forms;
 
+use App\Models\User;
+use Illuminate\Validation\Rule;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
 
 class UserForm extends Form
 {
+    #[Validate]
+    public ?User $user;
 
-    #[Validate('required', message: 'The :attribute field is required.')]
-    #[Validate('regex:/^[A-Za-z\s.]+$/', message: 'The :attribute field must contain only letters, spaces, and dots.')]
-    #[Validate('max:255', message: 'The :attribute field must not be greater than :max characters.')]
+    #[Validate]
     public string $first_name = '';
 
-    #[Validate('regex:/^[A-Za-z\s.]+$/', message: 'The middle name field must contain only letters and dots.')]
-    #[Validate('max:255', message: 'The middle name field must not be greater than :max characters.')]
+    #[Validate]
     public string $middle_name = '';
 
-    #[Validate('required', message: 'The :attribute field is required.')]
-    #[Validate('alpha', message: 'The :attribute field must contain only letters.')]
-    #[Validate('max:255', message: 'The :attribute field must not be greater than :max characters.')]
+    #[Validate]
     public string $last_name = '';
 
-    #[Validate('required', message: 'The :attribute field is required.')]
-    #[Validate('date', message: 'The :attribute field must be a valid date.')]
-    #[Validate('before:today', message: 'The :attribute field must be a date before today.')]
+    #[Validate]
     public string $birth_date = '';
 
-    #[Validate('required', message: 'The :attribute field is required.')]
-    #[Validate('in:0,1', message: 'The :attribute field must be selected from the given options.')]
+    #[Validate]
     public string $sex = '';
 
-    #[Validate('required', message: 'The :attribute field is required.')]
-    #[Validate('regex:/^\+63[0-9]{10}$/', message: 'The :attribute field must be a valid Philippine mobile number.')]
-    #[Validate('max:13', message: 'The :attribute field must not be greater than :max characters.')]
+    #[Validate]
     public string $contact_no = '';
 
-    #[Validate('required', message: 'The :attribute field is required.')]
-    #[Validate('email', message: 'The :attribute field must be a valid email address.')]
-    #[Validate('max:320', message: 'The :attribute field must not be greater than :max characters.')]
-    #[Validate('unique:users,email', message: 'This email is already taken.')]
+    #[Validate]
     public string $email = '';
 
-    #[Validate('required', message: 'The :attribute field is required.')]
-    #[Validate('min:8', message: 'The :attribute field must be at least :min characters.')]
-    #[Validate('max:40', message: 'The :attribute field must not be greater than :max characters.')]
+    #[Validate]
     public string $username = '';
 
-    #[Validate('required', message: 'The :attribute field is required.')]
-    #[Validate('min:8', message: 'The :attribute field must be at least :min characters.')]
-    #[Validate('max:128', message: 'The :attribute field must not be greater than :max characters.')]
+    #[Validate]
     public string $password = '';
 
-    #[Validate('required', message: 'The :attribute field is required.')]
-    #[Validate('same:password', message: 'The :attribute field must match the password field.')]
+    #[Validate]
     public string $confirm_password = '';
 
-    #[Validate('required', message: 'The :attribute field is required.')]
-    #[Validate('regex:^[A-Za-z0-9\s-]+$', message: 'The :attribute field must contain only letters, numbers, spaces, and dashes.')]
-    #[Validate('max:255', message: 'The :attribute field must not be greater than :max characters.')]
+    #[Validate]
     public string $house_number = '';
 
-    #[Validate('required', message: 'The :attribute field is required.')]
-    #[Validate('regex:^[A-Za-z0-9\s\.]+$', message: 'The :attribute field must contain only letters, numbers, spaces, and dots.')]
+    #[Validate]
     public string $barangay = '';
 
-    #[Validate('required', message: 'The :attribute field is required.')]
-    #[Validate('regex:^[A-Za-z0-9\s\.]+$', message: 'The :attribute field must contain only letters, numbers, spaces, and dots.')]
-    #[Validate('max:255', message: 'The :attribute field must not be greater than :max characters.')]
+    #[Validate]
     public string $street = '';
 
-    #[Validate('required', message: 'The :attribute field is required.')]
-    #[Validate('alpha', message: 'The :attribute field must contain only letters.')]
-    #[Validate('max:255', message: 'The :attribute field must not be greater than :max characters.')]
+    #[Validate]
     public string $city = '';
 
-    #[Validate('required', message: 'The :attribute field is required.')]
-    #[Validate('alpha', message: 'The :attribute field must contain only letters.')]
-    #[Validate('max:255', message: 'The :attribute field must not be greater than :max characters.')]
+    #[Validate]
     public string $province = '';
 
-    #[Validate('required', message: 'The :attribute field is required.')]
-    #[Validate('alpha', message: 'The :attribute field must contain only letters.')]
-    #[Validate('max:255', message: 'The :attribute field must not be greater than :max characters.')]
+    #[Validate]
     public string $region = '';
 
-
-    #[Validate('required', message: 'The :attribute field is required.')]
-    #[Validate('alpha', message: 'The :attribute field must contain only letters.')]
-    #[Validate('max:255', message: 'The :attribute field must not be greater than :max characters.')]
+    #[Validate]
     public string $country = 'Philippines';
 
-    #[Validate('required', message: 'The :attribute field is required.')]
-    #[Validate('in:barangay-official,bhw,doctor', message: 'The :attribute field must be selected from the given options.')]
+    #[Validate]
     public string $role = '';
 
-    #[Validate('required_if:role,barangay-official', message: 'The :attribute field is required.')]
-    #[Validate('alpha', message: 'The :attribute field must contain only letters.')]
-    #[Validate('max:255', message: 'The :attribute field must not be greater than :max characters.')]
+    #[Validate]
     public string $position = '';
 
-    #[Validate('required_if:role,barangay-official', message: 'The :attribute field is required.')]
-    #[Validate('date', message: 'The :attribute field must be a valid date.')]
-    #[Validate('before:today', message: 'The :attribute field must be a date before today.')]
+    #[Validate]
     public string $term_start = '';
 
-    #[Validate('required_if:role,barangay-official', message: 'The :attribute field is required.')]
-    #[Validate('date', message: 'The :attribute field must be a valid date.')]
-    #[Validate('after:term_start', message: 'The :attribute field must be a date after the term start.')]
+    #[Validate]
     public string $term_end = '';
 
-    #[Validate('required_if:role,bhw', message: 'The :attribute field is required.')]
-    #[Validate('digits', message: 'The :attribute field must contain only digits.')]
-    #[Validate('max:20', message: 'The :attribute field must not be greater than :max characters.')]
+    #[Validate]
     public string $certification_no = '';
 
-    #[Validate('required_if:role,bhw', message: 'The :attribute field is required.')]
-    #[Validate('alpha_num', message: 'The :attribute field must contain only letters and numbers.')]
+    #[Validate]
     public string $bhw_barangay = '';
 
-    #[Validate([
-        'license_number' => ['required_if:role,doctor', 'digits', 'max:20'],
-    ], message: [
-        'required_if' => 'The license number field is required.',
-        'digits' => 'The license number field must contain only digits.',
-        'max' => 'The license number field must not be greater than :max characters.',
-    ])]
+    #[Validate]
     public string $license_number = '';
 
-    #[Validate([
-        'specialization' => ['required_if:role,doctor', 'alpha', 'max:255'],
-    ], message: [
-        'required_if' => 'The specialization field is required.',
-        'alpha' => 'The specialization field must contain only letters.',
-        'max' => 'The specialization field must not be greater than :max characters.',
-    ])]
+    #[Validate]
     public string $specialization = '';
+
+    protected function rules(): array
+    {
+        return [
+            'first_name' => [
+                'required',
+                'regex:/^[A-Za-z\s.]+$/',
+                'max:255',
+            ],
+            'middle_name' => [
+                'regex:/^[A-Za-z\s.]+$/',
+                'max:255',
+            ],
+            'last_name' => [
+                'required',
+                'regex:/^[A-Za-z\s.]+$/',
+                'max:255',
+            ],
+            'birth_date' => [
+                'required',
+                'date',
+                'before:today',
+                Rule::date()->after(now()->subYears(120))
+            ],
+            'sex' => [
+                'required',
+                Rule::in([0, 1])
+            ],
+            'contact_no' => [
+                'required',
+                'regex:/^+63[0-9]{10}$/',
+                'max:13',
+            ],
+            'email' => [
+                'required',
+                'email',
+                'max:320',
+                Rule::unique('users', 'email')->ignore($this->user)
+            ],
+            'username' => [
+                'required',
+                'alpha_num',
+                'max:40',
+                Rule::unique('users', 'username')->ignore($this->user)
+            ],
+            'password' => [
+                'required',
+                'min:8',
+                'max:128',
+            ],
+            'confirm_password' => [
+                'required',
+                'same:password',
+            ],
+            'house_number' => [
+                'required',
+                'regex:/^[A-Za-z0-9\s-]+$/',
+                'max:255',
+            ],
+            'barangay' => [
+                'required',
+                'regex:/^[A-Za-z0-9\s.]+$/',
+            ],
+            'street' => [
+                'required',
+                'regex:/^[A-Za-z0-9\s.]+$/',
+                'max:255',
+            ],
+            'city' => [
+                'required',
+                'alpha',
+                'max:255',
+            ],
+            'province' => [
+                'required',
+                'alpha',
+                'max:255',
+            ],
+            'region' => [
+                'required',
+                'alpha',
+                'max:255',
+            ],
+            'country' => [
+                'required',
+                'alpha',
+                'max:255',
+            ],
+            'role' => [
+                'required',
+                Rule::in(['barangay-official', 'bhw', 'doctor'])
+            ],
+            'position' => [
+                'required_if:role,barangay-official',
+                'alpha',
+                'max:255',
+            ],
+            'term_start' => [
+                'required_if:role,barangay-official',
+                'date',
+                'before:today',
+            ],
+            'term_end' => [
+                'required_if:role,barangay-official',
+                'date',
+                'after:term_start',
+            ],
+            'certification_no' => [
+                'required_if:role,bhw',
+                'digits:20',
+                'max:20',
+            ],
+            'bhw_barangay' => [
+                'required_if:role,bhw',
+                'alpha_num',
+            ],
+            'license_number' => [
+                'required_if:role,doctor',
+                'digits:7',
+                'max:7',
+            ],
+            'specialization' => [
+                'required_if:role,doctor',
+                'alpha',
+                'max:255',
+                Rule::exists('specializations', 'name')
+            ],
+        ];
+    }
+
+    protected function messages(): array
+    {
+        return [
+            'first_name' => [
+                'required' => 'The :attribute field is required.',
+                'regex' => 'The :attribute field must contain only letters, spaces, and dots.',
+                'max' => 'The :attribute field must not be greater than :max characters.'
+            ],
+            'middle_name' => [
+                'regex' => 'The :attribute field must contain only letters, spaces, and dots.',
+                'max' => 'The :attribute field must not be greater than :max characters.'
+            ],
+            'last_name' => [
+                'required' => 'The :attribute field is required.',
+                'regex' => 'The :attribute field must contain only letters, spaces, and dots.',
+                'max' => 'The :attribute field must not be greater than :max characters.'
+            ],
+            'birth_date' => [
+                'required' => 'The :attribute field is required.',
+                'date' => 'The :attribute field must be a valid date.',
+                'before' => 'The :attribute field must be a date before today.',
+                'after' => 'The :attribute field must be a date after :date.'
+            ],
+            'sex' => [
+                'required' => 'The :attribute field is required.',
+                'in' => 'The :attribute field must be selected from the given options.'
+            ],
+            'contact_no' => [
+                'required' => 'The :attribute field is required.',
+                'regex' => 'The :attribute field must be a valid contact number.',
+                'max' => 'The :attribute field must not be greater than :max characters.'
+            ],
+            'email' => [
+                'required' => 'The :attribute field is required.',
+                'email' => 'The :attribute field must be a valid email address.',
+                'max' => 'The :attribute field must not be greater than :max characters.',
+                'unique' => 'The :attribute field has already been taken.'
+            ],
+            'username' => [
+                'required' => 'The :attribute field is required.',
+                'alpha_num' => 'The :attribute field must contain only letters and numbers.',
+                'max' => 'The :attribute field must not be greater than :max characters.',
+                'unique' => 'The :attribute field has already been taken.'
+            ],
+            'password' => [
+                'required' => 'The :attribute field is required.',
+                'min' => 'The :attribute field must be at least :min characters.',
+                'max' => 'The :attribute field must not be greater than :max characters.'
+            ],
+            'confirm_password' => [
+                'required' => 'The :attribute field is required.',
+                'same' => 'The :attribute field must match the password field.'
+            ],
+            'house_number' => [
+                'required' => 'The :attribute field is required.',
+                'regex' => 'The :attribute field must contain only letters, numbers, spaces, and dashes.',
+                'max' => 'The :attribute field must not be greater than :max characters.'
+            ],
+            'barangay' => [
+                'required' => 'The :attribute field is required.',
+                'regex' => 'The :attribute field must contain only letters, numbers, spaces, and dots.'
+            ],
+            'street' => [
+                'required' => 'The :attribute field is required.',
+                'regex' => 'The :attribute field must contain only letters, numbers, spaces, and dots.',
+                'max' => 'The :attribute field must not be greater than :max characters.'
+            ],
+            'city' => [
+                'required' => 'The :attribute field is required.',
+                'alpha' => 'The :attribute field must contain only letters.',
+                'max' => 'The :attribute field must not be greater than :max characters.'
+            ],
+            'province' => [
+                'required' => 'The :attribute field is required.',
+                'alpha' => 'The :attribute field must contain only letters.',
+                'max' => 'The :attribute field must not be greater than :max characters.'
+            ],
+            'region' => [
+                'required' => 'The :attribute field is required.',
+                'alpha' => 'The :attribute field must contain only letters.',
+                'max' => 'The :attribute field must not be greater than :max characters.'
+            ],
+            'country' => [
+                'required' => 'The :attribute field is required.',
+                'alpha' => 'The :attribute field must contain only letters.',
+                'max' => 'The :attribute field must not be greater than :max characters.'
+            ],
+            'role' => [
+                'required' => 'The :attribute field is required.',
+                'in' => 'The :attribute field must be selected from the given options.'
+            ],
+            'position' => [
+                'required_if' => 'The :attribute field is required.',
+                'alpha' => 'The :attribute field must contain only letters.',
+                'max' => 'The :attribute field must not be greater than :max characters.'
+            ],
+            'term_start' => [
+                'required_if' => 'The :attribute field is required.',
+                'date' => 'The :attribute field must be a valid date.',
+                'before' => 'The :attribute field must be a date before today.'
+            ],
+            'term_end' => [
+                'required_if' => 'The :attribute field is required.',
+                'date' => 'The :attribute field must be a valid date.',
+                'after' => 'The :attribute field must be a date after the term start.'
+            ],
+            'certification_no' => [
+                'required_if' => 'The :attribute field is required.',
+                'digits' => 'The :attribute field must contain only digits.',
+                'max' => 'The :attribute field must not be greater than :max characters.'
+            ],
+            'bhw_barangay' => [
+                'required_if' => 'The :attribute field is required.',
+                'alpha_num' => 'The :attribute field must contain only letters and numbers.'
+            ],
+            'license_number' => [
+                'required_if' => 'The :attribute field is required.',
+                'digits' => 'The :attribute field must contain only digits.',
+                'max' => 'The :attribute field must not be greater than :max characters.'
+            ],
+            'specialization' => [
+                'required_if' => 'The :attribute field is required.',
+                'alpha' => 'The :attribute field must contain only letters.',
+                'max' => 'The :attribute field must not be greater than :max characters.',
+                'exists' => 'The :attribute field must be selected from the given options.'
+            ],
+        ];
+    }
 }
