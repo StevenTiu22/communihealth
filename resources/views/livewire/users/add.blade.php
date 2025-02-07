@@ -29,7 +29,7 @@
                             <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Profile Photo</h2>
 
                             <div class="flex justify-center">
-                                <div x-data="{ photoName: null, photoPreview: true }" class="col-span-6 sm:col-span-4 text-center">
+                                <div x-data="{ photoName: null, photoPreview: null }" class="col-span-6 sm:col-span-4 text-center">
                                     <!-- Profile Photo File Input -->
                                     <input
                                         type="file"
@@ -40,6 +40,28 @@
                                         x-ref="photo"
                                         x-on:change="
                                             photoName = $refs.photo.files[0].name;
+
+                                            size = $refs.photo.files[0].size;
+
+                                            file_type = $refs.photo.files[0].type;
+
+                                            if (file_type != 'image/jpeg' && file_type != 'image/png') {
+                                                $dispatch('notify', {
+                                                    title: 'Invalid file type',
+                                                    message: 'Please upload a file with a valid image format.',
+                                                    type: 'error',
+                                                });
+                                                event.preventDefault();
+                                            }
+
+                                            if (size > 2097152) {
+                                                $dispatch('notify', {
+                                                    title: 'File size too large',
+                                                    message: 'Please upload a file less than 2MB.',
+                                                    type: 'error',
+                                                });
+                                                event.preventDefault();
+                                            }
 
                                             const reader = new FileReader();
                                             reader.onload = (e) => {
@@ -53,6 +75,12 @@
                                         <div class="mt-2 text-middle" x-show="photoPreview" style="display: none;">
                                             <span class="block rounded-full w-32 h-32 bg-gray-900 bg-cover bg-no-repeat bg-center"
                                                   x-bind:style="'background-image: url(\'' + photoPreview + '\');'">
+                                            </span>
+                                        </div>
+
+                                        <div class="mt-2" x-show="!photoPreview">
+                                            <span class="block rounded-full w-32 h-32 bg-cover bg-no-repeat bg-center border-2 border-gray-200"
+                                                  style="background-image: url('{{ asset('images/default-avatar.png') }}')">
                                             </span>
                                         </div>
                                     </div>
@@ -506,12 +534,12 @@
                                                 id="barangay"
                                                 type="text"
                                                 class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
-                                                wire:model.blur="barangay"
+                                                wire:model.blur="form.bhw_barangay"
                                                 required
                                                 placeholder="e.g., Barangay 123"
                                             />
 
-                                            <x-input-error for="barangay" class="mt-2" />
+                                            <x-input-error for="form.bhw_barangay" class="mt-2" />
                                         </div>
                                     </div>
                                 </div>

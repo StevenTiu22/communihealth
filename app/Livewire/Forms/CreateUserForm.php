@@ -2,16 +2,12 @@
 
 namespace App\Livewire\Forms;
 
-use App\Models\User;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
 
-class UserForm extends Form
+class CreateUserForm extends Form
 {
-    #[Validate]
-    public ?User $user;
-
     #[Validate]
     public string $first_name = '';
 
@@ -87,21 +83,23 @@ class UserForm extends Form
     #[Validate]
     public string $specialization = '';
 
+    public string $profile_photo_path = '';
+
     protected function rules(): array
     {
         return [
             'first_name' => [
                 'required',
-                'regex:/^[A-Za-z\s.]+$/',
+                'alpha',
                 'max:255',
             ],
             'middle_name' => [
-                'regex:/^[A-Za-z\s.]+$/',
+                'alpha',
                 'max:255',
             ],
             'last_name' => [
                 'required',
-                'regex:/^[A-Za-z\s.]+$/',
+                'alpha',
                 'max:255',
             ],
             'birth_date' => [
@@ -116,20 +114,20 @@ class UserForm extends Form
             ],
             'contact_no' => [
                 'required',
-                'regex:/^+63[0-9]{10}$/',
+                'regex:^(09|\+639)\d{9}$^',
                 'max:13',
             ],
             'email' => [
                 'required',
                 'email',
                 'max:320',
-                Rule::unique('users', 'email')->ignore($this->user)
+                Rule::unique('users', 'email')
             ],
             'username' => [
                 'required',
                 'alpha_num',
                 'max:40',
-                Rule::unique('users', 'username')->ignore($this->user)
+                Rule::unique('users', 'username')
             ],
             'password' => [
                 'required',
@@ -142,16 +140,16 @@ class UserForm extends Form
             ],
             'house_number' => [
                 'required',
-                'regex:/^[A-Za-z0-9\s-]+$/',
+                'string',
                 'max:255',
             ],
             'barangay' => [
                 'required',
-                'regex:/^[A-Za-z0-9\s.]+$/',
+                'string',
             ],
             'street' => [
                 'required',
-                'regex:/^[A-Za-z0-9\s.]+$/',
+                'string',
                 'max:255',
             ],
             'city' => [
@@ -166,7 +164,7 @@ class UserForm extends Form
             ],
             'region' => [
                 'required',
-                'alpha',
+                'string',
                 'max:255',
             ],
             'country' => [
@@ -180,7 +178,7 @@ class UserForm extends Form
             ],
             'position' => [
                 'required_if:role,barangay-official',
-                'alpha',
+                'string',
                 'max:255',
             ],
             'term_start' => [
@@ -221,16 +219,16 @@ class UserForm extends Form
         return [
             'first_name' => [
                 'required' => 'The :attribute field is required.',
-                'regex' => 'The :attribute field must contain only letters, spaces, and dots.',
+                'alpha' => 'The :attribute field must contain letters only',
                 'max' => 'The :attribute field must not be greater than :max characters.'
             ],
             'middle_name' => [
-                'regex' => 'The :attribute field must contain only letters, spaces, and dots.',
+                'alpha' => 'The :attribute field must contain letters only.',
                 'max' => 'The :attribute field must not be greater than :max characters.'
             ],
             'last_name' => [
                 'required' => 'The :attribute field is required.',
-                'regex' => 'The :attribute field must contain only letters, spaces, and dots.',
+                'alpha' => 'The :attribute field must contain letters only.',
                 'max' => 'The :attribute field must not be greater than :max characters.'
             ],
             'birth_date' => [
@@ -271,16 +269,13 @@ class UserForm extends Form
             ],
             'house_number' => [
                 'required' => 'The :attribute field is required.',
-                'regex' => 'The :attribute field must contain only letters, numbers, spaces, and dashes.',
                 'max' => 'The :attribute field must not be greater than :max characters.'
             ],
             'barangay' => [
                 'required' => 'The :attribute field is required.',
-                'regex' => 'The :attribute field must contain only letters, numbers, spaces, and dots.'
             ],
             'street' => [
                 'required' => 'The :attribute field is required.',
-                'regex' => 'The :attribute field must contain only letters, numbers, spaces, and dots.',
                 'max' => 'The :attribute field must not be greater than :max characters.'
             ],
             'city' => [
@@ -295,7 +290,6 @@ class UserForm extends Form
             ],
             'region' => [
                 'required' => 'The :attribute field is required.',
-                'alpha' => 'The :attribute field must contain only letters.',
                 'max' => 'The :attribute field must not be greater than :max characters.'
             ],
             'country' => [
@@ -309,7 +303,6 @@ class UserForm extends Form
             ],
             'position' => [
                 'required_if' => 'The :attribute field is required.',
-                'alpha' => 'The :attribute field must contain only letters.',
                 'max' => 'The :attribute field must not be greater than :max characters.'
             ],
             'term_start' => [

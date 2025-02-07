@@ -15,7 +15,7 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-Route::get('/users', [UserController::class, 'index'])->name('users');
+Route::get('/users', [UserController::class, 'index'])->name('users.index');
 
 $authMiddleware = [
     'auth:sanctum',
