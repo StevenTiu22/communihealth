@@ -175,7 +175,7 @@
                                             </svg>
                                         </div>
 
-                                        <x-input id="contact_no" name="form.contact_no" type="text" placeholder="Enter contact number" class="block w-full pl-10" />
+                                        <x-input id="contact_no" wire:model.blur="form.contact_no" type="text" placeholder="Enter contact number" class="block w-full pl-10" />
                                     </div>
 
                                     <x-input-error for="form.contact_no" class="mt-2" />
@@ -414,7 +414,7 @@
                                 <select
                                     id="role"
                                     class="mt-1 block w-full border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-200 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
-                                    wire:model.blur="form.role"
+                                    wire:model.live="form.role"
                                     required
                                 >
                                     <option selected="">Select Role</option>
@@ -427,208 +427,206 @@
                                 <x-input-error for="form.role" class="mt-2" />
                             </div>
                         </div>
-                        @if(isset($form->role))
-                            @if($form->role == 'barangay-official')
-                                <div class="bg-white dark:bg-gray-800 p-2 rounded-lg shadow-sm space-y-4 w-full">
-                                    <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Barangay Official Information</h2>
-                                    {{-- Barangay Official fields --}}
+                        @if($form->role == 'barangay-official')
+                            <div class="bg-white dark:bg-gray-800 p-2 rounded-lg shadow-sm space-y-4 w-full">
+                                <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Barangay Official Information</h2>
+                                {{-- Barangay Official fields --}}
 
-                                    <div class="grid grid-cols-2 gap-4">
-                                        <!-- Position -->
-                                        <div class="col-span-2">
-                                            <x-label for="position" value="Position" required />
+                                <div class="grid grid-cols-2 gap-4">
+                                    <!-- Position -->
+                                    <div class="col-span-2">
+                                        <x-label for="position" value="Position" required />
+                                        <x-input
+                                            id="position"
+                                            type="text"
+                                            class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
+                                            wire:model.blur="form.position"
+                                            required
+                                            placeholder="e.g., Barangay Captain"
+                                        />
+
+                                        <x-input-error for="form.position" class="mt-2" />
+                                    </div>
+
+                                    <!-- Term Start -->
+                                    <div class="col-span-1">
+                                        <x-label for="term_start" value="Term Start Date" required />
+                                        <div class="relative">
                                             <x-input
-                                                id="position"
-                                                type="text"
+                                                id="term_start"
+                                                type="date"
                                                 class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
-                                                wire:model.blur="form.position"
+                                                wire:model.blur="form.term_start"
                                                 required
-                                                placeholder="e.g., Barangay Captain"
+                                                min="{{ date('Y-m-d') }}"
+                                                x-on:change="$dispatch('term-start-changed', { value: $event.target.value })"
                                             />
-
-                                            <x-input-error for="form.position" class="mt-2" />
-                                        </div>
-
-                                        <!-- Term Start -->
-                                        <div class="col-span-1">
-                                            <x-label for="term_start" value="Term Start Date" required />
-                                            <div class="relative">
-                                                <x-input
-                                                    id="term_start"
-                                                    type="date"
-                                                    class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
-                                                    wire:model.blur="form.term_start"
-                                                    required
-                                                    min="{{ date('Y-m-d') }}"
-                                                    x-on:change="$dispatch('term-start-changed', { value: $event.target.value })"
-                                                />
-                                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pt-1 pointer-events-none">
-                                                    <svg class="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
-                                                    </svg>
-                                                </div>
+                                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pt-1 pointer-events-none">
+                                                <svg class="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+                                                </svg>
                                             </div>
-
-                                            <x-input-error for="form.term_start" class="mt-2" />
                                         </div>
 
-                                        <!-- Term End -->
-                                        <div class="col-span-1">
-                                            <x-label for="term_end" value="Term End Date" required />
-                                            <div class="relative">
-                                                <x-input
-                                                    id="term_end"
-                                                    type="date"
-                                                    class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
-                                                    wire:model.blur="form.term_end"
-                                                    required
-                                                    :min="$term_start ?? date('Y-m-d')"
-                                                    x-on:term-start-changed.window="$el.min = $event.detail.value"
-                                                />
-                                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pt-1 pointer-events-none">
-                                                    <svg class="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
-                                                    </svg>
-                                                </div>
-                                            </div>
-
-                                            <x-input-error for="form.term_end" class="mt-2" />
-                                        </div>
+                                        <x-input-error for="form.term_start" class="mt-2" />
                                     </div>
-                                </div>
-                            @elseif($form->role == 'bhw')
-                                <div class="bg-white dark:bg-gray-800 p-2 rounded-lg shadow-sm space-y-4 w-full">
-                                    <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">BHW Information</h2>
 
-                                    <div class="grid grid-cols-2 gap-4">
-                                        <!-- Certification Number -->
-                                        <div class="col-span-1">
-                                            <x-label for="certification_no" value="Certification No." required />
-                                            <div class="relative">
-                                                <x-input
-                                                    id="certification_no"
-                                                    type="text"
-                                                    class="mt-1 block w-full uppercase dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
-                                                    wire:model.blur="form.certification_no"
-                                                    required
-                                                    maxlength="20"
-                                                    placeholder="e.g., CERT-2025-0001"
-                                                    x-data=""
-                                                    x-on:input="$el.value = $el.value.toUpperCase()"
-                                                />
-                                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pt-1">
-                                                    <span class="text-sm text-gray-400 dark:text-gray-500" x-text="certification_no ? certification_no.length : 0">/20</span>
-                                                </div>
-                                            </div>
-                                            <div class="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                Maximum of 20 characters. Automatically converted to uppercase.
-                                            </div>
-
-                                            <x-input-error for="form.certification_no" class="mt-2" />
-                                        </div>
-
-                                        <!-- Barangay -->
-                                        <div class="col-span-1">
-                                            <x-label for="barangay" value="Barangay" required />
+                                    <!-- Term End -->
+                                    <div class="col-span-1">
+                                        <x-label for="term_end" value="Term End Date" required />
+                                        <div class="relative">
                                             <x-input
-                                                id="barangay"
-                                                type="text"
+                                                id="term_end"
+                                                type="date"
                                                 class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
-                                                wire:model.blur="form.bhw_barangay"
+                                                wire:model.blur="form.term_end"
                                                 required
-                                                placeholder="e.g., Barangay 123"
+                                                :min="$term_start ?? date('Y-m-d')"
+                                                x-on:term-start-changed.window="$el.min = $event.detail.value"
                                             />
-
-                                            <x-input-error for="form.bhw_barangay" class="mt-2" />
+                                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pt-1 pointer-events-none">
+                                                <svg class="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+                                                </svg>
+                                            </div>
                                         </div>
+
+                                        <x-input-error for="form.term_end" class="mt-2" />
                                     </div>
                                 </div>
-                            @elseif($form->role == 'doctor')
-                                <div class="bg-white dark:bg-gray-800 p-2 rounded-lg shadow-sm space-y-4 w-full">
-                                    <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Doctor Information</h2>
+                            </div>
+                        @elseif($form->role == 'bhw')
+                            <div class="bg-white dark:bg-gray-800 p-2 rounded-lg shadow-sm space-y-4 w-full">
+                                <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">BHW Information</h2>
 
-                                    <div class="grid grid-cols-2 gap-4">
-                                        <!-- License Number -->
-                                        <div class="col-span-1">
-                                            <x-label for="license_number" value="PRC License Number" required />
-                                            <div class="relative">
-                                                <x-input
-                                                    id="license_number"
-                                                    type="text"
-                                                    class="mt-1 block w-full uppercase dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
-                                                    wire:model.blur="form.license_number"
-                                                    required
-                                                    maxlength="7"
-                                                    placeholder="e.g., 0123456"
-                                                    x-data="{
-                                                        mask(e) {
-                                                            let value = e.target.value.replace(/\D/g, '');
-                                                            if (value.length > 7) value = value.slice(0, 7);
-                                                            e.target.value = value;
-                                                            return value;
-                                                        }
-                                                    }"
-                                                    x-on:input="mask($event)"
-                                                />
-                                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pt-1">
-                                                    <span class="text-sm text-gray-400 dark:text-gray-500" x-text="license_number ? license_number.length : 0">/7</span>
-                                                </div>
-                                            </div>
-                                            <div class="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                Enter your 7-digit PRC license number
-                                            </div>
-
-                                            <x-input-error for="form.license_number" class="mt-2" />
-                                        </div>
-
-                                        <!-- Specialization -->
-                                        <div class="col-span-1">
-                                            <x-label for="specialization" value="Specialization" required />
-                                            <select
-                                                id="specialization"
-                                                wire:model.blur="form.specialization"
-                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300 focus:border-primary-500 focus:ring-primary-500"
+                                <div class="grid grid-cols-2 gap-4">
+                                    <!-- Certification Number -->
+                                    <div class="col-span-1">
+                                        <x-label for="certification_no" value="Certification No." required />
+                                        <div class="relative">
+                                            <x-input
+                                                id="certification_no"
+                                                type="text"
+                                                class="mt-1 block w-full uppercase dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
+                                                wire:model.blur="form.certification_no"
                                                 required
-                                            >
-                                                <option value="">Select Specialization</option>
-                                                <optgroup label="Primary Care">
-                                                    <option value="family_medicine">Family Medicine</option>
-                                                    <option value="internal_medicine">Internal Medicine</option>
-                                                    <option value="pediatrics">Pediatrics</option>
-                                                    <option value="general_practice">General Practice</option>
-                                                </optgroup>
-                                                <optgroup label="Medical Specialties">
-                                                    <option value="cardiology">Cardiology</option>
-                                                    <option value="dermatology">Dermatology</option>
-                                                    <option value="endocrinology">Endocrinology</option>
-                                                    <option value="gastroenterology">Gastroenterology</option>
-                                                    <option value="neurology">Neurology</option>
-                                                    <option value="oncology">Oncology</option>
-                                                    <option value="psychiatry">Psychiatry</option>
-                                                    <option value="pulmonology">Pulmonology</option>
-                                                </optgroup>
-                                                <optgroup label="Surgical Specialties">
-                                                    <option value="general_surgery">General Surgery</option>
-                                                    <option value="neurosurgery">Neurosurgery</option>
-                                                    <option value="orthopedics">Orthopedics</option>
-                                                    <option value="plastic_surgery">Plastic Surgery</option>
-                                                    <option value="urology">Urology</option>
-                                                </optgroup>
-                                                <optgroup label="Other Specialties">
-                                                    <option value="anesthesiology">Anesthesiology</option>
-                                                    <option value="obstetrics_gynecology">Obstetrics & Gynecology</option>
-                                                    <option value="ophthalmology">Ophthalmology</option>
-                                                    <option value="otolaryngology">Otolaryngology (ENT)</option>
-                                                    <option value="pathology">Pathology</option>
-                                                    <option value="radiology">Radiology</option>
-                                                </optgroup>
-                                            </select>
-
-                                            <x-input-error for="form.specialization" class="mt-2" />
+                                                maxlength="20"
+                                                placeholder="e.g., CERT-2025-0001"
+                                                x-data=""
+                                                x-on:input="$el.value = $el.value.toUpperCase()"
+                                            />
+                                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pt-1">
+                                                <span class="text-sm text-gray-400 dark:text-gray-500" x-text="certification_no ? certification_no.length : 0">/20</span>
+                                            </div>
                                         </div>
+                                        <div class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                            Maximum of 20 characters. Automatically converted to uppercase.
+                                        </div>
+
+                                        <x-input-error for="form.certification_no" class="mt-2" />
+                                    </div>
+
+                                    <!-- Barangay -->
+                                    <div class="col-span-1">
+                                        <x-label for="barangay" value="Barangay" required />
+                                        <x-input
+                                            id="barangay"
+                                            type="text"
+                                            class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
+                                            wire:model.blur="form.bhw_barangay"
+                                            required
+                                            placeholder="e.g., Barangay 123"
+                                        />
+
+                                        <x-input-error for="form.bhw_barangay" class="mt-2" />
                                     </div>
                                 </div>
-                            @endif
+                            </div>
+                        @elseif($form->role == 'doctor')
+                            <div class="bg-white dark:bg-gray-800 p-2 rounded-lg shadow-sm space-y-4 w-full">
+                                <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Doctor Information</h2>
+
+                                <div class="grid grid-cols-2 gap-4">
+                                    <!-- License Number -->
+                                    <div class="col-span-1">
+                                        <x-label for="license_number" value="PRC License Number" required />
+                                        <div class="relative">
+                                            <x-input
+                                                id="license_number"
+                                                type="text"
+                                                class="mt-1 block w-full uppercase dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
+                                                wire:model.blur="form.license_number"
+                                                required
+                                                maxlength="7"
+                                                placeholder="e.g., 0123456"
+                                                x-data="{
+                                                    mask(e) {
+                                                        let value = e.target.value.replace(/\D/g, '');
+                                                        if (value.length > 7) value = value.slice(0, 7);
+                                                        e.target.value = value;
+                                                        return value;
+                                                    }
+                                                }"
+                                                x-on:input="mask($event)"
+                                            />
+                                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pt-1">
+                                                <span class="text-sm text-gray-400 dark:text-gray-500" x-text="license_number ? license_number.length : 0">/7</span>
+                                            </div>
+                                        </div>
+                                        <div class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                            Enter your 7-digit PRC license number
+                                        </div>
+
+                                        <x-input-error for="form.license_number" class="mt-2" />
+                                    </div>
+
+                                    <!-- Specialization -->
+                                    <div class="col-span-1">
+                                        <x-label for="specialization" value="Specialization" required />
+                                        <select
+                                            id="specialization"
+                                            wire:model.blur="form.specialization"
+                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300 focus:border-primary-500 focus:ring-primary-500"
+                                            required
+                                        >
+                                            <option value="">Select Specialization</option>
+                                            <optgroup label="Primary Care">
+                                                <option value="family_medicine">Family Medicine</option>
+                                                <option value="internal_medicine">Internal Medicine</option>
+                                                <option value="pediatrics">Pediatrics</option>
+                                                <option value="general_practice">General Practice</option>
+                                            </optgroup>
+                                            <optgroup label="Medical Specialties">
+                                                <option value="cardiology">Cardiology</option>
+                                                <option value="dermatology">Dermatology</option>
+                                                <option value="endocrinology">Endocrinology</option>
+                                                <option value="gastroenterology">Gastroenterology</option>
+                                                <option value="neurology">Neurology</option>
+                                                <option value="oncology">Oncology</option>
+                                                <option value="psychiatry">Psychiatry</option>
+                                                <option value="pulmonology">Pulmonology</option>
+                                            </optgroup>
+                                            <optgroup label="Surgical Specialties">
+                                                <option value="general_surgery">General Surgery</option>
+                                                <option value="neurosurgery">Neurosurgery</option>
+                                                <option value="orthopedics">Orthopedics</option>
+                                                <option value="plastic_surgery">Plastic Surgery</option>
+                                                <option value="urology">Urology</option>
+                                            </optgroup>
+                                            <optgroup label="Other Specialties">
+                                                <option value="anesthesiology">Anesthesiology</option>
+                                                <option value="obstetrics_gynecology">Obstetrics & Gynecology</option>
+                                                <option value="ophthalmology">Ophthalmology</option>
+                                                <option value="otolaryngology">Otolaryngology (ENT)</option>
+                                                <option value="pathology">Pathology</option>
+                                                <option value="radiology">Radiology</option>
+                                            </optgroup>
+                                        </select>
+
+                                        <x-input-error for="form.specialization" class="mt-2" />
+                                    </div>
+                                </div>
+                            </div>
                         @endif
                     </div>
                 </div>

@@ -83,6 +83,7 @@ class CreateUserForm extends Form
     #[Validate]
     public string $specialization = '';
 
+    #[Validate]
     public string $profile_photo_path = '';
 
     protected function rules(): array
@@ -154,7 +155,7 @@ class CreateUserForm extends Form
             ],
             'city' => [
                 'required',
-                'alpha',
+                'string',
                 'max:255',
             ],
             'province' => [
@@ -193,23 +194,25 @@ class CreateUserForm extends Form
             ],
             'certification_no' => [
                 'required_if:role,bhw',
-                'digits:20',
+                'digits:9',
                 'max:20',
             ],
             'bhw_barangay' => [
                 'required_if:role,bhw',
-                'alpha_num',
+                'string',
             ],
             'license_number' => [
                 'required_if:role,doctor',
                 'digits:7',
-                'max:7',
             ],
             'specialization' => [
                 'required_if:role,doctor',
-                'alpha',
+                'string',
                 'max:255',
-                Rule::exists('specializations', 'name')
+            ],
+            'profile_photo_path' => [
+                'nullable',
+                'string',
             ],
         ];
     }
@@ -279,8 +282,7 @@ class CreateUserForm extends Form
                 'max' => 'The :attribute field must not be greater than :max characters.'
             ],
             'city' => [
-                'required' => 'The :attribute field is required.',
-                'alpha' => 'The :attribute field must contain only letters.',
+                'required' => 'The contact number field is required.',
                 'max' => 'The :attribute field must not be greater than :max characters.'
             ],
             'province' => [
@@ -327,7 +329,6 @@ class CreateUserForm extends Form
             'license_number' => [
                 'required_if' => 'The :attribute field is required.',
                 'digits' => 'The :attribute field must contain only digits.',
-                'max' => 'The :attribute field must not be greater than :max characters.'
             ],
             'specialization' => [
                 'required_if' => 'The :attribute field is required.',

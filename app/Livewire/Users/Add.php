@@ -2,16 +2,12 @@
 
 namespace App\Livewire\Users;
 
-use App\Actions\Fortify\CreateNewUser;
+use App\Actions\CreateNewUser;
 use App\Events\UserActivityEvent;
 use App\Livewire\Forms\CreateUserForm;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Livewire\Component;
-use Livewire\Features\SupportRedirects\Redirector;
 use Livewire\WithFileUploads;
 use Livewire\Attributes\Validate;
 
@@ -27,11 +23,11 @@ class Add extends Component
 
     public bool $showModal = false;
 
-    public function mount(): void
+    /*public function mount(): void
     {
         if (auth()->user()->cannot('create users'))
             abort(403, 'This action is unauthorized.');
-    }
+    }*/
 
     public function open(): void
     {
@@ -41,6 +37,7 @@ class Add extends Component
     public function close(): void
     {
         $this->showModal = false;
+        $this->reset('photo');
         $this->form->reset();
         $this->form->resetErrorBag();
     }
@@ -48,39 +45,44 @@ class Add extends Component
     public function save(CreateNewUser $creator): void
     {
         // Photo upload
-        if (!$this->photo)
-            $this->form->profile_photo_path = storage_path('app/public/images/default-avatar.png');
+        if ($this->photo === null)
+            $this->form->profile_photo_path = 'images/default-avatar.png';
         else
             $this->form->profile_photo_path = $this->photo->store('images', 'public');
 
         // Validation
-        $validatedData = $this->validate($this->form);
+        $validatedData = $this->form->validate();
 
         // Creation
         try
         {
-            $creator->create($validatedData);
+            $user = $creator->create($validatedData);
 
             UserActivityEvent::dispatch(
-                auth()->user()->id,
+                auth()->id(),
                 "User created.",
-                ['data' => $validatedData],
+                [
+                    'user' => $user->id,
+                    'data' => $validatedData,
+                ],
                 now()->toDateTimeString()
             );
-
-            session()->flash('success', 'User created successfully!');
         }
         catch(\Exception $e)
         {
-            session()->flash('error', 'Failed to create user. Please try again later.');
+            $this->dispatch('user-creation-failed');
+
+            Log::error($e->getMessage());
 
             UserActivityEvent::dispatch(
-                auth()->user()->id,
+                auth()->id(),
                 "User creation failed.",
                 ['error' => $e->getMessage()],
                 now()->toDateTimeString()
             );
         }
+
+        $this->dispatch('user-created');
 
         $this->close();
     }

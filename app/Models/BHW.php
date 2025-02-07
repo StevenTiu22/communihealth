@@ -12,31 +12,18 @@ class BHW extends Model
 {
     use HasFactory;
 
+    protected $table = 'bhws';
+
     protected $fillable = [
         'user_id',
-        'local_government_unit',
-        'issuance_date'
+        'certification_no',
+        'barangay',
     ];
-
-    protected function casts() : array
-    {
-        return [
-            'issuance_date' => 'date'
-        ];
-    }
 
     // Relationships
     public function user() : BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    // Accessors and Mutators
-    protected function localGovernmentUnit() : Attribute
-    {
-        return Attribute::make(
-            set: fn ($value) => strtolower($value)
-        );
     }
 
     // Scopes

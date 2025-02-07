@@ -1,14 +1,16 @@
 <?php
 
-namespace App\Actions\Fortify;
+namespace App\Actions;
 
 use App\Models\Address;
+use App\Models\BarangayOfficial;
+use App\Models\BHW;
+use App\Models\Doctor;
+use App\Models\Specialization;
 use App\Models\User;
 use Exception;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
-use Laravel\Jetstream\Role;
 
 class CreateNewUser implements CreatesNewUsers
 {
@@ -20,7 +22,7 @@ class CreateNewUser implements CreatesNewUsers
      * @param  array<string, string>  $input
      * @throws Exception
      */
-    public function create(array $input): void
+    public function create(array $input): User
     {
         // User creation
         $user = User::create([
@@ -36,8 +38,15 @@ class CreateNewUser implements CreatesNewUsers
             'profile_photo_path' => $input['profile_photo_path']
         ]);
 
-        if (! User::where('id', $user->id)->exists()) {
+        if (! User::where('id', $user->id)) {
             throw new Exception('Failed to create user.');
+        }
+
+        // Role assignment and related information creation
+        $user->assignRole($input['role']);
+
+        if (! $user->hasRole($input['role'])) {
+            throw new Exception('Failed to assign role.');
         }
 
         // Address creation
@@ -51,53 +60,57 @@ class CreateNewUser implements CreatesNewUsers
             'country' => $input['country'],
         ]);
 
-        if (! Address::where('id', $user->address()->id)->exists()) {
+        if (! $user->address()) {
             throw new Exception('Failed to insert address information.');
-        }
-
-        // Role assignment and related information creation
-        $user->assignRole($input['role']);
-
-        if (! $user->hasRole($input['role'])) {
-            throw new Exception('Failed to assign role.');
         }
 
         switch($input['role'])
         {
-            case 'barangay_official':
+            case 'barangay-official':
                 $user->barangayOfficial()->create([
                     'position' => $input['position'],
                     'term_start' => $input['term_start'],
                     'term_end' => $input['term_end']
                 ]);
 
-                if (! $user->barangayOfficial()->exists()) {
+                if (! $user->barangayOfficial()) {
                     throw new Exception('Failed to insert barangay official information.');
                 }
 
                 break;
+
             case 'bhw':
                 $user->bhw()->create([
-                    'certificate_no' => $input['certificate_no'],
+                    'certification_no' => $input['certification_no'],
                     'barangay' => $input['bhw_barangay']
                 ]);
 
-                if (! $user->bhw()->exists()) {
+                if (! $user->bhw()) {
                     throw new Exception('Failed to insert BHW information.');
                 }
 
                 break;
+
             case 'doctor':
                 $user->doctor()->create([
                     'license_number' => $input['license_number'],
-                    'specialization' => $input['specialization']
                 ]);
 
-                if (! $user->doctor()->exists()) {
+                if (! $user->doctor()) {
                     throw new Exception('Failed to insert doctor information.');
+                }
+
+                $specialization = Specialization::firstOrCreate(['name' => $input['specialization']]);
+
+                $user->doctor->specializations()->attach($specialization->id);
+
+                if (! $user->doctor->specializations()) {
+                    throw new Exception('Failed to insert doctor specialization information.');
                 }
 
                 break;
         }
+
+        return $user;
     }
 }
