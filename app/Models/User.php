@@ -45,6 +45,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'contact_no',
         'email',
         'username',
+        'password',
         'profile_photo_path',
     ];
 
@@ -93,59 +94,6 @@ class User extends Authenticatable implements MustVerifyEmail
         static::created(function ($user) {
             $user->roles()->detach();
         });
-    }
-
-    // Validation
-    /**
-     * Validate attributes using UserRequest rules
-     *
-     * @param array $attributes
-     * @throws ValidationException
-     */
-    public static function validateAttributes(array $attributes): void
-    {
-        $request = new UserRequest();
-        $rules = $request->rules();
-
-        // Skip validation for factory-created instances
-        if (app()->environment('testing') && isset($attributes['_skip_validation'])) {
-            unset($attributes['_skip_validation']);
-            return;
-        }
-
-        $validator = Validator::make($attributes, $rules);
-
-        if ($validator->fails()) {
-            throw ValidationException::withMessages($validator->errors()->toArray());
-        }
-    }
-
-    /**
-     * Create a new model instance.
-     *
-     * @param array $attributes
-     * @return static
-     * @throws ValidationException
-     */
-    public static function make($attributes = [])
-    {
-        static::validateAttributes($attributes);
-        return new static($attributes);
-    }
-
-    /**
-     * Create and save a new model instance.
-     *
-     * @param array $attributes
-     * @return static
-     * @throws ValidationException
-     */
-    public static function create(array $attributes = []): User
-    {
-        static::validateAttributes($attributes);
-        $model = new static($attributes);
-        $model->save();
-        return $model;
     }
 
     // Relationships
