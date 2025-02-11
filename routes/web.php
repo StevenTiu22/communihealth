@@ -15,8 +15,6 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-Route::get('/users', [UserController::class, 'index'])->name('users.index');
-
 $authMiddleware = [
     'auth:sanctum',
     config('jetstream.auth_session'),
@@ -37,11 +35,10 @@ Route::middleware([...$authMiddleware, 'role:barangay-official|bhw|doctor'])
 // Barangay Official Routes
 Route::middleware([...$authMiddleware, 'role:barangay-official'])
     ->prefix('barangay-official')
-    ->name('barangay-official.')
     ->group(function() {
-        Route::get('/dashboard', [DashboardController::class, 'barangayOfficial'])->name('dashboard');
-
-        Route::get('/audit-trail', [AuditTrailController::class, 'index'])->name('audit-trail');
+        Route::get('/dashboard', [DashboardController::class, 'barangayOfficial'])->name('barangay-official.dashboard');
+        Route::get('/audit-trail', [AuditTrailController::class, 'index'])->name('audit-trail.index');
+        Route::get('/users', [UserController::class, 'index'])->name('users.index');
     });
 
 // BHW Routes

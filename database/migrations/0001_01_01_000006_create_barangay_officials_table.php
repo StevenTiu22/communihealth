@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('barangay_official', function (Blueprint $table) {
+        Schema::create('barangay_officials', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->unique()->constrained('users')->restrictOnDelete();
             $table->string('position');

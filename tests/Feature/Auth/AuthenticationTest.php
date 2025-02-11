@@ -131,6 +131,8 @@ class AuthenticationTest extends TestCase
 
     public function test_successful_login_dispatches_login_event(): void
     {
+        Event::fake();
+
         $user = User::factory()->create();
 
         $this->post('/login', [
@@ -150,14 +152,9 @@ class AuthenticationTest extends TestCase
             'password' => 'password',
         ]);
 
-        $this->post('/login', [
-            'email' => $user->email,
-            'password' => 'password',
-        ]);
-
         $this->assertDatabaseHas('activity_log', [
             'log_name' => 'Successful Login',
-            'description' => "User {$user->id} has logged in.",
+            'description' => "User {$user->username} has logged in.",
             'causer_id' => $user->id,
             'causer_type' => get_class($user),
         ]);

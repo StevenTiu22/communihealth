@@ -28,6 +28,7 @@ class UserActivityLogger
                 'data' => $event->data,
                 'timestamp' => $event->timestamp,
             ])
-            ->log($event->action);
+            ->useLog($event->action)
+            ->log($event->description);
     }
 }

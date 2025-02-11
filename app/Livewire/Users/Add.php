@@ -5,6 +5,7 @@ namespace App\Livewire\Users;
 use App\Actions\CreateNewUser;
 use App\Events\UserActivityEvent;
 use App\Livewire\Forms\CreateUserForm;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Livewire\Component;
@@ -60,31 +61,37 @@ class Add extends Component
 
             UserActivityEvent::dispatch(
                 auth()->id(),
-                "User created.",
+                "Successful user creation",
+                "User {auth()->user()->username} created user {$user->username}.",
                 [
                     'user' => $user->id,
                     'data' => $validatedData,
                 ],
                 now()->toDateTimeString()
             );
+
+            event(new Registered($user));
         }
         catch(\Exception $e)
         {
-            $this->dispatch('user-creation-failed');
-
             Log::error($e->getMessage());
 
             UserActivityEvent::dispatch(
                 auth()->id(),
-                "User creation failed.",
+                "Failed user creation",
+                "User {auth()->user()->username} failed to create user.",
                 ['error' => $e->getMessage()],
                 now()->toDateTimeString()
             );
+
+            session()->flash('message', 'User creation failed.');
+
+            $this->redirect('/users');
         }
 
-        $this->dispatch('user-created');
+        session()->flash('success', 'User created successfully!');
 
-        $this->close();
+        $this->redirect('/users');
     }
 
     public function render(): View
