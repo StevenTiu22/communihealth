@@ -4,16 +4,20 @@ namespace Tests\Feature\Livewire\Users;
 
 use App\Livewire\Users\Add as CreateUserModal;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Tests\TestCase;
 
 class AddTest extends TestCase
 {
-    protected ?User $user;
+    use RefreshDatabase;
+
+    protected User $user;
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->seed('RolesAndPermissionSeeder');
 
         $this->user = User::factory()->withRole('barangay-official')->create();
     }
@@ -27,7 +31,7 @@ class AddTest extends TestCase
     public function test_modal_appears_on_user_management()
     {
         $this->actingAs($this->user)
-            ->get(route('barangay-official.users'))
+            ->get(route('users.index'))
             ->assertSeeLivewire(CreateUserModal::class);
     }
 
@@ -69,7 +73,7 @@ class AddTest extends TestCase
             ->set('form.term_end', '2023-01-01')
             ->call('save')
             ->assertHasNoErrors()
-            ->assertDispatched('user-created')
+            ->assertSessionHas('success', 'User created successfully!')
             ->assertSet('showModal', false);
 
 
@@ -108,6 +112,11 @@ class AddTest extends TestCase
                 'term_start' => '2021-01-01',
                 'term_end' => '2023-01-01',
         ]);
+
+        $this->assertDatabaseHas('activity_log', [
+                'log_name' => 'Successful user creation',
+                'causer_id' => $this->user->id,
+        ]);
     }
 
     public function test_modal_can_create_bhw()
@@ -138,7 +147,7 @@ class AddTest extends TestCase
             ->set('form.bhw_barangay', 'Barangay 1')
             ->call('save')
             ->assertHasNoErrors()
-            ->assertDispatched('user-created')
+            ->assertSessionHas('success', 'User created successfully!')
             ->assertSet('showModal', false);
 
 
@@ -171,10 +180,15 @@ class AddTest extends TestCase
 
         $this->assertNotNull($user->bhw());
 
-        $this->assertDatabaseHas('bhws', [
+        $this->assertDatabaseHas('bhw', [
             'user_id' => $user->id,
             'certification_no' => '123456789',
             'barangay' => 'Barangay 1',
+        ]);
+
+        $this->assertDatabaseHas('activity_log', [
+            'log_name' => 'Successful user creation',
+            'causer_id' => $this->user->id,
         ]);
     }
 
@@ -206,7 +220,7 @@ class AddTest extends TestCase
             ->set('form.specialization', 'General Medicine')
             ->call('save')
             ->assertHasNoErrors()
-            ->assertDispatched('user-created')
+            ->assertSessionHas('success', 'User created successfully!')
             ->assertSet('showModal', false);
 
 
@@ -241,16 +255,21 @@ class AddTest extends TestCase
 
         $this->assertDatabaseHas('doctors', [
             'user_id' => $user->id,
-            'license' => '1234567',
+            'license_number' => '1234567',
         ]);
 
         $this->assertNotNull($user->doctor->specializations());
 
         $this->assertEquals('General Medicine', $user->doctor->specializations()->first()->name);
 
-        $this->assertDatabaseHas('doctor_specializations', [
+        $this->assertDatabaseHas('doctor_specialization', [
             'doctor_id' => $user->doctor->id,
             'specialization_id' => 1,
+        ]);
+
+        $this->assertDatabaseHas('activity_log', [
+            'log_name' => 'Successful user creation',
+            'causer_id' => $this->user->id,
         ]);
     }
 }

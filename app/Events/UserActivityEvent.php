@@ -2,8 +2,6 @@
 
 namespace App\Events;
 
-use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -22,6 +20,7 @@ class UserActivityEvent
     public function __construct(
         public readonly string $causer_id,
         public readonly string $action,
+        public readonly string $description,
         public readonly array $data,
         public readonly string $timestamp
     )

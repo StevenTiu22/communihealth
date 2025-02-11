@@ -21,7 +21,7 @@
                     <div class="mt-6">
                         <!-- Header -->
                         <div class="flex items-center justify-between mb-4">
-                            <h2 class="text-xl font-semibold text-white">All Accounts (28)</h2>
+                            <h2 class="text-xl font-semibold text-white">{{__('All Accounts (' . $user_count . ')')}}</h2>
                         </div>
                         <div class="mb-4 flex items-center space-x-4">
                             <div class="flex-grow">
