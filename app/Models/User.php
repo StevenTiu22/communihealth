@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -47,6 +48,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'username',
         'password',
         'profile_photo_path',
+        'last_login_at'
     ];
 
     /**

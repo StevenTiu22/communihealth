@@ -1,8 +1,7 @@
 <x-app-layout title="User Accounts">
-    <x-sidebar />
-    <div class="p-4 block sm:flex items-center justify-between">
+    <div class="p-2 block sm:flex items-center justify-between w-full">
         <div class="w-full">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg min-h-[calc(100vh-2rem)] w-full">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg min-h-[calc(100vh-2rem)]">
                 <div class="p-6 text-gray-900 dark:text-gray-100 h-full">
                     <div class="flex justify-between items-center mb-2">
                         <h2 class="text-3xl font-semibold">User Accounts</h2>

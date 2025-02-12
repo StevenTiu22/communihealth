@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Users;
 
+use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use App\Models\User;
@@ -11,37 +13,46 @@ class Table extends Component
 {
     use WithPagination;
 
-    public $search = '';
-    public $selectedRoles = [];
-    public $perPage = 10;
+    public string $category = '';
+    public int $perPage = 10;
 
-    public ?User $users = null;
-
-    protected $queryString = ['search', 'role', 'perPage'];
-
-    protected $listeners = ['pageChanged' => 'gotoPage'];
-
-    #[On('search-updated')]
-    public function updatingSearch($search)
+    #[On('category-updated')]
+    public function updated(string $category): void
     {
-        $this->search = $search;
+        $this->category = $category;
+
         $this->resetPage();
     }
 
-    #[On('role-selected')]
-    public function updatingRole($selectedRoles)
-    {
-        $this->selectedRoles = $selectedRoles;
-        $this->resetPage();
-    }
-
-    public function gotoPage($page)
+    public function gotoPage($page): void
     {
         $this->setPage($page);
     }
 
-    public function render()
+    public function render(): View
     {
-        return view('livewire.users.table');
+        $query = User::query();
+
+        if (!empty($this->category))
+        {
+            if ($this->category === 'deleted')
+            {
+                $query->onlyTrashed();
+            }
+            else
+            {
+                $query->role($this->category)->get();
+            }
+        }
+        else
+        {
+            $query->get();
+        }
+
+        $users = $query->paginate($this->perPage);
+
+        return view('livewire.users.table', [
+            'users' => $users,
+        ]);
     }
 }

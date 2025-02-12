@@ -1,15 +1,7 @@
 <!-- Sidebar -->
-<aside id="sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
-    <div class="h-full flex flex-col px-3 py-4 overflow-y-auto bg-white dark:bg-gray-900">
-        <div class="mt-5">
-            <a href="#" class="flex items-center ps-2 mb-4">
-                <div class="w-10 h-10">
-                    <x-application-logo class="w-full h-full" />
-                </div>
-                <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white ml-2">CommuniHealth+</span>
-            </a>
-        </div>
-        <ul class="space-y-2 font-medium mt-11">
+<aside id="sidebar" class="fixed top-18 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
+    <div class="h-full flex flex-col overflow-y-auto bg-white dark:bg-gray-900">
+        <ul class="space-y-2 font-medium mt-11 ms-8">
             <li>
                 <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                     <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">

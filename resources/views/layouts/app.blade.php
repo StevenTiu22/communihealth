@@ -21,12 +21,23 @@
         @livewireStyles
     </head>
     <body class="font-sans antialiased">
-        <div class="flex h-screen overflow-hidden">
-            <div id="main-content" class="relative w-full h-full overflow-y-auto bg-gray-50 lg:ml-64 dark:bg-gray-900">
-                <main>
-                    <x-success-banner />
-                    {{ $slot }}
-                </main>
+        <div class="fixed top-0 w-full z-50">
+            @include('navigation-menu')
+        </div>
+
+        <!-- Main content container -->
+        <div class="pt-16">
+            <div class="flex relative">
+                <div class="fixed left-0 top-16 hidden lg:block">
+                    <x-sidebar />
+                </div>
+
+                <!-- Main content area -->
+                <div id="main-content" class="relative w-full min-h-screen overflow-y-auto bg-gray-50 dark:bg-gray-900 transition-all duration-300 lg:ml-64">
+                    <main class="p-4 sm:p-4 lg:p-4">
+                        {{ $slot }}
+                    </main>
+                </div>
             </div>
         </div>
         @livewireScripts
