@@ -3,7 +3,6 @@
 namespace App\Livewire\Users;
 
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use App\Models\User;
@@ -14,12 +13,21 @@ class Table extends Component
     use WithPagination;
 
     public string $category = '';
+    public string $search = '';
     public int $perPage = 10;
 
     #[On('category-updated')]
-    public function updated(string $category): void
+    public function updateCategory(string $category): void
     {
         $this->category = $category;
+
+        $this->resetPage();
+    }
+
+    #[On('search-updated')]
+    public function updateSearch(string $search): void
+    {
+        $this->search = $search;
 
         $this->resetPage();
     }
@@ -47,6 +55,15 @@ class Table extends Component
         else
         {
             $query->get();
+        }
+
+        if (! empty($this->search))
+        {
+            $query->where('first_name', 'like', '%' . $this->search . '%')
+                ->orWhere('middle_name', 'like', '%' . $this->search . '%')
+                ->orWhere('last_name', 'like', '%' . $this->search . '%')
+                ->orWhere('email', 'like', '%' . $this->search . '%')
+                ->orWhere('username', 'like', '%' . $this->search . '%');
         }
 
         $users = $query->paginate($this->perPage);
