@@ -8,6 +8,7 @@
     <input
         type="text"
         placeholder="Search for accounts..."
+        wire:model.live="search"
         class="w-80 px-10 py-2 h-[40px] bg-gray-700 text-sm text-gray-200 rounded-lg border border-gray-600 focus:outline-none focus:border-gray-500 focus:ring-1 focus:ring-gray-500 placeholder-gray-400"
     >
 </div>
