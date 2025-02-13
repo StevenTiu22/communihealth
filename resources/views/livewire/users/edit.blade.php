@@ -26,23 +26,23 @@
                             <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Profile Photo</h2>
 
                             <div class="flex justify-center">
-                                <div x-data="{ photoName: null, photoPreview: null }" class="col-span-6 sm:col-span-4 text-center">
+                                <div x-data="{ edit_photoName: null, edit_photoPreview: null }" class="col-span-6 sm:col-span-4 text-center">
                                     <!-- Profile Photo File Input -->
                                     <input
                                         type="file"
                                         accept="image/jpeg,image/png"
-                                        id="photo"
+                                        id="edit_photo"
                                         class="hidden"
-                                        wire:model.live="photo"
+                                        wire:model.live="edit_photo"
                                         x-ref="photo"
                                         x-on:change="
-                                            photoName = $refs.photo.files[0].name;
+                                            edit_photoName = $refs.edit_photo.files[0].name;
 
-                                            size = $refs.photo.files[0].size;
+                                            edit_size = $refs.edit_photo.files[0].size;
 
-                                            file_type = $refs.photo.files[0].type;
+                                            edit_file_type = $refs.edit_photo.files[0].type;
 
-                                            if (file_type != 'image/jpeg' && file_type != 'image/png') {
+                                            if (edit_file_type != 'image/jpeg' && edit_file_type != 'image/png') {
                                                 $dispatch('notify', {
                                                     title: 'Invalid file type',
                                                     message: 'Please upload a file with a valid image format.',
@@ -51,7 +51,7 @@
                                                 event.preventDefault();
                                             }
 
-                                            if (size > 2097152) {
+                                            if (edit_size > 2097152) {
                                                 $dispatch('notify', {
                                                     title: 'File size too large',
                                                     message: 'Please upload a file less than 2MB.',
@@ -60,29 +60,29 @@
                                                 event.preventDefault();
                                             }
 
-                                            const reader = new FileReader();
-                                            reader.onload = (e) => {
+                                            const edit_reader = new FileReader();
+                                            edit_reader.onload = (e) => {
                                                 photoPreview = e.target.result;
                                             };
-                                            reader.readAsDataURL($refs.photo.files[0]);
+                                            edit_reader.readAsDataURL($refs.edit_photo.files[0]);
                                         " />
 
                                     <!-- New Profile Photo Preview -->
                                     <div class="flex justify-center">
-                                        <div class="mt-2 text-middle" x-show="photoPreview" style="display: none;">
+                                        <div class="mt-2 text-middle" x-show="edit_photoPreview" style="display: none;">
                                             <span class="block rounded-full w-32 h-32 bg-gray-900 bg-cover bg-no-repeat bg-center"
                                                   x-bind:style="'background-image: url(\'' + photoPreview + '\');'">
                                             </span>
                                         </div>
 
-                                        <div class="mt-2" x-show="!photoPreview">
+                                        <div class="mt-2" x-show="!edit_photoPreview">
                                             <span class="block rounded-full w-32 h-32 bg-cover bg-no-repeat bg-center border-2 border-gray-200"
                                                   style="background-image: url('{{ asset('images/default-avatar.png') }}')">
                                             </span>
                                         </div>
                                     </div>
 
-                                    <x-button class="mt-4" type="button" x-on:click.prevent="$refs.photo.click()">
+                                    <x-button class="mt-4" type="button" x-on:click.prevent="$refs.edit_photo.click()">
                                         {{ __('Upload a photo') }}
                                     </x-button>
 
@@ -94,75 +94,75 @@
 
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="col-span-2">
-                                    <x-label for="first_name" value="First Name" class="mb-2" />
+                                    <x-label for="edit_first_name" value="First Name" class="mb-2" />
 
                                     <x-input
                                         type="text"
-                                        id="first_name"
-                                        wire:model.blur="form.first_name"
+                                        id="edit_first_name"
+                                        wire:model.blur="form.edit_first_name"
                                         class="block w-full"
                                     />
 
-                                    <x-input-error for="form.first_name" class="mt-2" />
+                                    <x-input-error for="form.edit_first_name" class="mt-2" />
                                 </div>
 
                                 <div class="col-span-1">
-                                    <x-label for="middle_name" value="Middle Name" class="mb-2" />
+                                    <x-label for="edit_middle_name" value="Middle Name" class="mb-2" />
 
                                     <x-input
                                         type="text"
-                                        id="middle_name"
-                                        wire:model.blur="form.middle_name"
+                                        id="edit_middle_name"
+                                        wire:model.blur="form.edit_middle_name"
                                         class="block w-full"
                                     />
 
-                                    <x-input-error for="form.middle_name" class="mt-2" />
+                                    <x-input-error for="form.edit_middle_name" class="mt-2" />
                                 </div>
 
                                 <div class="col-span-1">
-                                    <x-label for="last_name" value="Last Name" class="mb-2" />
+                                    <x-label for="edit_last_name" value="Last Name" class="mb-2" />
 
                                     <x-input
                                         type="text"
-                                        id="last_name"
-                                        wire:model.blur="form.last_name"
+                                        id="edit_last_name"
+                                        wire:model.blur="form.edit_last_name"
                                         class="block w-full"
                                     />
 
-                                    <x-input-error for="form.last_name" class="mt-2" />
+                                    <x-input-error for="form.edit_last_name" class="mt-2" />
                                 </div>
 
                                 <div class="col-span-1">
-                                    <x-label for="birth_date" value="Birthdate" class="mb-2" />
+                                    <x-label for="edit_birth_date" value="Birthdate" class="mb-2" />
 
                                     <x-input
                                         type="date"
-                                        id="birth_date"
-                                        wire:model.blur="form.birth_date"
+                                        id="edit_birth_date"
+                                        wire:model.blur="form.edit_birth_date"
                                         class="block w-full [&::-webkit-calendar-picker-indicator]:[filter:brightness(0)_invert(1)]"
                                     />
 
-                                    <x-input-error for="form.birth_date" class="mt-2" />
+                                    <x-input-error for="form.edit_birth_date" class="mt-2" />
                                 </div>
 
                                 <div class="col-span-1">
-                                    <x-label for="sex" value="Sex" class="mb-2" />
+                                    <x-label for="edit_sex" value="Sex" class="mb-2" />
 
                                     <select
-                                        id="sex"
+                                        id="edit_sex"
                                         class="mt-1 block w-full border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-200 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
-                                        wire:model.blur="form.sex"
+                                        wire:model.blur="form.edit_sex"
                                     >
                                         <option value="">Select Sex</option>
                                         <option value="0">Male</option>
                                         <option value="1">Female</option>
                                     </select>
 
-                                    <x-input-error for="form.sex" class="mt-2" />
+                                    <x-input-error for="form.edit_sex" class="mt-2" />
                                 </div>
 
                                 <div class="col-span-2">
-                                    <x-label for="contact_no" value="Contact Number" class="mb-2" />
+                                    <x-label for="edit_contact_no" value="Contact Number" class="mb-2" />
 
                                     <div class="relative">
                                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -172,34 +172,34 @@
                                             </svg>
                                         </div>
 
-                                        <x-input id="contact_no" wire:model.blur="form.contact_no" type="text" placeholder="Enter contact number" class="block w-full pl-10" />
+                                        <x-input id="edit_contact_no" wire:model.blur="form.edit_contact_no" type="text" placeholder="Enter contact number" class="block w-full pl-10" />
                                     </div>
 
-                                    <x-input-error for="form.contact_no" class="mt-2" />
+                                    <x-input-error for="form.edit_contact_no" class="mt-2" />
                                 </div>
 
                                 <div class="col-span-2">
-                                    <x-label for="email" value="Email" class="mb-2" />
+                                    <x-label for="edit_email" value="Email" class="mb-2" />
                                     <div class="relative mt-1">
                                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="email" class="h-5 w-5 text-white dark:text-white">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="edit_email" class="h-5 w-5 text-white dark:text-white">
                                                 <path fill="none" d="M0 0h24v24H0V0z"></path>
                                                 <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-.4 4.25l-7.07 4.42c-.32.2-.74.2-1.06 0L4.4 8.25c-.25-.16-.4-.43-.4-.72 0-.67.73-1.07 1.3-.72L12 11l6.7-4.19c.57-.35 1.3.05 1.3.72 0 .29-.15.56-.4.72z" fill="currentColor"></path>
                                             </svg>
                                         </div>
                                         <x-input
-                                            type="email"
-                                            id="email"
+                                            type="edit_email"
+                                            id="edit_email"
                                             class="block w-full pl-10 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300"
-                                            wire:model.blur="form.email"
+                                            wire:model.blur="form.edit_email"
                                         />
                                     </div>
 
-                                    <x-input-error for="form.email" class="mt-2" />
+                                    <x-input-error for="form.edit_email" class="mt-2" />
                                 </div>
 
                                 <div class="col-span-2">
-                                    <x-label for="username" value="Username" />
+                                    <x-label for="edit_username" value="Username" />
 
                                     <div class="relative mt-1">
                                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -209,19 +209,19 @@
                                         </div>
                                         <x-input
                                             type="text"
-                                            id="username"
+                                            id="edit_username"
                                             class="block w-full pl-10 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300"
-                                            wire:model.blur="form.username"
+                                            wire:model.blur="form.edit_username"
                                         />
                                     </div>
 
-                                    <x-input-error for="form.username" class="mt-2" />
+                                    <x-input-error for="form.edit_username" class="mt-2" />
                                 </div>
 
-                                <div class="col-span-2 space-y-4" x-data="{ showBothPasswords: false }">
+                                <div class="col-span-2 space-y-4" x-data="{ edit_showBothPasswords: false }">
                                     <!-- Password Field -->
                                     <div>
-                                        <x-label for="password" value="Password" />
+                                        <x-label for="edit_password" value="Password" />
 
                                         <div class="relative">
                                             <!-- Password Icon -->
@@ -235,19 +235,19 @@
 
                                             <!-- Password Input -->
                                             <input
-                                                :type="showBothPasswords ? 'text' : 'password'"
-                                                id="password"
-                                                wire:model.blur="form.password"
+                                                :type="showBothPasswords ? 'text' : 'edit_password'"
+                                                id="edit_password"
+                                                wire:model.blur="form.edit_password"
                                                 class="block w-full pl-10 pr-10 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
                                             />
                                         </div>
 
-                                        <x-input-error for="form.password" class="mt-2" />
+                                        <x-input-error for="form.edit_password" class="mt-2" />
                                     </div>
 
                                     <!-- Confirm Password Field -->
                                     <div>
-                                        <x-label for="confirm_password" value="Confirm Password" />
+                                        <x-label for="edit_confirm_password" value="Confirm Password" />
                                         <div class="relative">
                                             <!-- Password Icon -->
                                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -261,13 +261,13 @@
                                             <!-- Confirm Password Input -->
                                             <input
                                                 :type="showBothPasswords ? 'text' : 'password'"
-                                                id="confirm_password"
-                                                wire:model.blur="form.confirm_password"
+                                                id="edit_confirm_password"
+                                                wire:model.blur="form.edit_confirm_password"
                                                 class="block w-full pl-10 pr-10 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
                                             />
                                         </div>
 
-                                        <x-input-error for="form.confirm_password" class="mt-2" />
+                                        <x-input-error for="form.edit_confirm_password" class="mt-2" />
                                     </div>
 
                                     <!-- Show/Hide Password -->
@@ -277,7 +277,7 @@
                                                 id="checkbox"
                                                 type="checkbox"
                                                 class="form-checkbox rounded border-gray-300 dark:border-gray-700 text-primary-600 shadow-sm focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 dark:bg-gray-900"
-                                                x-model="showBothPasswords"
+                                                x-model="edit_showBothPasswords"
                                             >
                                             <span class="ml-2">Show passwords</span>
                                         </label>
@@ -295,46 +295,46 @@
                             <div class="grid grid-cols-2 gap-4">
                                 <!-- House Number -->
                                 <div class="col-span-1">
-                                    <x-label for="house_number" value="House Number" />
+                                    <x-label for="edit_house_number" value="House Number" />
                                     <x-input
-                                        id="house_number"
+                                        id="edit_house_number"
                                         type="text"
                                         class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
-                                        wire:model.blur="form.house_number"
+                                        wire:model.blur="form.edit_house_number"
                                         placeholder="e.g., 123"
                                     />
 
-                                    <x-input-error for="form.house_number" class="mt-2" />
+                                    <x-input-error for="form.edit_house_number" class="mt-2" />
                                 </div>
 
                                 <!-- Street -->
                                 <div class="col-span-1">
-                                    <x-label for="street" value="Street" required />
+                                    <x-label for="edit_street" value="Street" required />
                                     <x-input
-                                        id="street"
+                                        id="edit_street"
                                         type="text"
                                         class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
-                                        wire:model.blur="form.street"
+                                        wire:model.blur="form.edit_street"
                                         required
                                         placeholder="e.g., Main Street"
                                     />
 
-                                    <x-input-error for="form.street" class="mt-2" />
+                                    <x-input-error for="form.edit_street" class="mt-2" />
                                 </div>
 
                                 <!-- Barangay -->
                                 <div class="col-span-2">
-                                    <x-label for="barangay" value="Barangay" required />
+                                    <x-label for="edit_barangay" value="Barangay" required />
                                     <x-input
-                                        id="barangay"
+                                        id="edit_barangay"
                                         type="text"
                                         class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
-                                        wire:model.blur="form.barangay"
+                                        wire:model.blur="form.edit_barangay"
                                         required
                                         placeholder="e.g., Barangay 123"
                                     />
 
-                                    <x-input-error for="form.barangay" class="mt-2" />
+                                    <x-input-error for="form.edit_barangay" class="mt-2" />
                                 </div>
 
                                 <!-- City -->
@@ -407,84 +407,84 @@
                             <!-- Role fields -->
 
                             <div>
-                                <x-label for="role" value="Role" required />
+                                <x-label for="edit_role" value="Role" required />
                                 <select
-                                    id="role"
+                                    id="edit_role"
                                     class="mt-1 block w-full border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-200 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
-                                    wire:model.live="form.role"
+                                    wire:model.live="form.edit_role"
                                     required
                                 >
                                     <option selected="">Select Role</option>
-                                    <option value="barangay-official">Barangay Official</option>
+                                    <option value="edit_barangay-official">Barangay Official</option>
                                     <option value="bhw">BHW</option>
                                     <option value="doctor">Doctor</option>
                                 </select>
 
 
-                                <x-input-error for="form.role" class="mt-2" />
+                                <x-input-error for="form.edit_role" class="mt-2" />
                             </div>
                         </div>
-                        @if($form->role == 'barangay-official')
+                        @if($form->edit_role == 'edit_barangay-official')
                             <div class="bg-white dark:bg-gray-800 p-2 rounded-lg shadow-sm space-y-4 w-full">
                                 <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Barangay Official Information</h2>
                                 {{-- Barangay Official fields --}}
                                 <div class="grid grid-cols-2 gap-4">
                                     <!-- Position -->
                                     <div class="col-span-2">
-                                        <x-label for="position" value="Position" required />
+                                        <x-label for="edit_position" value="Position" required />
                                         <x-input
-                                            id="position"
+                                            id="edit_position"
                                             type="text"
                                             class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
-                                            wire:model.blur="form.position"
+                                            wire:model.blur="form.edit_position"
                                             required
                                             placeholder="e.g., Barangay Captain"
                                         />
 
-                                        <x-input-error for="form.position" class="mt-2" />
+                                        <x-input-error for="form.edit_position" class="mt-2" />
                                     </div>
 
                                     <!-- Term Start -->
                                     <div class="col-span-1">
-                                        <x-label for="term_start" value="Term Start Date" required />
+                                        <x-label for="edit_term_start" value="Term Start Date" required />
                                         <x-input
-                                            id="term_start"
+                                            id="edit_term_start"
                                             type="date"
                                             class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
-                                            wire:model.blur="form.term_start"
-                                            x-on:change="$dispatch('term-start-changed', { value: $event.target.value })"
+                                            wire:model.blur="form.edit_term_start"
+                                            x-on:change="$dispatch('edit-term-start-changed', { value: $event.target.value })"
                                         />
-                                        <x-input-error for="form.term_start" class="mt-2" />
+                                        <x-input-error for="form.edit_term_start" class="mt-2" />
                                     </div>
 
                                     <!-- Term End -->
                                     <div class="col-span-1">
-                                        <x-label for="term_end" value="Term End Date" required />
+                                        <x-label for="edit_term_end" value="Term End Date" required />
                                         <x-input
-                                            id="term_end"
+                                            id="edit_term_end"
                                             type="date"
                                             class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
-                                            wire:model.blur="form.term_end"
+                                            wire:model.blur="form.edit_term_end"
                                             x-on:term-start-changed.window="$el.min = $event.detail.value"
                                         />
-                                        <x-input-error for="form.term_end" class="mt-2" />
+                                        <x-input-error for="form.edit_term_end" class="mt-2" />
                                     </div>
                                 </div>
                             </div>
-                        @elseif($form->role == 'bhw')
+                        @elseif($form->edit_role == 'bhw')
                             <div class="bg-white dark:bg-gray-800 p-2 rounded-lg shadow-sm space-y-4 w-full">
                                 <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">BHW Information</h2>
 
                                 <div class="grid grid-cols-2 gap-4">
                                     <!-- Certification Number -->
                                     <div class="col-span-1">
-                                        <x-label for="certification_no" value="Certification No." required />
+                                        <x-label for="edit_certification_no" value="Certification No." required />
                                         <div class="relative">
                                             <x-input
-                                                id="certification_no"
+                                                id="edit_certification_no"
                                                 type="text"
                                                 class="mt-1 block w-full uppercase dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
-                                                wire:model.blur="form.certification_no"
+                                                wire:model.blur="form.edit_certification_no"
                                                 required
                                                 maxlength="20"
                                                 placeholder="e.g., CERT-2025-0001"
@@ -492,21 +492,21 @@
                                                 x-on:input="$el.value = $el.value.toUpperCase()"
                                             />
                                             <div class="absolute inset-y-0 right-0 flex items-center pr-3 pt-1">
-                                                <span class="text-sm text-gray-400 dark:text-gray-500" x-text="certification_no ? certification_no.length : 0">/20</span>
+                                                <span class="text-sm text-gray-400 dark:text-gray-500" x-text="edit_certification_no ? edit_certification_no.length : 0">/20</span>
                                             </div>
                                         </div>
                                         <div class="mt-1 text-xs text-gray-500 dark:text-gray-400">
                                             Maximum of 20 characters. Automatically converted to uppercase.
                                         </div>
 
-                                        <x-input-error for="form.certification_no" class="mt-2" />
+                                        <x-input-error for="form.edit_certification_no" class="mt-2" />
                                     </div>
 
                                     <!-- Barangay -->
                                     <div class="col-span-1">
-                                        <x-label for="barangay" value="Barangay" required />
+                                        <x-label for="edit_barangay" value="Barangay" required />
                                         <x-input
-                                            id="barangay"
+                                            id="edit_barangay"
                                             type="text"
                                             class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
                                             wire:model.blur="form.bhw_barangay"
@@ -514,24 +514,24 @@
                                             placeholder="e.g., Barangay 123"
                                         />
 
-                                        <x-input-error for="form.bhw_barangay" class="mt-2" />
+                                        <x-input-error for="form.edit_bhw_barangay" class="mt-2" />
                                     </div>
                                 </div>
                             </div>
-                        @elseif($form->role == 'doctor')
+                        @elseif($form->edit_role == 'doctor')
                             <div class="bg-white dark:bg-gray-800 p-2 rounded-lg shadow-sm space-y-4 w-full">
                                 <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Doctor Information</h2>
 
                                 <div class="grid grid-cols-2 gap-4">
                                     <!-- License Number -->
                                     <div class="col-span-1">
-                                        <x-label for="license_number" value="PRC License Number" required />
+                                        <x-label for="edit_license_number" value="PRC License Number" required />
                                         <div class="relative">
                                             <x-input
-                                                id="license_number"
+                                                id="edit_license_number"
                                                 type="text"
                                                 class="mt-1 block w-full uppercase dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
-                                                wire:model.blur="form.license_number"
+                                                wire:model.blur="form.edit_license_number"
                                                 required
                                                 maxlength="7"
                                                 placeholder="e.g., 0123456"
@@ -546,22 +546,22 @@
                                                 x-on:input="mask($event)"
                                             />
                                             <div class="absolute inset-y-0 right-0 flex items-center pr-3 pt-1">
-                                                <span class="text-sm text-gray-400 dark:text-gray-500" x-text="license_number ? license_number.length : 0">/7</span>
+                                                <span class="text-sm text-gray-400 dark:text-gray-500" x-text="edit_license_number ? edit_license_number.length : 0">/7</span>
                                             </div>
                                         </div>
                                         <div class="mt-1 text-xs text-gray-500 dark:text-gray-400">
                                             Enter your 7-digit PRC license number
                                         </div>
 
-                                        <x-input-error for="form.license_number" class="mt-2" />
+                                        <x-input-error for="form.edit_license_number" class="mt-2" />
                                     </div>
 
                                     <!-- Specialization -->
                                     <div class="col-span-1">
-                                        <x-label for="specialization" value="Specialization" required />
+                                        <x-label for="edit_specialization" value="Specialization" required />
                                         <select
-                                            id="specialization"
-                                            wire:model.blur="form.specialization"
+                                            id="edit_specialization"
+                                            wire:model.blur="form.edit_specialization"
                                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300 focus:border-primary-500 focus:ring-primary-500"
                                             required
                                         >
@@ -599,7 +599,7 @@
                                             </optgroup>
                                         </select>
 
-                                        <x-input-error for="form.specialization" class="mt-2" />
+                                        <x-input-error for="form.edit_specialization" class="mt-2" />
                                     </div>
                                 </div>
                             </div>
@@ -619,7 +619,7 @@
                     class="ml-3"
                     color="blue"
                     :darkMode="false"
-                    wire:click="save"
+                    wire:click="update"
                     wire:loading.attr="disabled"
                     :disabled="$errors->any()"
                 >

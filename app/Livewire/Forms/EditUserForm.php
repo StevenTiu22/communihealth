@@ -9,211 +9,211 @@ use Livewire\Form;
 
 class EditUserForm extends Form
 {
-    public User $user;
+    public User $edit_user;
 
     #[Validate]
-    public string $first_name = '';
+    public string $edit_first_name = '';
 
     #[Validate]
-    public string $middle_name = '';
+    public string $edit_middle_name = '';
 
     #[Validate]
-    public string $last_name = '';
+    public string $edit_last_name = '';
 
     #[Validate]
-    public string $birth_date = '';
+    public string $edit_birth_date = '';
 
     #[Validate]
-    public string $sex = '';
+    public string $edit_sex = '';
 
     #[Validate]
-    public string $contact_no = '';
+    public string $edit_contact_no = '';
 
     #[Validate]
-    public string $email = '';
+    public string $edit_email = '';
 
     #[Validate]
-    public string $username = '';
+    public string $edit_username = '';
 
     #[Validate]
-    public string $password = '';
+    public string $edit_password = '';
 
     #[Validate]
-    public string $confirm_password = '';
+    public string $edit_confirm_password = '';
 
     #[Validate]
-    public string $house_number = '';
+    public string $edit_house_number = '';
 
     #[Validate]
-    public string $barangay = '';
+    public string $edit_barangay = '';
 
     #[Validate]
-    public string $street = '';
+    public string $edit_street = '';
 
     #[Validate]
-    public string $city = '';
+    public string $edit_city = '';
 
     #[Validate]
-    public string $province = '';
+    public string $edit_province = '';
 
     #[Validate]
-    public string $region = '';
+    public string $edit_region = '';
 
     #[Validate]
-    public string $country = 'Philippines';
+    public string $edit_country = 'Philippines';
 
     #[Validate]
-    public string $role = '';
+    public string $edit_role = '';
 
     #[Validate]
-    public string $position = '';
+    public string $edit_position = '';
 
     #[Validate]
-    public string $term_start = '';
+    public string $edit_term_start = '';
 
     #[Validate]
-    public string $term_end = '';
+    public string $edit_term_end = '';
 
     #[Validate]
-    public string $certification_no = '';
+    public string $edit_certification_no = '';
 
     #[Validate]
-    public string $bhw_barangay = '';
+    public string $edit_bhw_barangay = '';
 
     #[Validate]
-    public string $license_number = '';
+    public string $edit_license_number = '';
 
     #[Validate]
-    public string $specialization = '';
+    public string $edit_specialization = '';
 
     #[Validate]
-    public string $profile_photo_path = '';
+    public string $edit_profile_photo_path = '';
 
     protected function rules(): array
     {
         return [
-            'first_name' => [
+            'edit_first_name' => [
                 'required',
                 'alpha',
                 'max:255',
             ],
-            'middle_name' => [
+            'edit_middle_name' => [
                 'alpha',
                 'max:255',
             ],
-            'last_name' => [
+            'edit_last_name' => [
                 'required',
                 'alpha',
                 'max:255',
             ],
-            'birth_date' => [
+            'edit_birth_date' => [
                 'required',
                 'date',
                 'before:today',
                 Rule::date()->after(now()->subYears(120))
             ],
-            'sex' => [
+            'edit_sex' => [
                 'required',
                 Rule::in([0, 1])
             ],
-            'contact_no' => [
+            'edit_contact_no' => [
                 'required',
                 'regex:^(09|\+639)\d{9}$^',
                 'max:13',
             ],
-            'email' => [
+            'edit_email' => [
                 'required',
                 'email',
                 'max:320',
-                Rule::unique('users', 'email')->ignore($this->user->id)
+                Rule::unique('users', 'email')->ignore($this->edit_user->id)
             ],
-            'username' => [
+            'edit_username' => [
                 'required',
                 'alpha_num',
                 'max:40',
-                Rule::unique('users', 'username')->ignore($this->user->id)
+                Rule::unique('users', 'username')->ignore($this->edit_user->id)
             ],
-            'password' => [
+            'edit_password' => [
                 'required',
                 'min:8',
                 'max:128',
             ],
-            'confirm_password' => [
+            'edit_confirm_password' => [
                 'required',
                 'same:password',
             ],
-            'house_number' => [
+            'edit_house_number' => [
                 'required',
                 'string',
                 'max:255',
             ],
-            'barangay' => [
+            'edit_barangay' => [
                 'required',
                 'string',
             ],
-            'street' => [
-                'required',
-                'string',
-                'max:255',
-            ],
-            'city' => [
+            'edit_street' => [
                 'required',
                 'string',
                 'max:255',
             ],
-            'province' => [
+            'edit_city' => [
+                'required',
+                'string',
+                'max:255',
+            ],
+            'edit_province' => [
                 'required',
                 'alpha',
                 'max:255',
             ],
-            'region' => [
+            'edit_region' => [
                 'required',
                 'string',
                 'max:255',
             ],
-            'country' => [
+            'edit_country' => [
                 'required',
                 'alpha',
                 'max:255',
             ],
-            'role' => [
+            'edit_role' => [
                 'required',
                 Rule::in(['barangay-official', 'bhw', 'doctor'])
             ],
-            'position' => [
+            'edit_position' => [
                 'required_if:role,barangay-official',
                 'string',
                 'max:255',
             ],
-            'term_start' => [
+            'edit_term_start' => [
                 'required_if:role,barangay-official',
                 'date',
                 'before:today',
             ],
-            'term_end' => [
+            'edit_term_end' => [
                 'required_if:role,barangay-official',
                 'date',
                 'after:term_start',
             ],
-            'certification_no' => [
+            'edit_certification_no' => [
                 'required_if:role,bhw',
                 'digits:9',
                 'max:20',
             ],
-            'bhw_barangay' => [
+            'edit_bhw_barangay' => [
                 'required_if:role,bhw',
                 'string',
             ],
-            'license_number' => [
+            'edit_license_number' => [
                 'required_if:role,doctor',
                 'digits:7',
             ],
-            'specialization' => [
+            'edit_specialization' => [
                 'required_if:role,doctor',
                 'string',
                 'max:255',
             ],
-            'profile_photo_path' => [
+            'edit_profile_photo_path' => [
                 'nullable',
                 'string',
             ],
@@ -223,117 +223,117 @@ class EditUserForm extends Form
     protected function messages(): array
     {
         return [
-            'first_name' => [
+            'edit_first_name' => [
                 'required' => 'The :attribute field is required.',
                 'alpha' => 'The :attribute field must contain letters only',
                 'max' => 'The :attribute field must not be greater than :max characters.'
             ],
-            'middle_name' => [
+            'edit_middle_name' => [
                 'alpha' => 'The :attribute field must contain letters only.',
                 'max' => 'The :attribute field must not be greater than :max characters.'
             ],
-            'last_name' => [
+            'edit_last_name' => [
                 'required' => 'The :attribute field is required.',
                 'alpha' => 'The :attribute field must contain letters only.',
                 'max' => 'The :attribute field must not be greater than :max characters.'
             ],
-            'birth_date' => [
+            'edit_birth_date' => [
                 'required' => 'The :attribute field is required.',
                 'date' => 'The :attribute field must be a valid date.',
                 'before' => 'The :attribute field must be a date before today.',
                 'after' => 'The :attribute field must be a date after :date.'
             ],
-            'sex' => [
+            'edit_sex' => [
                 'required' => 'The :attribute field is required.',
                 'in' => 'The :attribute field must be selected from the given options.'
             ],
-            'contact_no' => [
+            'edit_contact_no' => [
                 'required' => 'The :attribute field is required.',
                 'regex' => 'The :attribute field must be a valid contact number.',
                 'max' => 'The :attribute field must not be greater than :max characters.'
             ],
-            'email' => [
+            'edit_email' => [
                 'required' => 'The :attribute field is required.',
                 'email' => 'The :attribute field must be a valid email address.',
                 'max' => 'The :attribute field must not be greater than :max characters.',
                 'unique' => 'The :attribute field has already been taken.'
             ],
-            'username' => [
+            'edit_username' => [
                 'required' => 'The :attribute field is required.',
                 'alpha_num' => 'The :attribute field must contain only letters and numbers.',
                 'max' => 'The :attribute field must not be greater than :max characters.',
                 'unique' => 'The :attribute field has already been taken.'
             ],
-            'password' => [
+            'edit_password' => [
                 'required' => 'The :attribute field is required.',
                 'min' => 'The :attribute field must be at least :min characters.',
                 'max' => 'The :attribute field must not be greater than :max characters.'
             ],
-            'confirm_password' => [
+            'edit_confirm_password' => [
                 'required' => 'The :attribute field is required.',
                 'same' => 'The :attribute field must match the password field.'
             ],
-            'house_number' => [
+            'edit_house_number' => [
                 'required' => 'The :attribute field is required.',
                 'max' => 'The :attribute field must not be greater than :max characters.'
             ],
-            'barangay' => [
+            'edit_barangay' => [
                 'required' => 'The :attribute field is required.',
             ],
-            'street' => [
+            'edit_street' => [
                 'required' => 'The :attribute field is required.',
                 'max' => 'The :attribute field must not be greater than :max characters.'
             ],
-            'city' => [
+            'edit_city' => [
                 'required' => 'The contact number field is required.',
                 'max' => 'The :attribute field must not be greater than :max characters.'
             ],
-            'province' => [
+            'edit_province' => [
                 'required' => 'The :attribute field is required.',
                 'alpha' => 'The :attribute field must contain only letters.',
                 'max' => 'The :attribute field must not be greater than :max characters.'
             ],
-            'region' => [
+            'edit_region' => [
                 'required' => 'The :attribute field is required.',
                 'max' => 'The :attribute field must not be greater than :max characters.'
             ],
-            'country' => [
+            'edit_country' => [
                 'required' => 'The :attribute field is required.',
                 'alpha' => 'The :attribute field must contain only letters.',
                 'max' => 'The :attribute field must not be greater than :max characters.'
             ],
-            'role' => [
+            'edit_role' => [
                 'required' => 'The :attribute field is required.',
                 'in' => 'The :attribute field must be selected from the given options.'
             ],
-            'position' => [
+            'edit_position' => [
                 'required_if' => 'The :attribute field is required.',
                 'max' => 'The :attribute field must not be greater than :max characters.'
             ],
-            'term_start' => [
+            'edit_term_start' => [
                 'required_if' => 'The :attribute field is required.',
                 'date' => 'The :attribute field must be a valid date.',
                 'before' => 'The :attribute field must be a date before today.'
             ],
-            'term_end' => [
+            'edit_term_end' => [
                 'required_if' => 'The :attribute field is required.',
                 'date' => 'The :attribute field must be a valid date.',
                 'after' => 'The :attribute field must be a date after the term start.'
             ],
-            'certification_no' => [
+            'edit_certification_no' => [
                 'required_if' => 'The :attribute field is required.',
                 'digits' => 'The :attribute field must contain only digits.',
                 'max' => 'The :attribute field must not be greater than :max characters.'
             ],
-            'bhw_barangay' => [
+            'edit_bhw_barangay' => [
                 'required_if' => 'The :attribute field is required.',
                 'alpha_num' => 'The :attribute field must contain only letters and numbers.'
             ],
-            'license_number' => [
+            'edit_license_number' => [
                 'required_if' => 'The :attribute field is required.',
                 'digits' => 'The :attribute field must contain only digits.',
             ],
-            'specialization' => [
+            'edit_specialization' => [
                 'required_if' => 'The :attribute field is required.',
                 'alpha' => 'The :attribute field must contain only letters.',
                 'max' => 'The :attribute field must not be greater than :max characters.',
