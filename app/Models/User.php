@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Http\Requests\UserRequest;
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -13,9 +12,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Spatie\Activitylog\LogOptions;
@@ -157,7 +153,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected function sex(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value === 0 ? 'male' : 'female',
+            get: fn ($value) => $value == 0 ? 'male' : 'female',
         );
     }
 

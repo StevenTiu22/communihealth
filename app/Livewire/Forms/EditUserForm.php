@@ -326,18 +326,18 @@ class EditUserForm extends Form
                 'max' => 'The :attribute field must not be greater than :max characters.'
             ],
             'edit_bhw_barangay' => [
-                'required_if' => 'The :attribute field is required.',
-                'alpha_num' => 'The :attribute field must contain only letters and numbers.'
+                'required_if' => 'The barangay field is required.',
+                'alpha_num' => 'The barangay field must contain only letters and numbers.'
             ],
             'edit_license_number' => [
-                'required_if' => 'The :attribute field is required.',
-                'digits' => 'The :attribute field must contain only digits.',
+                'required_if' => 'The license number field is required.',
+                'digits' => 'The license number field must contain only digits.',
             ],
             'edit_specialization' => [
-                'required_if' => 'The :attribute field is required.',
-                'alpha' => 'The :attribute field must contain only letters.',
-                'max' => 'The :attribute field must not be greater than :max characters.',
-                'exists' => 'The :attribute field must be selected from the given options.'
+                'required_if' => 'The specialization field is required.',
+                'alpha' => 'The specialization field must contain only letters.',
+                'max' => 'The specialization field must not be greater than :max characters.',
+                'exists' => 'The specialization field must be selected from the given options.'
             ],
         ];
     }

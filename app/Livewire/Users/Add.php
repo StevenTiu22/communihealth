@@ -39,7 +39,6 @@ class Add extends Component
     {
         $this->showModal = false;
         $this->reset('photo');
-        $this->form->reset();
         $this->form->resetErrorBag();
     }
 
