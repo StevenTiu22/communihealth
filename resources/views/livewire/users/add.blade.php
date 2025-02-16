@@ -21,7 +21,7 @@
         </x-slot>
 
         <x-slot name="content">
-            <form wire:submit="save" class="relative">
+            <form id="add_user_form" wire:submit="save" class="relative">
                 <div class="h-[calc(100vh-15rem)] overflow-y-auto">
                     <div class="space-y-6 w-full">
                         <!-- Basic Information Section -->
@@ -104,6 +104,7 @@
                                         id="first_name"
                                         wire:model.blur="form.first_name"
                                         class="block w-full"
+                                        autocomplete="given-name"
                                     />
 
                                     <x-input-error for="form.first_name" class="mt-2" />
@@ -117,6 +118,7 @@
                                         id="middle_name"
                                         wire:model.blur="form.middle_name"
                                         class="block w-full"
+                                        autocomplete="additional-name"
                                     />
 
                                     <x-input-error for="form.middle_name" class="mt-2" />
@@ -130,6 +132,7 @@
                                         id="last_name"
                                         wire:model.blur="form.last_name"
                                         class="block w-full"
+                                        autocomplete="family-name"
                                     />
 
                                     <x-input-error for="form.last_name" class="mt-2" />
@@ -191,10 +194,11 @@
                                             </svg>
                                         </div>
                                         <x-input
-                                            type="email"
                                             id="email"
+                                            type="email"
                                             class="block w-full pl-10 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300"
                                             wire:model.blur="form.email"
+                                            autocomplete="email"
                                         />
                                     </div>
 
@@ -215,6 +219,7 @@
                                             id="username"
                                             class="block w-full pl-10 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300"
                                             wire:model.blur="form.username"
+                                            autocomplete="username"
                                         />
                                     </div>
 
@@ -242,6 +247,7 @@
                                                 id="password"
                                                 wire:model.blur="form.password"
                                                 class="block w-full pl-10 pr-10 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
+                                                autocomplete="off"
                                             />
                                         </div>
 
@@ -381,6 +387,7 @@
                                         wire:model.blur="form.region"
                                         required
                                         placeholder="e.g., NCR"
+                                        autocomplete="off"
                                     />
 
                                     <x-input-error for="form.region" class="mt-2" />
@@ -395,6 +402,7 @@
                                         class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
                                         wire:model.blur="form.country"
                                         readonly
+                                        autocomplete="country-name"
                                     />
 
                                     <x-input-error for="form.country" class="mt-2" />

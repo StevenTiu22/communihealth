@@ -2,6 +2,7 @@
 <div class="inline-flex space-x-2 bg-gray-900 p-2 rounded-xl">
     <label class="relative">
         <input type="radio"
+               id="all"
                wire:model.live="category"
                value=""
                class="absolute opacity-0 w-full h-full cursor-pointer peer">
@@ -12,6 +13,7 @@
 
     <label class="relative">
         <input type="radio"
+               id="barangay-official"
                wire:model.live="category"
                value="barangay-official"
                class="absolute opacity-0 w-full h-full cursor-pointer peer">
@@ -22,6 +24,7 @@
 
     <label class="relative">
         <input type="radio"
+               id="bhw"
                wire:model.live="category"
                value="bhw"
                class="absolute opacity-0 w-full h-full cursor-pointer peer">
@@ -32,6 +35,7 @@
 
     <label class="relative">
         <input type="radio"
+               id="doctor"
                wire:model.live="category"
                value="doctor"
                class="absolute opacity-0 w-full h-full cursor-pointer peer">
@@ -42,6 +46,7 @@
 
     <label class="relative">
         <input type="radio"
+               id="deleted"
                wire:model.live="category"
                value="deleted"
                class="absolute opacity-0 w-full h-full cursor-pointer peer">
