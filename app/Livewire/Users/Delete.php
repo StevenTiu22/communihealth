@@ -2,30 +2,80 @@
 
 namespace App\Livewire\Users;
 
+use App\Events\UserActivityEvent;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
+use Livewire\Attributes\Validate;
 
 class Delete extends Component
 {
-    public User $user;
+    public ?User $user;
 
-    public bool $showDeleteModal = false;
+    public string $username = '';
 
-    public function openUserDeleteModal(): void
+    #[Validate('required', message: 'You are required to enter the username to confirm deletion.')]
+    #[Validate('same:username', message: 'The username you entered does not match the user\'s username.')]
+    public string $confirm_username = '';
+
+    public bool $is_confirmed = false;
+
+    public bool $showModal = false;
+
+    public function open(): void
     {
-        $this->showDeleteModal = true;
+        $this->showModal = true;
     }
 
-    public function mount($id): void
+    public function mount($user_id): void
     {
-        $this->user = User::findOrFail($id);
+        $this->user = User::findOrFail($user_id);
+        $this->username = $this->user->username;
     }
 
-    public function closeUserDeleteModal(): void
+    public function delete(): void
     {
-        $this->showDeleteModal = false;
-        $this->reset($this->user);
+        try
+        {
+            $this->user->delete();
+
+            event(new UserActivityEvent(
+                auth()->id(),
+                'User successfully deleted.',
+                "User {{ auth()->user()->username }} deleted user {{ $this->user->username }}.",
+                [
+                    'user_id' => $this->user->id,
+                    'user_username' => $this->user->username,
+                ],
+                Carbon::now()->toDateTimeString()
+            ));
+
+            session()->flash('success', 'User successfully deleted.');
+            $this->redirect(route('users.index'));
+        }
+        catch (\Exception $e)
+        {
+            event(new UserActivityEvent(
+                auth()->id(),
+                'User deletion failed.',
+                "User {{ auth()->user()->username }} failed to delete user {{ $this->user->username }}.",
+                [
+                    'user_id' => $this->user->id,
+                    'user_username' => $this->user->username,
+                ],
+                Carbon::now()->toDateTimeString()
+            ));
+
+            session()->flash('error', 'User deletion failed.');
+            $this->redirect(route('users.index'));
+        }
+    }
+
+    public function close(): void
+    {
+        $this->showModal = false;
+        $this->reset(['confirm_username']);
         $this->resetErrorBag();
     }
 
