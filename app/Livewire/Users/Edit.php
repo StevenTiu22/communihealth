@@ -73,7 +73,7 @@ class Edit extends Component
     public function close(): void
     {
         $this->showModal = false;
-        $this->reset('edit_photo');
+        $this->reset(['edit_photo']);
         $this->form->resetErrorBag();
     }
 

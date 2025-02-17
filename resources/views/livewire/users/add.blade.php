@@ -21,7 +21,7 @@
         </x-slot>
 
         <x-slot name="content">
-            <form id="add_user_form" wire:submit="save" class="relative">
+            <form wire:submit.prevent="save" class="relative">
                 <div class="h-[calc(100vh-15rem)] overflow-y-auto">
                     <div class="space-y-6 w-full">
                         <!-- Basic Information Section -->
