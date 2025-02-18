@@ -15,7 +15,7 @@ class BHW extends Model
     protected $fillable = [
         'user_id',
         'certification_no',
-        'barangay',
+        'assigned_barangay',
     ];
 
     // Relationships

@@ -67,23 +67,23 @@ class Add extends Component
         {
             Log::error($e->getMessage());
 
-            UserActivityEvent::dispatch(
-                auth()->id(),
+            event(new UserActivityEvent(
+                auth()->user(),
                 "Failed user creation",
-                "User {auth()->user()->username} failed to create user.",
+                "User " . auth()->user()->username . " failed to create user.",
                 ['error' => $e->getMessage()],
                 now()->toDateTimeString()
-            );
+            ));
 
-            session()->flash('message', 'User creation failed.');
+            session()->flash('error', 'User creation failed.');
 
-            $this->redirect('/users');
+            $this->redirect(route('users.index'));
         }
 
         event(new UserActivityEvent(
             auth()->user(),
             "User created successfully",
-            "User {auth()->user()->username} created user {user->username}.",
+            "User " . auth()->user()->username . " created user" . $user->username . ".",
             [
                 'user_id' => $user->id
             ],
@@ -94,7 +94,7 @@ class Add extends Component
 
         session()->flash('success', 'User created successfully!');
 
-        $this->redirect('/users');
+        $this->redirect(route('users.index'));
     }
 
     public function render(): View

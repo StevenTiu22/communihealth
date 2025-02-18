@@ -72,9 +72,7 @@
                                 @endif
                             </td>
                             <td class="p-4 whitespace-nowrap">
-                                @if($user->trashed())
-                                    <span>{{__('Restore')}}</span>
-                                @else
+                                @if(! $user->trashed())
                                     <div class="flex justify-center space-x-2">
                                         <livewire:users.edit :user_id="$user->id" :key="'edit-user-'.$user->id" />
                                         <livewire:users.delete :user_id="$user->id" :key="'delete-user-'.$user->id" />

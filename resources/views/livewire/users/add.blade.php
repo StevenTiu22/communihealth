@@ -520,12 +520,12 @@
                                             id="barangay"
                                             type="text"
                                             class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
-                                            wire:model.blur="form.bhw_barangay"
+                                            wire:model.blur="form.assigned_barangay"
                                             required
                                             placeholder="e.g., Barangay 123"
                                         />
 
-                                        <x-input-error for="form.bhw_barangay" class="mt-2" />
+                                        <x-input-error for="form.assigned_barangay" class="mt-2" />
                                     </div>
                                 </div>
                             </div>
