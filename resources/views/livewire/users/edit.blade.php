@@ -25,7 +25,33 @@
                         <div class="bg-white dark:bg-gray-800 p-2 rounded-lg shadow-sm space-y-4 w-full">
                             <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">{{__('Profile Photo')}}</h2>
 
+                            <div class="flex flex-col items-center justify-center mb-6 space-y-4">
+                                <div class="flex-shrink-0">
+                                    @if($new_profile_photo)
+                                        <img src="{{ $new_profile_photo->temporaryUrl() }}" class="h-32 w-32 rounded-full object-cover" alt="{{$form->edit_user->username}}">
+                                    @elseif($form->edit_profile_photo_path)
+                                        <img src="{{ Storage::url($form->edit_profile_photo_path) }}" class="h-32 w-32 rounded-full object-cover" alt="{{$form->edit_user->username}}">
+                                    @endif
+                                </div>
 
+                                <div>
+                                    <input
+                                        type="file"
+                                        wire:model.blur="new_profile_photo"
+                                        class="hidden"
+                                        id="new_profile_photo"
+                                        accept="image/*"
+                                    >
+                                    <label
+                                        for="new_profile_photo"
+                                        class="cursor-pointer bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                    >
+                                        Change Photo
+                                    </label>
+                                </div>
+
+                                <x-input-error for="new_profile_photo" class="mt-2" />
+                            </div>
 
                             <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">{{__('Basic Information')}}</h2>
 
@@ -433,7 +459,7 @@
                                                 <span class="text-sm text-gray-400 dark:text-gray-500" x-text="edit_certification_no ? edit_certification_no.length : 0">/20</span>
                                             </div>
                                         </div>
-                                        <div class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                        <div class="mt-1 text-xs text-gray-500 dark:text-gray-400 text-wrap">
                                             Maximum of 20 characters. Automatically converted to uppercase.
                                         </div>
 
@@ -447,7 +473,7 @@
                                             id="edit_barangay"
                                             type="text"
                                             class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
-                                            wire:model.blur="form.bhw_barangay"
+                                            wire:model.blur="form.edit_bhw_barangay"
                                             required
                                             placeholder="e.g., Barangay 123"
                                         />

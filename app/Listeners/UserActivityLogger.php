@@ -22,7 +22,7 @@ class UserActivityLogger
     public function handle(UserActivityEvent $event): void
     {
         activity()
-            ->causedBy($event->causer_id)
+            ->causedBy($event->causer)
             ->withProperties([
                 'action' => $event->action,
                 'data' => $event->data,

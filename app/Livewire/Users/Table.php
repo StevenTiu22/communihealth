@@ -41,29 +41,22 @@ class Table extends Component
     {
         $query = User::query();
 
-        if (!empty($this->category))
-        {
-            if ($this->category === 'deleted')
-            {
+        if (!empty($this->category)) {
+            if ($this->category === 'deleted') {
                 $query->onlyTrashed();
+            } else {
+                $query->role($this->category);
             }
-            else
-            {
-                $query->role($this->category)->get();
-            }
-        }
-        else
-        {
-            $query->get();
         }
 
-        if (! empty($this->search))
-        {
-            $query->where('first_name', 'like', '%' . $this->search . '%')
-                ->orWhere('middle_name', 'like', '%' . $this->search . '%')
-                ->orWhere('last_name', 'like', '%' . $this->search . '%')
-                ->orWhere('email', 'like', '%' . $this->search . '%')
-                ->orWhere('username', 'like', '%' . $this->search . '%');
+        if (!empty($this->search)) {
+            $query->where(function($q) {
+                $q->where('first_name', 'like', '%' . $this->search . '%')
+                    ->orWhere('middle_name', 'like', '%' . $this->search . '%')
+                    ->orWhere('last_name', 'like', '%' . $this->search . '%')
+                    ->orWhere('email', 'like', '%' . $this->search . '%')
+                    ->orWhere('username', 'like', '%' . $this->search . '%');
+            });
         }
 
         $users = $query->paginate($this->perPage);

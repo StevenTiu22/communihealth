@@ -8,28 +8,33 @@ use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class Edit extends Component
 {
+    use WithFileUploads;
+
     public bool $showModal = false;
     public EditUserForm $form;
 
     #[Validate('image', message: "The :attribute field must be an image.")]
     #[Validate('max:2048', message: "The :attribute field must not be greater than :max kilobytes.")]
-    public mixed $edit_photo;
+    public mixed $new_profile_photo = null;
 
     public function mount($user_id): void
     {
-        $this->form->edit_user = User::findOrFail($user_id);
+        $this->form->edit_user = User::find($user_id);
 
         $this->form->edit_first_name = $this->form->edit_user->first_name;
         $this->form->edit_middle_name = $this->form->edit_user->middle_name ?? '';
         $this->form->edit_last_name = $this->form->edit_user->last_name;
         $this->form->edit_birth_date = Carbon::parse($this->form->edit_user->birth_date)->format('Y-m-d');
+
         $this->form->edit_sex = match($this->form->edit_user->sex) {
             'male' => 0,
             'female' => 1,
         };
+
         $this->form->edit_contact_no = $this->form->edit_user->contact_no;
         $this->form->edit_email = $this->form->edit_user->email;
         $this->form->edit_username = $this->form->edit_user->username;
@@ -52,17 +57,16 @@ class Edit extends Component
         }
         else if ($this->form->edit_role === 'bhw')
         {
-            $this->form->edit_certification_no = $this->form->edit_user->bhw()->certification_no ?? '';
-            $this->form->edit_bhw_barangay = $this->form->edit_user->bhw()->bhw_barangay ?? '';
+            $this->form->edit_certification_no = $this->form->edit_user->bhw->certification_no ?? '';
+            $this->form->edit_bhw_barangay = $this->form->edit_user->bhw->barangay ?? '';
         }
         else if ($this->form->edit_role === 'doctor')
         {
-            $this->form->edit_license_number = $this->form->edit_user->doctor()->license_number ?? '';
-            $this->form->edit_specialization = $this->form->edit_user->doctor->specializations()->name ?? '';
+            $this->form->edit_license_number = $this->form->edit_user->doctor->license_number ?? '';
+            $this->form->edit_specialization = $this->form->edit_user->doctor->specializations->first()->name ?? '';
         }
 
         $this->form->edit_profile_photo_path = $this->form->edit_user->profile_photo_path;
-        $this->edit_photo = $this->form->edit_user->profile_photo_path;
     }
 
     public function open(): void
@@ -73,7 +77,7 @@ class Edit extends Component
     public function close(): void
     {
         $this->showModal = false;
-        $this->reset(['edit_photo']);
+        $this->reset(['new_profile_photo']);
         $this->form->resetErrorBag();
     }
 

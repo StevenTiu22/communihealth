@@ -5,6 +5,7 @@ namespace App\Livewire\Users;
 use App\Actions\CreateNewUser;
 use App\Events\UserActivityEvent;
 use App\Livewire\Forms\CreateUserForm;
+use Carbon\Carbon;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
@@ -24,11 +25,10 @@ class Add extends Component
 
     public bool $showModal = false;
 
-    /*public function mount(): void
+    public function mount(): void
     {
-        if (auth()->user()->cannot('create users'))
-            abort(403, 'This action is unauthorized.');
-    }*/
+
+    }
 
     public function open(): void
     {
@@ -44,6 +44,11 @@ class Add extends Component
 
     public function save(CreateNewUser $creator): void
     {
+        if (! auth()->check())
+        {
+            return;
+        }
+
         // Photo upload
         if ($this->photo === null)
             $this->form->profile_photo_path = 'images/default-avatar.png';
@@ -57,19 +62,6 @@ class Add extends Component
         try
         {
             $user = $creator->create($validatedData);
-
-            UserActivityEvent::dispatch(
-                auth()->id(),
-                "Successful user creation",
-                "User {auth()->user()->username} created user {$user->username}.",
-                [
-                    'user' => $user->id,
-                    'data' => $validatedData,
-                ],
-                now()->toDateTimeString()
-            );
-
-            event(new Registered($user));
         }
         catch(\Exception $e)
         {
@@ -87,6 +79,18 @@ class Add extends Component
 
             $this->redirect('/users');
         }
+
+        event(new UserActivityEvent(
+            auth()->user(),
+            "User created successfully",
+            "User {auth()->user()->username} created user {user->username}.",
+            [
+                'user_id' => $user->id
+            ],
+            Carbon::now()->toDateTimeString()
+        ));
+
+        event(new Registered($user));
 
         session()->flash('success', 'User created successfully!');
 
