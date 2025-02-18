@@ -79,11 +79,6 @@ class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => 'datetime',
         ];
     }
-    protected static $recordEvents = [
-        'created',
-        'updated',
-        'deleted',
-    ];
 
     protected static function boot(): void
     {
@@ -116,62 +111,16 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     // Accessors and mutators
-    protected function firstName() : Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => ucfirst($value),
-            set: fn ($value) => strtolower($value)
-        );
-    }
-
-    protected function lastName() : Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => ucfirst($value),
-            set: fn ($value) => strtolower($value)
-        );
-    }
-
-    protected function middleName() : Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => $value ? ucfirst($value) : '',
-            set: fn ($value) => $value ? strtolower($value) : ''
-        );
-    }
-
     protected function fullName() : Attribute
     {
         return Attribute::make(
             get: function () {
                 $middle_initial = $this->middle_name ? $this->middle_name[0] . '.' : '';
-                return "{$this->last_name}, {$this->first_name} {$middle_initial}";
+                return ucwords("{$this->last_name}, {$this->first_name} {$middle_initial}");
             }
         );
     }
 
-    protected function sex(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => $value == 0 ? 'male' : 'female',
-        );
-    }
-
-    protected function birthDate(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => Carbon::parse($value)->format('F j, Y'),
-            set: fn ($value) => Carbon::parse($value)->format('Y-m-d')
-        );
-    }
-
-    protected function contactNo(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => preg_replace('/^(\d{3})(\d{3})(\d{4})/', "($1) $2-$3", $value),
-            set: fn ($value) => preg_replace('/\D/', '', $value)
-        );
-    }
 
     // Scopes
     public function scopeVerifiedUser($query): Builder

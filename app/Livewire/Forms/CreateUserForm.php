@@ -75,7 +75,7 @@ class CreateUserForm extends Form
     public string $certification_no = '';
 
     #[Validate]
-    public string $bhw_barangay = '';
+    public string $assigned_barangay = '';
 
     #[Validate]
     public string $license_number = '';
@@ -197,7 +197,7 @@ class CreateUserForm extends Form
                 'digits:9',
                 'max:20',
             ],
-            'bhw_barangay' => [
+            'assigned_barangay' => [
                 'required_if:role,bhw',
                 'string',
             ],
@@ -322,7 +322,7 @@ class CreateUserForm extends Form
                 'digits' => 'The :attribute field must contain only digits.',
                 'max' => 'The :attribute field must not be greater than :max characters.'
             ],
-            'bhw_barangay' => [
+            'assigned_barangay' => [
                 'required_if' => 'The :attribute field is required.',
                 'alpha_num' => 'The :attribute field must contain only letters and numbers.'
             ],

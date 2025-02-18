@@ -39,27 +39,13 @@ class Delete extends Component
         try
         {
             $this->user->delete();
-
-            event(new UserActivityEvent(
-                auth()->id(),
-                'User successfully deleted.',
-                "User {{ auth()->user()->username }} deleted user {{ $this->user->username }}.",
-                [
-                    'user_id' => $this->user->id,
-                    'user_username' => $this->user->username,
-                ],
-                Carbon::now()->toDateTimeString()
-            ));
-
-            session()->flash('success', 'User successfully deleted.');
-            $this->redirect(route('users.index'));
         }
         catch (\Exception $e)
         {
             event(new UserActivityEvent(
-                auth()->id(),
+                auth()->user(),
                 'User deletion failed.',
-                "User {{ auth()->user()->username }} failed to delete user {{ $this->user->username }}.",
+                "User " . auth()->user()->username . " failed to delete user " . $this->user->username . ".",
                 [
                     'user_id' => $this->user->id,
                     'user_username' => $this->user->username,
@@ -70,6 +56,20 @@ class Delete extends Component
             session()->flash('error', 'User deletion failed.');
             $this->redirect(route('users.index'));
         }
+
+        event(new UserActivityEvent(
+            auth()->user(),
+            'User successfully deleted.',
+            "User " . auth()->user()->username . " deleted user " . $this->user->username . ".",
+            [
+                'user_id' => $this->user->id,
+                'user_username' => $this->user->username,
+            ],
+            Carbon::now()->toDateTimeString()
+        ));
+
+        session()->flash('success', 'User successfully deleted.');
+        $this->redirect(route('users.index'));
     }
 
     public function close(): void
