@@ -32,10 +32,10 @@
                     <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
 
                     @forelse($users as $user)
-                        <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <tr wire:key="{{ $user->id }}" class="hover:bg-gray-100 dark:hover:bg-gray-700">
                             <td class="p-4 whitespace-nowrap">
                                 <div class="flex items-center">
-                                    <img class="w-10 h-10 rounded-full" src="{{ asset($user->profile_photo_path) }}" alt="{{ $user->full_name }}">
+                                    <img class="w-10 h-10 rounded-full" src="{{ Storage::URL($user->profile_photo_path) }}" alt="{{ $user->full_name }}">
                                 </div>
                             </td>
                             <td class="p-4 whitespace-nowrap">
@@ -55,7 +55,7 @@
                             </td>
                             <td class="p-4 whitespace-nowrap">
                                 <div class="text-sm text-gray-500 dark:text-gray-400">
-                                    {{ ucwords(str_replace('-', ' ', ($user->getRoleNames()[0]))) }}
+                                    {{ $user->getRoleNames()[0] == 'bhw' ? 'BHW' : ucwords(str_replace('-', ' ', $user->getRoleNames()[0]))  }}
                                 </div>
                             </td>
                             <td class="p-4 whitespace-nowrap">
@@ -72,10 +72,14 @@
                                 @endif
                             </td>
                             <td class="p-4 whitespace-nowrap">
-                                <div class="flex justify-center space-x-2">
-                                    <livewire:users.edit :user_id="$user->id" wire:key="'edit-user-'.$user->id.'-'.uniqid()" />
-                                    <livewire:users.delete :user_id="$user->id" wire:key="'delete-user-'.$user->id.'-'.uniqid()" />
-                                </div>
+                                @if($user->trashed())
+                                    <span>{{__('Restore')}}</span>
+                                @else
+                                    <div class="flex justify-center space-x-2">
+                                        <livewire:users.edit :user_id="$user->id" :key="'edit-user-'.$user->id" />
+                                        <livewire:users.delete :user_id="$user->id" :key="'delete-user-'.$user->id" />
+                                    </div>
+                                @endif
                             </td>
                         </tr>
                     @empty

@@ -29,7 +29,6 @@ class Specialization extends Model
     protected function name() : Attribute
     {
         return Attribute::make(
-            get: fn ($value) => ucwords($value),
             set: fn ($value) => strtolower($value)
         );
     }

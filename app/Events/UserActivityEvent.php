@@ -18,7 +18,7 @@ class UserActivityEvent
      * Create a new event instance.
      */
     public function __construct(
-        public readonly string $causer_id,
+        public readonly object|string $causer,
         public readonly string $action,
         public readonly string $description,
         public readonly array $data,

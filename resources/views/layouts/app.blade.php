@@ -20,7 +20,7 @@
         <!-- Styles -->
         @livewireStyles
     </head>
-    <body class="font-sans antialiased">
+    <body class="font-sans antialiased bg-gray-900">
         <div class="fixed top-0 w-full z-50">
             @include('navigation-menu')
         </div>
@@ -33,7 +33,7 @@
                 </div>
 
                 <!-- Main content area -->
-                <div id="main-content" class="relative w-full min-h-screen overflow-y-auto bg-gray-50 dark:bg-gray-900 transition-all duration-300 lg:ml-64">
+                <div id="main-content" class="relative w-full min-h-screen overflow-y-auto bg-gray-50 dark:bg-gray-900 transition-all duration-300 lg:ml-64 overscroll-none">
                     <main class="p-4 sm:p-4 lg:p-4">
                         {{ $slot }}
                     </main>
