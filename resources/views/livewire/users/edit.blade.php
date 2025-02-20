@@ -69,7 +69,7 @@
                                         type="text"
                                         id="first_name"
                                         wire:model.blur="form.first_name"
-                                        class="block w-full"
+                                        class="block w-full capitalize"
                                     />
 
                                     <x-input-error for="form.first_name" class="mt-2" />
@@ -82,7 +82,7 @@
                                         type="text"
                                         id="middle_name"
                                         wire:model.blur="form.middle_name"
-                                        class="block w-full"
+                                        class="block w-full capitalize"
                                     />
 
                                     <x-input-error for="form.middle_name" class="mt-2" />
@@ -95,7 +95,7 @@
                                         type="text"
                                         id="last_name"
                                         wire:model.blur="form.last_name"
-                                        class="block w-full"
+                                        class="block w-full capitalize"
                                     />
 
                                     <x-input-error for="form.last_name" class="mt-2" />
@@ -284,7 +284,7 @@
                                     <x-input
                                         id="street"
                                         type="text"
-                                        class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
+                                        class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300 capitalize"
                                         wire:model.blur="form.street"
                                         required
                                         placeholder="e.g., Main Street"
@@ -299,7 +299,7 @@
                                     <x-input
                                         id="barangay"
                                         type="text"
-                                        class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
+                                        class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300 capitalize"
                                         wire:model.blur="form.barangay"
                                         required
                                         placeholder="e.g., Barangay 123"
@@ -314,7 +314,7 @@
                                     <x-input
                                         id="city"
                                         type="text"
-                                        class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
+                                        class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300 capitalize"
                                         wire:model.blur="form.city"
                                         required
                                         placeholder="e.g., Manila"
@@ -330,7 +330,7 @@
                                     <x-input
                                         id="province"
                                         type="text"
-                                        class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
+                                        class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300 capitalize"
                                         wire:model.blur="form.province"
                                         required
                                         placeholder="e.g., Metro Manila"
@@ -345,7 +345,7 @@
                                     <x-input
                                         id="region"
                                         type="text"
-                                        class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
+                                        class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300 capitalize"
                                         wire:model.blur="form.region"
                                         required
                                         placeholder="e.g., NCR"
@@ -360,7 +360,7 @@
                                     <x-input
                                         id="country"
                                         type="text"
-                                        class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
+                                        class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300 capitalize"
                                         wire:model.blur="form.country"
                                         readonly
                                     />
@@ -405,7 +405,7 @@
                                         <x-input
                                             id="position"
                                             type="text"
-                                            class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
+                                            class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300 capitalize"
                                             wire:model.blur="form.position"
                                             required
                                             placeholder="e.g., Barangay Captain"
@@ -478,7 +478,7 @@
                                         <x-input
                                             id="barangay"
                                             type="text"
-                                            class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
+                                            class="mt-1 block w-full dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300 capitalize"
                                             wire:model.blur="form.assigned_barangay"
                                             required
                                             placeholder="e.g., Barangay 123"

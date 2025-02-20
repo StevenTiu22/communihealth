@@ -91,7 +91,7 @@ class CreateUserForm extends Form
         return [
             'first_name' => [
                 'required',
-                'alpha',
+                'string',
                 'max:255',
             ],
             'middle_name' => [
@@ -160,7 +160,7 @@ class CreateUserForm extends Form
             ],
             'province' => [
                 'required',
-                'alpha',
+                'string',
                 'max:255',
             ],
             'region' => [
@@ -207,8 +207,6 @@ class CreateUserForm extends Form
             ],
             'specialization' => [
                 'required_if:role,doctor',
-                'string',
-                'max:255',
             ],
             'profile_photo_path' => [
                 'nullable',
@@ -221,13 +219,12 @@ class CreateUserForm extends Form
     {
         return [
             'first_name' => [
-                'required' => 'The :attribute field is required.',
-                'alpha' => 'The :attribute field must contain letters only',
-                'max' => 'The :attribute field must not be greater than :max characters.'
+                'required' => 'The first name field is required.',
+                'max' => 'The first name field must not be greater than :max characters.'
             ],
             'middle_name' => [
-                'alpha' => 'The :attribute field must contain letters only.',
-                'max' => 'The :attribute field must not be greater than :max characters.'
+                'alpha' => 'The middle name field must contain letters only.',
+                'max' => 'The middle name field must not be greater than :max characters.'
             ],
             'last_name' => [
                 'required' => 'The :attribute field is required.',
@@ -332,8 +329,6 @@ class CreateUserForm extends Form
             ],
             'specialization' => [
                 'required_if' => 'The :attribute field is required.',
-                'alpha' => 'The :attribute field must contain only letters.',
-                'max' => 'The :attribute field must not be greater than :max characters.',
                 'exists' => 'The :attribute field must be selected from the given options.'
             ],
         ];
