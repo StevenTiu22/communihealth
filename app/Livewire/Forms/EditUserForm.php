@@ -9,6 +9,8 @@ use Livewire\Form;
 
 class EditUserForm extends Form
 {
+    public ?int $user_id;
+
     #[Validate]
     public string $first_name = '';
 
@@ -123,13 +125,13 @@ class EditUserForm extends Form
                 'required',
                 'email',
                 'max:320',
-                Rule::unique('users', 'email')->ignore($this->user->id)
+                Rule::unique('users', 'email')->ignore($this->user_id)
             ],
             'username' => [
                 'required',
                 'alpha_num',
                 'max:40',
-                Rule::unique('users', 'username')->ignore($this->user->id)
+                Rule::unique('users', 'username')->ignore($this->user_id)
             ],
             'password' => [
                 'required',
@@ -161,7 +163,7 @@ class EditUserForm extends Form
             ],
             'province' => [
                 'required',
-                'alpha',
+                'string',
                 'max:255',
             ],
             'region' => [
@@ -171,7 +173,7 @@ class EditUserForm extends Form
             ],
             'country' => [
                 'required',
-                'alpha',
+                'string',
                 'max:255',
             ],
             'role' => [
@@ -208,8 +210,7 @@ class EditUserForm extends Form
             ],
             'specialization' => [
                 'required_if:role,doctor',
-                'string',
-                'max:255',
+                'exists:specializations,name',
             ],
             'profile_photo_path' => [
                 'nullable',
@@ -333,7 +334,6 @@ class EditUserForm extends Form
             ],
             'specialization' => [
                 'required_if' => 'The specialization field is required.',
-                'alpha' => 'The specialization field must contain only letters.',
                 'max' => 'The specialization field must not be greater than :max characters.',
                 'exists' => 'The specialization field must be selected from the given options.'
             ],
