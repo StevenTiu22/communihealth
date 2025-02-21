@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Users;
 
-use App\Actions\Fortify\UpdateUserProfileInformation;
+use App\Actions\UpdateUserInformation;
 use App\Events\UserActivityEvent;
 use App\Livewire\Forms\EditUserForm;
 use App\Models\User;
@@ -69,11 +69,11 @@ class Edit extends Component
         $this->reset(['new_profile_photo']);
     }
 
-    public function update(UpdateUserProfileInformation $updater): void
+    public function update(UpdateUserInformation $updater): void
     {
         // Photo handling
         if ($this->new_profile_photo)
-            $this->form->profile_photo_path = $this->new_profile_photo->store('images', 'public');
+            $this->user->updateProfilePhoto($this->new_profile_photo);
 
         // Validation
         $validated_data = $this->form->validate();
