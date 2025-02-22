@@ -27,6 +27,12 @@ class UpdateUserInformation
                 'contact_no' => $input['contact_no'],
                 'email' => $input['email'],
                 'username' => $input['username'],
+            ])->save();
+        }
+
+        // Password handling
+        if ($input['password'] != null) {
+            $user->forceFill([
                 'password' => Hash::make($input['password']),
             ])->save();
         }
@@ -44,30 +50,66 @@ class UpdateUserInformation
 
         // Updating existing role-based information
         if ($user->getRoleNames()[0] === $input['role']) {
-            if ($user->barangayOfficial()) {
-                $user->barangayOfficial->forceFill([
-                    'position' => $input['position'],
-                    'term_start' => $input['term_start'],
-                    'term_end' => $input['term_end']
-                ])->save();
-            } else if ($user->bhw() && $input['role']) {
-                $user->bhw->forceFill([
-                    'certification_no' => $input['certification_no'],
-                    'assigned_barangay' => $input['assigned_barangay']
-                ])->save();
-            } else if ($user->doctor()) {
-                $user->doctor->forceFill([
-                    'license_number' => $input['license_number'],
-                ])->save();
+            switch ($user->getRoleNames()[0]) {
+                case 'barangay-official':
+                    if (! $user->barangayOfficial) {
+                        $user->barangayOfficial()->create([
+                            'position' => $input['position'],
+                            'term_start' => $input['term_start'],
+                            'term_end' => $input['term_end']
+                        ]);
+                    }
+                    else
+                    {
+                        $user->barangayOfficial->forceFill([
+                            'position' => $input['position'],
+                            'term_start' => $input['term_start'],
+                            'term_end' => $input['term_end']
+                        ])->save();
+                    }
 
-                $user->doctor->specializations()->firstOrCreate([
-                    'name' => $input['specialization']
-                ]);
+                    break;
+                case 'bhw':
+                    if (! $user->bhw) {
+                        $user->bhw()->create([
+                            'certification_no' => $input['certification_no'],
+                            'assigned_barangay' => $input['assigned_barangay']
+                        ]);
+                    }
+                    else
+                    {
+                        $user->bhw->forceFill([
+                            'certification_no' => $input['certification_no'],
+                            'assigned_barangay' => $input['assigned_barangay']
+                        ])->save();
+                    }
+                    break;
+                case 'doctor':
+                    if (! $user->doctor && ! $user->doctor->specializations) {
+                        $user->doctor()->create([
+                            'license_number' => $input['license_number'],
+                        ]);
+
+                        $specialization = Specialization::firstOrCreate(['name' => $input['specialization']]);
+
+                        $user->doctor->specializations()->attach($specialization->id);
+                    }
+                    else
+                    {
+                        $user->doctor->forceFill([
+                            'license_number' => $input['license_number'],
+                        ])->save();
+
+                        $user->doctor->specializations->first()->forceFill([
+                            'name' => $input['specialization']
+                        ])->save();
+                    }
+                    break;
             }
         }
 
         // Updates to new role
-        if ($user->getRoleNames()[0] !== $input['role'])
+        if ($user->getRoleNames()[0] != $input['role'])
         {
             if ($user->barangayOfficial())
             {
@@ -77,7 +119,7 @@ class UpdateUserInformation
             {
                 $user->bhw()->delete();
             }
-            else if ($user->doctor())
+            else
             {
                 $user->doctor->specializations->first()->delete();
                 $user->doctor()->delete();
@@ -147,7 +189,6 @@ class UpdateUserInformation
             'contact_no' => $input['contact_no'],
             'email' => $input['email'],
             'username' => $input['username'],
-            'password' => Hash::make($input['password']),
             'email_verified_at' => null,
         ])->save();
 

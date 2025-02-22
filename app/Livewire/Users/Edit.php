@@ -8,6 +8,7 @@ use App\Livewire\Forms\EditUserForm;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -30,7 +31,6 @@ class Edit extends Component
 
         // Fill the form with the existing basic information
         $this->form->user_id = $user_id;
-
         $this->form->fill($this->user->toArray());
 
         // Fill the form with the address information
@@ -42,18 +42,18 @@ class Edit extends Component
         $this->form->role = $this->user->getRoleNames()[0];
 
         // Fill the form with the existing role-based information
-        if ($this->user->barangayOfficial)
+        if ($this->user->getRoleNames()[0] === 'barangay-official')
         {
             $this->form->fill($this->user->barangayOfficial->toArray());
         }
-        else if ($this->user->bhw)
+        else if ($this->user->getRoleNames()[0] === 'bhw')
         {
             $this->form->fill($this->user->bhw->toArray());
         }
-        else if ($this->user->doctor)
+        else
         {
-            $this->form->fill(['license_number' => $this->user->doctor->license_number]);
-            $this->form->fill(['specialization' => $this->user->doctor->specializations->first()->name]);
+            $this->form->license_number = $this->user->doctor->license_number;
+            $this->form->specialization = $this->user->doctor->specializations->first()->name;
         }
     }
 
@@ -80,7 +80,7 @@ class Edit extends Component
 
         try
         {
-            $user = $updater->update($this->user, $validated_data);
+            $updater->update($this->user, $validated_data);
         }
         catch (\Exception $e)
         {
