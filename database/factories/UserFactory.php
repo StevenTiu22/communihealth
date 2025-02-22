@@ -35,13 +35,13 @@ class UserFactory extends Factory
             'sex' => fake()->randomElement(['0', '1']),
             'email' => fake()->unique()->safeEmail(),
             'username' => fake()->unique()->userName(),
-            'contact_no' => fake()->phoneNumber(),
+            'contact_no' => fake()->numberBetween(10000000, 99999999),
             'password' => static::$password ??= Hash::make('password'),
             'email_verified_at' => Carbon::parse(now()),
             'two_factor_secret' => null,
             'two_factor_recovery_codes' => null,
             'remember_token' => Str::random(10),
-            'profile_photo_path' => null,
+            'profile_photo_path' => 'images/default-avatar.png',
         ];
     }
 

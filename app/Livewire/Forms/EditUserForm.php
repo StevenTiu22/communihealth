@@ -9,7 +9,7 @@ use Livewire\Form;
 
 class EditUserForm extends Form
 {
-    public ?int $user_id;
+    public int $user_id;
 
     #[Validate]
     public string $first_name = '';
@@ -125,21 +125,20 @@ class EditUserForm extends Form
                 'required',
                 'email',
                 'max:320',
-                Rule::unique('users', 'email')->ignore($this->user_id)
+                Rule::unique('users', 'email')->ignore($this->user_id, 'id')
             ],
             'username' => [
                 'required',
                 'alpha_num',
                 'max:40',
-                Rule::unique('users', 'username')->ignore($this->user_id)
+                Rule::unique('users', 'username')->ignore($this->user_id, 'id')
             ],
             'password' => [
-                'required',
                 'min:8',
                 'max:128',
             ],
             'confirm_password' => [
-                'required',
+                'required_with:password',
                 'same:password',
             ],
             'house_number' => [
@@ -210,7 +209,6 @@ class EditUserForm extends Form
             ],
             'specialization' => [
                 'required_if:role,doctor',
-                'exists:specializations,name',
             ],
             'profile_photo_path' => [
                 'nullable',
@@ -264,13 +262,12 @@ class EditUserForm extends Form
                 'unique' => 'The :attribute field has already been taken.'
             ],
             'password' => [
-                'required' => 'The :attribute field is required.',
                 'min' => 'The :attribute field must be at least :min characters.',
                 'max' => 'The :attribute field must not be greater than :max characters.'
             ],
             'confirm_password' => [
-                'required' => 'The :attribute field is required.',
-                'same' => 'The :attribute field must match the password field.'
+                'required_with' => 'The confirm password field is required.',
+                'same' => 'The confirm password field must match the password field.'
             ],
             'house_number' => [
                 'required' => 'The :attribute field is required.',
@@ -334,8 +331,6 @@ class EditUserForm extends Form
             ],
             'specialization' => [
                 'required_if' => 'The specialization field is required.',
-                'max' => 'The specialization field must not be greater than :max characters.',
-                'exists' => 'The specialization field must be selected from the given options.'
             ],
         ];
     }

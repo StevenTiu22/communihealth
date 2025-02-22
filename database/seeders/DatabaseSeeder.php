@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
             'middle_name' => '',
             'last_name' => 'Admin',
             'sex' => '0',
-            'email' => 'barangay.barangay-official@gmail.com',
+            'email' => 'barangay.admin@gmail.com',
             'username' => 'admin',
             'password' => 'admin123',
         ]);

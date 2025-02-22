@@ -58,6 +58,8 @@ class Add extends Component
         // Validation
         $validatedData = $this->form->validate();
 
+        $user = null;
+
         // Creation
         try
         {
