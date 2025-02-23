@@ -194,6 +194,7 @@ class CreateUserForm extends Form
             ],
             'certification_no' => [
                 'required_if:role,bhw',
+                Rule::unique('bhw', 'certification_no'),
                 'digits:9',
                 'max:20',
             ],
@@ -317,11 +318,11 @@ class CreateUserForm extends Form
             'certification_no' => [
                 'required_if' => 'The :attribute field is required.',
                 'digits' => 'The :attribute field must contain only digits.',
+                'unique' => 'The certification number is already registered.',
                 'max' => 'The :attribute field must not be greater than :max characters.'
             ],
             'assigned_barangay' => [
                 'required_if' => 'The :attribute field is required.',
-                'alpha_num' => 'The :attribute field must contain only letters and numbers.'
             ],
             'license_number' => [
                 'required_if' => 'The :attribute field is required.',

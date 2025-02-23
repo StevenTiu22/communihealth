@@ -6,19 +6,41 @@ use Livewire\Component;
 
 class Sort extends Component
 {
-    public $isOpen = false;
-    public $sortBy = 'latest_login';
+    public string $sort_by = '';
+    public string $sort_direction = 'asc';
+    public bool $isOpen = false;
 
-    public function toggleDropdown()
+    public function toggleDropdown(): void
     {
         $this->isOpen = !$this->isOpen;
     }
 
-    public function sort($value)
+    public function sort(string $type): void
     {
-        $this->sortBy = $value;
+        switch ($type) {
+            case 'latest_login':
+                $this->sort_by = 'last_login_at';
+                $this->sort_direction = 'desc';
+                break;
+            case 'oldest_login':
+                $this->sort_by = 'last_login_at';
+                $this->sort_direction = 'asc';
+                break;
+            case 'newest':
+                $this->sort_by = 'created_at';
+                $this->sort_direction = 'desc';
+                break;
+            case 'oldest':
+                $this->sort_by = 'created_at';
+                $this->sort_direction = 'asc';
+                break;
+        }
+
         $this->isOpen = false;
-        $this->emit('sortChanged', $value);
+        $this->dispatch('user-sort-updated', [
+            'sort_by' => $this->sort_by,
+            'sort_direction' => $this->sort_direction,
+        ]);
     }
 
     public function render()
