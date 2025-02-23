@@ -6,7 +6,7 @@ use App\Models\Patient;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class PatientTable extends Component
+class Table extends Component
 {
     use WithPagination;
 
@@ -34,4 +34,4 @@ class PatientTable extends Component
             'patients' => $patients
         ]);
     }
-} 
+}

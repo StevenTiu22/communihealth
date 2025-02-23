@@ -2,15 +2,11 @@
 
 namespace Tests\Feature\Livewire;
 
-use App\Livewire\AddPatientModal;
+use App\Livewire\Patients\AddPatientModal;
 use App\Models\Patient;
-use App\Models\Address;
-use App\Models\ParentInfo;
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Tests\TestCase;
-use Illuminate\Support\Facades\Auth;
 
 class AddPatientModalTest extends TestCase
 {
