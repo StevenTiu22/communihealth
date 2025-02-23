@@ -5,6 +5,7 @@ namespace App\Livewire\Users;
 use App\Actions\CreateNewUser;
 use App\Events\UserActivityEvent;
 use App\Livewire\Forms\CreateUserForm;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Log;
@@ -58,12 +59,26 @@ class Add extends Component
         // Validation
         $validatedData = $this->form->validate();
 
-        $user = null;
-
         // Creation
         try
         {
             $user = $creator->create($validatedData);
+
+            event(new UserActivityEvent(
+                auth()->user(),
+                "User created successfully",
+                "User " . auth()->user()->username . " created user" . $user->username . ".",
+                [
+                    'user_id' => $user->id
+                ],
+                Carbon::now()->toDateTimeString()
+            ));
+
+            event(new Registered($user));
+
+            session()->flash('success', 'User created successfully!');
+
+            $this->redirect(route('users.index'));
         }
         catch(\Exception $e)
         {
@@ -81,22 +96,6 @@ class Add extends Component
 
             $this->redirect(route('users.index'));
         }
-
-        event(new UserActivityEvent(
-            auth()->user(),
-            "User created successfully",
-            "User " . auth()->user()->username . " created user" . $user->username . ".",
-            [
-                'user_id' => $user->id
-            ],
-            Carbon::now()->toDateTimeString()
-        ));
-
-        event(new Registered($user));
-
-        session()->flash('success', 'User created successfully!');
-
-        $this->redirect(route('users.index'));
     }
 
     public function render(): View

@@ -11,7 +11,7 @@ class CategoryFilter extends Component
 
     public function updated(): void
     {
-        $this->dispatch('category-updated', $this->category);
+        $this->dispatch('user-category-updated', $this->category);
     }
 
     public function render(): View

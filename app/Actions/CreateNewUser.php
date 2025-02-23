@@ -82,7 +82,7 @@ class CreateNewUser implements CreatesNewUsers
             case 'bhw':
                 $user->bhw()->create([
                     'certification_no' => $input['certification_no'],
-                    'barangay' => $input['assigned_barangay']
+                    'assigned_barangay' => $input['assigned_barangay']
                 ]);
 
                 if (! $user->bhw()) {

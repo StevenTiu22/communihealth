@@ -24,7 +24,7 @@
         <div class="py-1">
             <button
                 wire:click="sort('latest_login')"
-                class="w-full text-left px-4 py-2 text-sm {{ $sortBy === 'latest_login' ? 'bg-gray-600 text-white' : 'text-gray-300' }} hover:bg-gray-600 hover:text-white flex items-center space-x-2"
+                class="w-full text-left px-4 py-2 text-sm {{ $sort_by === 'latest_login' ? 'bg-gray-600 text-white' : 'text-gray-300' }} hover:bg-gray-600 hover:text-white flex items-center space-x-2"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 11-2 0V4H4v12h11v-2a1 1 0 112 0v3a1 1 0 01-1 1H4a1 1 0 01-1-1V3z" />
@@ -33,7 +33,7 @@
             </button>
             <button
                 wire:click="sort('oldest_login')"
-                class="w-full text-left px-4 py-2 text-sm {{ $sortBy === 'oldest_login' ? 'bg-gray-600 text-white' : 'text-gray-300' }} hover:bg-gray-600 hover:text-white flex items-center space-x-2"
+                class="w-full text-left px-4 py-2 text-sm {{ $sort_by === 'oldest_login' ? 'bg-gray-600 text-white' : 'text-gray-300' }} hover:bg-gray-600 hover:text-white flex items-center space-x-2"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 11-2 0V4H4v12h11v-2a1 1 0 112 0v3a1 1 0 01-1 1H4a1 1 0 01-1-1V3z" />
@@ -42,7 +42,7 @@
             </button>
             <button
                 wire:click="sort('newest')"
-                class="w-full text-left px-4 py-2 text-sm {{ $sortBy === 'newest' ? 'bg-gray-600 text-white' : 'text-gray-300' }} hover:bg-gray-600 hover:text-white flex items-center space-x-2"
+                class="w-full text-left px-4 py-2 text-sm {{ $sort_by === 'newest' ? 'bg-gray-600 text-white' : 'text-gray-300' }} hover:bg-gray-600 hover:text-white flex items-center space-x-2"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
@@ -51,7 +51,7 @@
             </button>
             <button
                 wire:click="sort('oldest')"
-                class="w-full text-left px-4 py-2 text-sm {{ $sortBy === 'oldest' ? 'bg-gray-600 text-white' : 'text-gray-300' }} hover:bg-gray-600 hover:text-white flex items-center space-x-2"
+                class="w-full text-left px-4 py-2 text-sm {{ $sort_by === 'oldest' ? 'bg-gray-600 text-white' : 'text-gray-300' }} hover:bg-gray-600 hover:text-white flex items-center space-x-2"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />

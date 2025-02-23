@@ -11,7 +11,7 @@ class Search extends Component
 
     public function updated(): void
     {
-        $this->dispatch('search-updated', $this->search);
+        $this->dispatch('user-search-updated', $this->search);
     }
 
     public function render(): View
