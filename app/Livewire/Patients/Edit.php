@@ -7,7 +7,7 @@ use Livewire\Component;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Rule;
 
-class EditPatientModal extends Component
+class Edit extends Component
 {
     public bool $show = false;
     public ?Patient $patient = null;
@@ -64,9 +64,9 @@ class EditPatientModal extends Component
     public function save()
     {
         $validated = $this->validate();
-        
+
         $this->patient->update($validated);
-        
+
         $this->dispatch('patient-updated');
         $this->close();
     }
@@ -75,4 +75,4 @@ class EditPatientModal extends Component
     {
         return view('livewire.patients.edit-patient-modal');
     }
-} 
+}

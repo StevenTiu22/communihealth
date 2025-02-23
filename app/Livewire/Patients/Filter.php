@@ -4,7 +4,7 @@ namespace App\Livewire\Patients;
 
 use Livewire\Component;
 
-class PatientFilter extends Component
+class Filter extends Component
 {
     public $filters = [
         'gender' => '',
@@ -33,4 +33,4 @@ class PatientFilter extends Component
     {
         return view('livewire.patients.patient-filter');
     }
-} 
+}

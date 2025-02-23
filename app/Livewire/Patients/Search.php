@@ -4,7 +4,7 @@ namespace App\Livewire\Patients;
 
 use Livewire\Component;
 
-class PatientSearch extends Component
+class Search extends Component
 {
     public $search = '';
 
@@ -18,4 +18,4 @@ class PatientSearch extends Component
     {
         return view('livewire.patients.patient-search');
     }
-} 
+}

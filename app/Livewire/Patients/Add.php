@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Patients;
 
+use App\Models\Address;
 use App\Models\ParentInfo;
 use App\Models\Patient;
-use App\Models\Address;
-use Livewire\Component;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
+use Livewire\Component;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
 
-class AddPatientModal extends Component
+class Add extends Component
 {
     use WithFileUploads;
 
@@ -122,7 +121,7 @@ class AddPatientModal extends Component
         $this->showModal = true;
     }
 
-    public function closeModal() 
+    public function closeModal()
     {
         $this->resetValidation();
         $this->reset();
@@ -136,7 +135,7 @@ class AddPatientModal extends Component
 
     public function render()
     {
-        return view('livewire.add-patient-modal');
+        return view('livewire.patients.add');
     }
 
     public function save()
@@ -163,7 +162,7 @@ class AddPatientModal extends Component
 
             $address = Address::firstOrCreate([
                 'house_number' => $this->house_number,
-                'street' => $this->street, 
+                'street' => $this->street,
                 'barangay' => $this->barangay,
                 'city' => $this->city
             ]);
@@ -196,7 +195,7 @@ class AddPatientModal extends Component
 
             session()->flash('success', 'Patient record created successfully.');
             $this->closeModal();
-            $this->redirectRoute('patient-records.index');
+            $this->redirectRoute('patients.index');
 
         } catch (\Exception $e) {
             DB::rollBack();
