@@ -5,7 +5,7 @@ namespace App\Livewire\Forms;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
 
-class PatientForm extends Form
+class CreatePatientForm extends Form
 {
     #[Validate]
     public string $first_name = '';
@@ -87,7 +87,7 @@ class PatientForm extends Form
             'father_first_name' => 'nullable|regex:/^[a-zA-Z\s.-]*$/',
             'father_middle_name' => 'nullable|regex:/^[a-zA-Z\s.-]*$/',
             'father_last_name' => 'nullable|regex:/^[a-zA-Z\s.-]*$/',
-            'father_philhealth' => 'nullable|regex:/^[0-9]{2}-[0-9]{9}-[0-9]$/',
+            'father_philhealth' => 'regex:/^[0-9]{2}-[0-9]{9}-[0-9]$/',
             'house_number' => 'required|string|max:50',
             'street' => 'required|string|max:100',
             'barangay' => 'required|string|max:100',

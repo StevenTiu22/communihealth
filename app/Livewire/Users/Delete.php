@@ -19,8 +19,6 @@ class Delete extends Component
     #[Validate('same:username', message: 'The username you entered does not match the user\'s username.')]
     public string $confirm_username = '';
 
-    public bool $is_confirmed = false;
-
     public bool $showModal = false;
 
     public function open(): void

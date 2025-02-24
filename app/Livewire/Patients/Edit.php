@@ -2,77 +2,94 @@
 
 namespace App\Livewire\Patients;
 
+use App\Events\UserActivityEvent;
 use App\Models\Patient;
+use Carbon\Carbon;
+use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Log;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
-use Livewire\Attributes\On;
-use Livewire\Attributes\Rule;
 
 class Edit extends Component
 {
-    public bool $show = false;
+    public bool $showModal = false;
     public ?Patient $patient = null;
+    public EditPatientForm $form;
 
-    #[Rule('required|string|max:255')]
-    public $first_name = '';
+    #[Validate('image', message: 'Invalid file type. Only image files are allowed.')]
+    #[Validate('max:1024', message: 'File size too large. Max size allowed is 1MB.')]
+    public mixed $new_profile_photo = null;
 
-    #[Rule('nullable|string|max:255')]
-    public $middle_name = '';
-
-    #[Rule('required|string|max:255')]
-    public $last_name = '';
-
-    #[Rule('required|in:male,female')]
-    public $sex = '';
-
-    #[Rule('required|date')]
-    public $birthdate = '';
-
-    #[Rule('boolean')]
-    public $is_4ps = false;
-
-    #[Rule('boolean')]
-    public $is_NHTS = false;
-
-    #[Rule('nullable|string|max:255')]
-    public $contact_num = '';
-
-    #[Rule('nullable|email|max:255')]
-    public $email = '';
-
-    #[On('edit-patient')]
-    public function open(Patient $patient)
+    public function mount($patient_id): void
     {
-        $this->patient = $patient;
-        $this->first_name = $patient->first_name;
-        $this->middle_name = $patient->middle_name;
-        $this->last_name = $patient->last_name;
-        $this->sex = $patient->sex;
-        $this->birthdate = $patient->birthdate->format('Y-m-d');
-        $this->is_4ps = $patient->is_4ps;
-        $this->is_NHTS = $patient->is_NHTS;
-        $this->contact_num = $patient->contact_num;
-        $this->email = $patient->email;
-        $this->show = true;
+        $this->patient = Patient::find($patient_id);
+
+        $this->form->fill($this->patient->toArray());
+
+        $this->form->fill($this->address->toArray());
+
+        if ($this->patient->parents) {
+            // Add logic here
+        }
     }
 
-    public function close()
+    public function open(): void
     {
-        $this->show = false;
-        $this->reset();
+        $this->showModal = true;
     }
 
-    public function save()
+    public function close(): void
     {
-        $validated = $this->validate();
-
-        $this->patient->update($validated);
-
-        $this->dispatch('patient-updated');
-        $this->close();
+        $this->showModal = false;
+        $this->form->resetErrorBag();
+        $this->reset(['new_profile_photo']);
     }
 
-    public function render()
+    public function update(UpdatePatientInformation $updater): void
     {
-        return view('livewire.patients.edit-patient-modal');
+        if ($this->new_profile_photo)
+            $this->patient->updateProfilePhoto($this->new_profile_photo);
+
+        $validated_data = $this->form->validate();
+
+        try {
+            $patient = $updater->update($this->patient, $validated_data);
+
+            Log::info('Patient information updated successfully.');
+
+            event(new UserActivityEvent(
+                auth()->user(),
+                'Updated patient information.',
+                "User " . auth()->user()->name . " updated patient information for patient " . $this->patient->full_name . ".",
+                [
+                    'data' => $validated_data
+                ],
+                Carbon::now()->toDateTimeString()
+            ));
+
+            session()->flash('success', 'Patient information updated successfully.');
+            $this->redirect(route('patients.index'));
+        } catch (\Exception $e) {
+            Log::error('Error updating patient information. Error: ' . $e->getMessage());
+
+            event (new UserActivityEvent(
+                auth()->user(),
+                'Failed to update patient information.',
+                "User " . auth()->user()->name . " failed to update patient information for patient " . $this->patient->full_name . ".",
+                [
+                    'data' => $validated_data,
+                    'error' => $e->getMessage()
+                ],
+                Carbon::now()->toDateTimeString()
+            ));
+
+            session()->flash('error', 'Failed to update patient information.');
+            $this->redirect(route('patients.index'));
+        }
+    }
+
+    public function render(): View
+    {
+        return view('livewire.patients.edit');
     }
 }

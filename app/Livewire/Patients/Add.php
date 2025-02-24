@@ -4,7 +4,7 @@ namespace App\Livewire\Patients;
 
 use App\Actions\CreatePatientInformation;
 use App\Events\UserActivityEvent;
-use App\Livewire\Forms\PatientForm;
+use App\Livewire\Forms\CreatePatientForm;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\View\View;
@@ -18,7 +18,7 @@ class Add extends Component
     use WithFileUploads;
 
     public bool $showModal = false;
-    public PatientForm $form;
+    public CreatePatientForm $form;
 
     #[Validate('image', message: 'Invalid file type. Only image files are allowed.')]
     #[Validate('max:1024', message: 'File size too large. Max size allowed is 1MB.')]
@@ -39,11 +39,6 @@ class Add extends Component
     public function removePhoto(): void
     {
         $this->profile_photo = null;
-    }
-
-    public function render(): View
-    {
-        return view('livewire.patients.add');
     }
 
     public function save(CreatePatientInformation $creator): void
@@ -89,5 +84,10 @@ class Add extends Component
             session()->flash('error', 'Failed to add patient.');
             $this->redirect(route('patients.index'));
         }
+    }
+
+    public function render(): View
+    {
+        return view('livewire.patients.add');
     }
 }
