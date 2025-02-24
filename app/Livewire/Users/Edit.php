@@ -20,8 +20,8 @@ class Edit extends Component
     public ?User $user;
     public EditUserForm $form;
 
-    #[Validate('image', message: "The :attribute field must be an image.")]
-    #[Validate('max:2048', message: "The :attribute field must not be greater than :max kilobytes.")]
+    #[Validate('image', message: "Invalid file type. Only image files are allowed.")]
+    #[Validate('max:2048', message: "File size too large. Max size allowed is 1MB.")]
     public mixed $new_profile_photo = null;
 
     public function mount($user_id): void
