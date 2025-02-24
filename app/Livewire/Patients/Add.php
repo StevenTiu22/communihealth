@@ -2,9 +2,12 @@
 
 namespace App\Livewire\Patients;
 
+use App\Actions\CreatePatientInformation;
 use App\Events\UserActivityEvent;
 use App\Livewire\Forms\PatientForm;
 use Carbon\Carbon;
+use Exception;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -33,17 +36,17 @@ class Add extends Component
         $this->showModal = false;
     }
 
-    public function removePhoto()
+    public function removePhoto(): void
     {
         $this->profile_photo = null;
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.patients.add');
     }
 
-    public function save(AddPatientInformation $creator): void
+    public function save(CreatePatientInformation $creator): void
     {
         // Profile photo handling
         if ($this->profile_photo)
@@ -60,7 +63,7 @@ class Add extends Component
             event(new UserActivityEvent(
                 auth()->user(),
                 'Added patient.',
-                "User {auth()->user()->name} added patient {$patient->full_name}.",
+                "User {auth()->user()->name} added patient $patient->full_name.",
                 [
                     'data' => $validated_data,
                 ],
@@ -69,7 +72,7 @@ class Add extends Component
 
             session()->flash('success', 'Patient added successfully.');
             $this->redirect(route('patients.index'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error("Error adding patient. Error: " . $e->getMessage());
 
             event(new UserActivityEvent(

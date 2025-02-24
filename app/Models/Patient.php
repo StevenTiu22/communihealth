@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Patient extends Model
@@ -27,16 +28,21 @@ class Patient extends Model
     ];
 
     protected $casts = [
-        'birthdate' => 'date',
+        'birthdate' => 'datetime:Y-m-d',
         'is_4ps' => 'boolean',
         'is_NHTS' => 'boolean',
     ];
 
     // Relationships
 
-    public function parents() : BelongsToMany
+    public function parents(): BelongsToMany
     {
-        return $this->belongsToMany(ParentInfo::class, $table="patient_has_parents");
+        return $this->belongsToMany(ParentInfo::class);
+    }
+
+    public function address(): MorphOne
+    {
+        return $this->morphOne(Address::class, 'addressable');
     }
 
     // Accessors and mutators
