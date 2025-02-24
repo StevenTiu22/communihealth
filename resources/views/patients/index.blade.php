@@ -1,4 +1,4 @@
-<x-app-layout title={{ __($title) }}>
+<x-app-layout title={{__($title)}}>
     <x-sidebar />
     <div class="p-4 sm:flex items-center justify-between">
         <div class="w-full">
@@ -6,7 +6,7 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100 h-full flex flex-col">
                     <!-- Header -->
                     <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-2xl font-semibold">Patient Records</h2>
+                        <h2 class="text-2xl font-semibold">{{__('Patient Records')}}</h2>
                     </div>
 
                     <!-- Search and Filter Section -->
