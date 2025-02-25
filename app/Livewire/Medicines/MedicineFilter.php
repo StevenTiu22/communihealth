@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Medicines;
 
 use App\Models\MedicineCategory;
-use Livewire\Component;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Livewire\Component;
 
 class MedicineFilter extends Component
 {
@@ -51,12 +51,12 @@ class MedicineFilter extends Component
         $this->selectedCategory = '';
         $this->selectedStock = '';
         $this->selectedExpiry = '';
-        
+
         $this->dispatch('filter-status', '');
         $this->dispatch('filter-category', '');
         $this->dispatch('filter-stock', '');
         $this->dispatch('filter-expiry', '');
-        
+
         $this->dispatch('reset-filters');
     }
 
@@ -82,7 +82,7 @@ class MedicineFilter extends Component
             });
         } catch (\Exception $e) {
             Log::error('Error fetching medicine categories: ' . $e->getMessage());
-            
+
             // Attempt to get fresh data without cache in case of cache issues
             try {
                 return MedicineCategory::select('id', 'name')
@@ -98,7 +98,7 @@ class MedicineFilter extends Component
     public function boot()
     {
         // Clear categories cache if it's older than 1 hour
-        if (Cache::has('medicine_categories') && 
+        if (Cache::has('medicine_categories') &&
             Cache::get('medicine_categories_timestamp', 0) < now()->subHour()->timestamp) {
             $this->clearCategoriesCache();
         }

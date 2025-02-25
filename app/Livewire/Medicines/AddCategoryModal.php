@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Medicines;
 
 use App\Models\MedicineCategory;
-use Livewire\Component;
 use Illuminate\Validation\Rule;
+use Livewire\Component;
 
 class AddCategoryModal extends Component
 {
@@ -42,7 +42,7 @@ class AddCategoryModal extends Component
         $this->showModal = true;
     }
 
-    public function closeModal() 
+    public function closeModal()
     {
         $this->reset();
         $this->resetErrorBag();
@@ -57,7 +57,7 @@ class AddCategoryModal extends Component
             MedicineCategory::create([
                 'name' => ucwords(strtolower($validatedData['name']))
             ]);
-            
+
             session()->flash('success', 'Category added successfully.');
             $this->closeModal();
             $this->redirectRoute('medicines.index');
@@ -70,4 +70,4 @@ class AddCategoryModal extends Component
     {
         return view('livewire.add-category-modal');
     }
-} 
+}

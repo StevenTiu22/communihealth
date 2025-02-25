@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Medicines;
 
 use App\Models\Medicine;
 use App\Models\MedicineCategory;
 use App\Services\MedicineService;
 use Carbon\Carbon;
-use Livewire\Component;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Validation\Rule;
+use Livewire\Component;
 
 class EditMedicineModal extends Component
 {
     public $showModal = false;
     public Medicine $medicine;
-    
+
     // Form fields
     public $name;
     public $generic_name;
@@ -34,14 +34,14 @@ class EditMedicineModal extends Component
         return [
             'name' => ['required', 'string', 'max:255'],
             'generic_name' => [
-                'required', 
-                'string', 
+                'required',
+                'string',
                 'max:255',
                 'regex:/^[a-zA-Z\s-]+$/'
             ],
             'manufacturer' => ['required', 'string', 'max:255'],
             'category_id' => [
-                'required', 
+                'required',
                 'exists:medicine_categories,id'
             ],
             'description' => ['required', 'string', 'min:10'],
@@ -127,7 +127,7 @@ class EditMedicineModal extends Component
     {
         try {
             $validatedData = $this->validate();
-            
+
             $medicineService = app(MedicineService::class);
             $medicine = $medicineService->updateMedicine($this->medicine, $validatedData);
 
@@ -167,4 +167,4 @@ class EditMedicineModal extends Component
             'categories' => $this->getCategories()
         ]);
     }
-} 
+}

@@ -5,12 +5,8 @@
                 <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
                     <thead class="bg-gray-100 dark:bg-gray-700 sticky top-0">
                         <tr>
-                            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400 cursor-pointer" wire:click="sortBy('last_name')">
-                                Full Name
-                            </th>
-                            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400 cursor-pointer" wire:click="sortBy('age')">
-                                Age
-                            </th>
+                            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400 cursor-pointer">Full Name</th>
+                            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400 cursor-pointer">Age</th>
                             <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Gender</th>
                             <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Contact Number</th>
                             <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Actions</th>

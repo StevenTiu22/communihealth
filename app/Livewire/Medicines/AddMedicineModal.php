@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Medicines;
 
 use App\Models\MedicineCategory;
 use App\Services\MedicineService;
-use Carbon\Carbon;
-use Livewire\Component;
 use Illuminate\Validation\Rule;
+use Livewire\Component;
 
 class AddMedicineModal extends Component
 {
@@ -29,14 +28,14 @@ class AddMedicineModal extends Component
         return [
             'name' => ['required', 'string', 'max:255'],
             'generic_name' => [
-                'required', 
-                'string', 
+                'required',
+                'string',
                 'max:255',
                 'regex:/^[a-zA-Z\s-]+$/'
             ],
             'manufacturer' => ['required', 'string', 'max:255'],
             'category_id' => [
-                'required', 
+                'required',
                 'exists:medicine_categories,id'
             ],
             'description' => ['required', 'string', 'min:10'],
@@ -63,14 +62,14 @@ class AddMedicineModal extends Component
                 'after:today'
             ],
             'number_of_boxes' => [
-                'required', 
-                'integer', 
+                'required',
+                'integer',
                 'min:1',
                 'max:999999'
             ],
             'quantity_per_boxes' => [
-                'required', 
-                'integer', 
+                'required',
+                'integer',
                 'min:1',
                 'max:999999'
             ],

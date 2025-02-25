@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Medicines;
 
 use Livewire\Component;
 
@@ -17,4 +17,4 @@ class MedicineSearch extends Component
     {
         return view('livewire.medicine-search');
     }
-} 
+}

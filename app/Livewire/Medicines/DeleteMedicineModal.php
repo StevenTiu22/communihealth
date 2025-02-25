@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Medicines;
 
 use App\Models\Medicine;
-use Livewire\Component;
 use Illuminate\Support\Facades\Log;
+use Livewire\Component;
 
 class DeleteMedicineModal extends Component
 {
@@ -49,7 +49,7 @@ class DeleteMedicineModal extends Component
                 'name' => $this->medicine->name,
                 'deleted_at' => now()
             ];
-            
+
             Log::info('Medicine deleted', $deletionDetails);
 
             // Perform soft delete
@@ -57,7 +57,7 @@ class DeleteMedicineModal extends Component
 
             $this->closeModal();
             $this->dispatch('medicine-deleted');
-            
+
             session()->flash('success', 'Medicine "' . $this->medicine->name . '" has been deleted successfully.');
         } catch (\Exception $e) {
             Log::error('Error deleting medicine: ' . $e->getMessage());
@@ -69,4 +69,4 @@ class DeleteMedicineModal extends Component
     {
         return view('livewire.delete-medicine-modal');
     }
-} 
+}

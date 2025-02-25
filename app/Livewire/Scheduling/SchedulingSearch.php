@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Scheduling;
 
 use Livewire\Component;
 
@@ -17,7 +17,7 @@ class SchedulingSearch extends Component
         $this->dispatch('search-updated', search: $this->search);
     }
 
-    public function resetSearch() 
+    public function resetSearch()
     {
         $this->search = '';
         $this->dispatch('search-reset');

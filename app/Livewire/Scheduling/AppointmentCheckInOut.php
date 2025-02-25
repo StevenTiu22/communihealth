@@ -1,11 +1,9 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Scheduling;
 
 use App\Models\Appointment;
-use App\Models\Schedule;
 use Livewire\Component;
-use Illuminate\Support\Facades\Auth;
 
 class AppointmentCheckInOut extends Component
 {
@@ -40,7 +38,7 @@ class AppointmentCheckInOut extends Component
         $this->schedule->update([
             'time_out' => now()
         ]);
-        
+
         $this->appointment->update(['status' => 'completed']);
     }
 
@@ -48,4 +46,4 @@ class AppointmentCheckInOut extends Component
     {
         return view('livewire.appointment-check-in-out');
     }
-} 
+}

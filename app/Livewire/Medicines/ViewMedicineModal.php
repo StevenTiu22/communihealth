@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Medicines;
 
 use App\Models\Medicine;
-use Livewire\Component;
-use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
+use Livewire\Component;
 
 class ViewMedicineModal extends Component
 {
@@ -40,14 +40,14 @@ class ViewMedicineModal extends Component
         }
     }
 
-    public function closeModal() 
+    public function closeModal()
     {
         $this->showModal = false;
     }
 
     public function getIsExpiringSoonProperty()
     {
-        return !$this->medicine->isExpired() && 
+        return !$this->medicine->isExpired() &&
                Carbon::parse($this->medicine->expiry_date)->diffInMonths(now(), true) <= 3.0;
     }
 
@@ -83,4 +83,4 @@ class ViewMedicineModal extends Component
     {
         return view('livewire.view-medicine-modal');
     }
-} 
+}
