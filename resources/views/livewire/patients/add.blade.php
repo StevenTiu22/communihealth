@@ -63,61 +63,63 @@
                                 <div class="mt-2 text-sm text-gray-500">
                                     Recommended: Square image, at least 400x400 pixels
                                 </div>
-                                @error('profile_photo') <x-input-error for="profile_photo" class="mt-2" /> @enderror
+                                <x-input-error for="profile_photo" class="mt-2" />
                             </div>
                             <div class="col-span-1">
                                 <x-label for="first_name" value="First Name" />
-                                <x-input id="first_name" type="text" class="mt-1 block w-full" wire:model.live="first_name" />
-                                @error('first_name') <x-input-error for="first_name" class="mt-2" /> @enderror
+                                <x-input id="first_name" type="text" class="mt-1 block w-full" wire:model.live="form.first_name" />
+                                <x-input-error for="form.first_name" class="mt-2" />
                             </div>
 
                             <div class="col-span-1">
                                 <x-label for="middle_name" value="Middle Name" />
-                                <x-input id="middle_name" type="text" class="mt-1 block w-full" wire:model.live="middle_name" />
-                                @error('middle_name') <x-input-error for="middle_name" class="mt-2" /> @enderror
+                                <x-input id="middle_name" type="text" class="mt-1 block w-full" wire:model.live="form.middle_name" />
+                                <x-input-error for="form.middle_name" class="mt-2" />
                             </div>
 
                             <div class="col-span-2">
                                 <x-label for="last_name" value="Last Name" />
-                                <x-input id="last_name" type="text" class="mt-1 block w-full" wire:model.live="last_name" />
-                                @error('last_name') <x-input-error for="last_name" class="mt-2" /> @enderror
+                                <x-input id="last_name" type="text" class="mt-1 block w-full" wire:model.live="form.last_name" />
+                                <x-input-error for="form.last_name" class="mt-2" />
                             </div>
 
                             <div class="col-span-1">
                                 <x-label for="gender" value="Gender" />
-                                <select id="gender" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" wire:model.live="gender">
+                                <select id="gender" wire:model.live="form.gender"
+                                        class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
                                     <option value="">Select Gender</option>
                                     <option value="0">Male</option>
                                     <option value="1">Female</option>
                                 </select>
+                                <x-input-error for="form.gender" class="mt-2" />
                             </div>
 
                             <div class="col-span-1">
                                 <x-label for="birth_date" value="Birthdate" />
-                                <x-input id="birth_date" type="date" class="mt-1 block w-full" wire:model.live="birth_date" />
-                                @error('birth_date') <x-input-error for="birth_date" class="mt-2" /> @enderror
+                                <x-input id="birth_date" type="date" class="mt-1 block w-full" wire:model.live="form.birth_date" />
+                                <x-input-error for="form.birth_date" class="mt-2" />
                             </div>
 
                             <div class="col-span-2">
                                 <x-label for="contact_number" value="Contact Number" />
-                                <x-input id="contact_number" type="tel" class="mt-1 block w-full" wire:model.live="contact_number" />
-                                @error('contact_number') <x-input-error for="contact_number" class="mt-2" /> @enderror
+                                <x-input id="contact_number" type="tel" class="mt-1 block w-full" wire:model.live="form.contact_number" />
+                                <x-input-error for="form.contact_number" class="mt-2" />
                             </div>
 
                             <div class="col-span-1">
                                 <label class="inline-flex items-center space-x-2">
-                                    <input type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" wire:model.live="is_4ps">
+                                    <input type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" wire:model.live="form.is_4ps">
                                     <span>4Ps Member</span>
                                 </label>
-                                @error('is_4ps') <x-input-error for="is_4ps" class="mt-2" /> @enderror
+                                <x-input-error for="form.is_4ps" class="mt-2" />
                             </div>
 
                             <div class="col-span-1">
                                 <label class="inline-flex items-center space-x-2">
-                                    <input type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" wire:model.live="is_NHTS" false-value="0" true-value="1">
+                                    <input type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" wire:model.live="form.is_NHTS" false-value="0" true-value="1">
                                     <span>NHTS Member</span>
                                 </label>
-                                @error('is_NHTS') <x-input-error for="is_NHTS" class="mt-2" /> @enderror
+                                <x-input-error for="form.is_NHTS" class="mt-2" />
                             </div>
                         </div>
                     </div>
@@ -128,26 +130,44 @@
                         <div class="grid grid-cols-2 gap-4">
                             <div class="col-span-2">
                                 <x-label for="house_number" value="House Number" />
-                                <x-input id="house_number" type="text" class="mt-1 block w-full" wire:model.live="house_number" />
-                                @error('house_number') <x-input-error for="house_number" class="mt-2" /> @enderror
+                                <x-input id="house_number" type="text" class="mt-1 block w-full" wire:model.live="form.house_number" />
+                                <x-input-error for="form.house_number" class="mt-2" />
                             </div>
 
                             <div class="col-span-1">
                                 <x-label for="street" value="Street" />
-                                <x-input id="street" type="text" class="mt-1 block w-full" wire:model.live="street" />
-                                @error('street') <x-input-error for="street" class="mt-2" /> @enderror
+                                <x-input id="street" type="text" class="mt-1 block w-full" wire:model.live="form.street" />
+                                <x-input-error for="form.street" class="mt-2" />
                             </div>
 
                             <div class="col-span-1">
                                 <x-label for="barangay" value="Barangay" />
                                 <x-input id="barangay" type="text" class="mt-1 block w-full" wire:model.live="barangay" />
-                                @error('barangay') <x-input-error for="barangay" class="mt-2" /> @enderror
+                                <x-input-error for="form.barangay" class="mt-2" />
                             </div>
 
                             <div class="col-span-2">
                                 <x-label for="city" value="City" />
-                                <x-input id="city" type="text" class="mt-1 block w-full" wire:model.live="city" />
-                                @error('city') <x-input-error for="city" class="mt-2" /> @enderror
+                                <x-input id="city" type="text" class="mt-1 block w-full" wire:model.live="form.city" />
+                                <x-input-error for="form.city" class="mt-2" />
+                            </div>
+
+                            <div class="col-span-2">
+                                <x-label for="province" value="Province" />
+                                <x-input id="province" type="text" class="mt-1 block w-full" wire:model.live="form.province" />
+                                <x-input-error for="form.province" class="mt-2" />
+                            </div>
+
+                            <div class="col-span-2">
+                                <x-label for="region" value="Region" />
+                                <x-input id="region" type="text" class="mt-1 block w-full" wire:model.live="form.region" />
+                                <x-input-error for="form.region" class="mt-2" />
+                            </div>
+
+                            <div class="col-span-2">
+                                <x-label for="country" value="Country" />
+                                <x-input id="country" type="text" class="mt-1 block w-full" wire:model.live="form.country" />
+                                <x-input-error for="form.country" class="mt-2" />
                             </div>
                         </div>
                     </div>
@@ -162,26 +182,26 @@
                                     <div class="grid grid-cols-1 gap-4">
                                         <div>
                                             <x-label for="mother_first_name" value="First Name" />
-                                            <x-input id="mother_first_name" type="text" class="mt-1 block w-full" wire:model.live="mother_first_name" />
-                                            @error('mother_first_name') <x-input-error for="mother_first_name" class="mt-2" /> @enderror
+                                            <x-input id="mother_first_name" type="text" class="mt-1 block w-full" wire:model.live="form.mother_first_name" />
+                                            <x-input-error for="form.mother_first_name" class="mt-2" />
                                         </div>
 
                                         <div>
                                             <x-label for="mother_middle_name" value="Middle Name" />
-                                            <x-input id="mother_middle_name" type="text" class="mt-1 block w-full" wire:model.live="mother_middle_name" />
-                                            @error('mother_middle_name') <x-input-error for="mother_middle_name" class="mt-2" /> @enderror
+                                            <x-input id="mother_middle_name" type="text" class="mt-1 block w-full" wire:model.live="form.mother_middle_name" />
+                                            <x-input-error for="form.mother_middle_name" class="mt-2" />
                                         </div>
 
                                         <div>
                                             <x-label for="mother_last_name" value="Last Name" />
-                                            <x-input id="mother_last_name" type="text" class="mt-1 block w-full" wire:model.live="mother_last_name" />
-                                            @error('mother_last_name') <x-input-error for="mother_last_name" class="mt-2" /> @enderror
+                                            <x-input id="mother_last_name" type="text" class="mt-1 block w-full" wire:model.live="form.mother_last_name" />
+                                            <x-input-error for="form.mother_last_name" class="mt-2" />
                                         </div>
 
                                         <div>
                                             <x-label for="mother_philhealth" value="PhilHealth Number" />
-                                            <x-input id="mother_philhealth" type="text" class="mt-1 block w-full" wire:model.live="mother_philhealth" />
-                                            @error('mother_philhealth') <x-input-error for="mother_philhealth" class="mt-2" /> @enderror
+                                            <x-input id="mother_philhealth" type="text" class="mt-1 block w-full" wire:model.live="form.mother_philhealth" />
+                                            <x-input-error for="form.mother_philhealth" class="mt-2" />
                                         </div>
                                     </div>
                                 </div>
@@ -192,26 +212,26 @@
                                     <div class="grid grid-cols-1 gap-4">
                                         <div>
                                             <x-label for="father_first_name" value="First Name" />
-                                            <x-input id="father_first_name" type="text" class="mt-1 block w-full" wire:model.live="father_first_name" />
-                                            @error('father_first_name') <x-input-error for="father_first_name" class="mt-2" /> @enderror
+                                            <x-input id="father_first_name" type="text" class="mt-1 block w-full" wire:model.live="form.father_first_name" />
+                                            <x-input-error for="form.father_first_name" class="mt-2" />
                                         </div>
 
                                         <div>
                                             <x-label for="father_middle_name" value="Middle Name" />
                                             <x-input id="father_middle_name" type="text" class="mt-1 block w-full" wire:model.live="father_middle_name" />
-                                            @error('father_middle_name') <x-input-error for="father_middle_name" class="mt-2" /> @enderror
+                                            @error('father_middle_name') <x-input-error for="father_middle_name" class="mt-2" />
                                         </div>
 
                                         <div>
                                             <x-label for="father_last_name" value="Last Name" />
-                                            <x-input id="father_last_name" type="text" class="mt-1 block w-full" wire:model.live="father_last_name" />
-                                            @error('father_last_name') <x-input-error for="father_last_name" class="mt-2" /> @enderror
+                                            <x-input id="father_last_name" type="text" class="mt-1 block w-full" wire:model.live="form.father_last_name" />
+                                            <x-input-error for="form.father_last_name" class="mt-2" />
                                         </div>
 
                                         <div>
                                             <x-label for="father_philhealth" value="PhilHealth Number" />
-                                            <x-input id="father_philhealth" type="text" class="mt-1 block w-full" wire:model.live="father_philhealth" />
-                                            @error('father_philhealth') <x-input-error for="father_philhealth" class="mt-2" /> @enderror
+                                            <x-input id="father_philhealth" type="text" class="mt-1 block w-full" wire:model.live="form.father_philhealth" />
+                                            <x-input-error for="form.father_philhealth" class="mt-2" />
                                         </div>
                                     </div>
                                 </div>

@@ -13,7 +13,8 @@
                     <div class="mb-4">
                         <div class="flex items-center justify-between gap-4">
                             <div class="flex items-center gap-4">
-
+                                <livewire:patients.search />
+                                <livewire:patients.filter />
                             </div>
                             <livewire:patients.add />
                         </div>
@@ -21,7 +22,7 @@
 
                     <!-- Patient Records Table -->
                     <div class="flex-1 overflow-auto">
-
+                        <livewire:patients.table />
                     </div>
 
                     <!-- Message -->

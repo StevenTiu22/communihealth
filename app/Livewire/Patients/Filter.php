@@ -2,35 +2,31 @@
 
 namespace App\Livewire\Patients;
 
+use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
 class Filter extends Component
 {
-    public $filters = [
-        'gender' => '',
-        'age_from' => '',
-        'age_to' => '',
-    ];
+    public string $gender = '';
+    public int $age_from;
+    public int $age_to;
 
-    public function applyFilters()
+    public function applyFilter(): void
     {
-        session(['filters' => $this->filters]);
-        $this->emit('filterApplied', $this->filters);
+        $this->dispatch('patient-filter-updated', [
+            'gender' => $this->gender,
+            'age_from' => $this->age_from,
+            'age_to' => $this->age_to,
+        ]);
     }
 
-    public function resetFilters()
+    public function resetFilter(): void
     {
-        $this->filters = [
-            'gender' => '',
-            'age_from' => '',
-            'age_to' => '',
-        ];
-        session()->forget('filters');
-        $this->emit('filterApplied', []);
+        $this->reset();
     }
 
-    public function render()
+    public function render(): View
     {
-        return view('livewire.patients.patient-filter');
+        return view('livewire.patients.filter');
     }
 }

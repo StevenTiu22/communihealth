@@ -5,23 +5,11 @@
                 <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
                     <thead class="bg-gray-100 dark:bg-gray-700 sticky top-0">
                         <tr>
-                            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400 cursor-pointer" wire:click="sortBy('id')">
-                                Patient ID
-                                @if($sortField === 'id')
-                                    <span class="ml-1">{{ $sortDirection === 'asc' ? '↑' : '↓' }}</span>
-                                @endif
-                            </th>
                             <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400 cursor-pointer" wire:click="sortBy('last_name')">
                                 Full Name
-                                @if($sortField === 'last_name')
-                                    <span class="ml-1">{{ $sortDirection === 'asc' ? '↑' : '↓' }}</span>
-                                @endif
                             </th>
                             <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400 cursor-pointer" wire:click="sortBy('age')">
                                 Age
-                                @if($sortField === 'age')
-                                    <span class="ml-1">{{ $sortDirection === 'asc' ? '↑' : '↓' }}</span>
-                                @endif
                             </th>
                             <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Gender</th>
                             <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Contact Number</th>
@@ -30,10 +18,7 @@
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
                         @forelse($patients as $patient)
-                            <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    {{ 'P-' . $patient->id }}
-                                </td>
+                            <tr wire:key="{{ $patient->id }}" class="hover:bg-gray-100 dark:hover:bg-gray-700">
                                 <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap">
                                     <img class="w-10 h-10 rounded-full" src="{{ $patient->profile_photo_path }}" alt="{{ $patient->full_name }}">
                                     <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
@@ -51,9 +36,8 @@
                                 </td>
                                 <td class="p-4 space-x-2 whitespace-nowrap">
                                     <div class="flex space-x-2">
-                                        <livewire:view-patient-modal :patient="$patient" :wire:key="'view-patient-'.$patient->id.'-'.uniqid()" />
-                                        <livewire:edit-patient-modal :patient="$patient" :wire:key="'edit-patient-'.$patient->id.'-'.uniqid()" />
-                                        <livewire:delete-patient-modal :patient="$patient" :wire:key="'delete-patient-'.$patient->id.'-'.uniqid()" />
+                                        <livewire:edit-patient-modal :patient="$patient" :wire:key="'edit-patient-'.$patient->id" />
+                                        <livewire:delete-patient-modal :patient="$patient" :wire:key="'delete-patient-'.$patient->id" />
                                     </div>
                                 </td>
                             </tr>
