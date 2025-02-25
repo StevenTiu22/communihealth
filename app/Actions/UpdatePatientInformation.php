@@ -2,14 +2,14 @@
 
 namespace App\Actions;
 
-use App\Models\ParentInfo;
+use App\Models\Address;
 use App\Models\Patient;
 
-class CreatePatientInformation
+class UpdatePatientInformation
 {
-    public function create(array $input): \Exception|Patient
+    public function update(Patient $patient, array $input): Patient
     {
-        $patient = Patient::create([
+        $patient->forceFill([
             'first_name' => $input['first_name'],
             'middle_name' => $input['middle_name'],
             'last_name' => $input['last_name'],
@@ -18,53 +18,45 @@ class CreatePatientInformation
             'contact_number' => $input['contact_number'],
             'is_4ps' => $input['is_4ps'],
             'is_NHTS' => $input['is_NHTS'],
-        ]);
+        ])->save();
 
         if (! Patient::where('id', $patient->id)) {
-            throw new \Exception('Failed to create patient information.');
+            throw new \Exception('Failed to update patient information.');
         }
 
         if ($input['father_first_name'] &&
             $input['father_last_name']) {
-            $father = ParentInfo::create([
+            $father = $patient->parents->where('relationship', 'father');
+
+            $father->forceFill([
                 'first_name' => $input['father_first_name'],
                 'middle_name' => $input['father_middle_name'],
                 'last_name' => $input['father_last_name'],
                 'philhealth_no' => $input['father_philhealth'],
-            ]);
+            ])->save();
 
             if (! ParentInfo::where('id', $father->id)) {
-                throw new \Exception('Failed to create father information.');
-            }
-
-            $patient->parents()->attach($father->id, ['relationship' => 'father']);
-
-            if (! $patient->parents()->where('id', $father->id)) {
-                throw new \Exception('Failed to attach father information.');
+                throw new \Exception('Failed to update father information.');
             }
         }
 
         if ($input['mother_first_name'] &&
             $input['mother_last_name']) {
-            $mother = ParentInfo::create([
+            $mother = $patient->parents->where('relationship', 'mother');
+
+            $mother->forceFill([
                 'first_name' => $input['mother_first_name'],
                 'middle_name' => $input['mother_middle_name'],
                 'last_name' => $input['mother_last_name'],
                 'philhealth_no' => $input['mother_philhealth'],
-            ]);
+            ])->save();
 
             if (! ParentInfo::where('id', $mother->id)) {
-                throw new \Exception('Failed to create mother information.');
-            }
-
-            $patient->parents()->attach($mother->id, ['relationship' => 'mother']);
-
-            if (! $patient->parents()->where('id', $mother->id)) {
-                throw new \Exception('Failed to attach mother information.');
+                throw new \Exception('Failed to update mother information.');
             }
         }
 
-        $patient->address()->create([
+        $patient->address->forceFill([
             'house_number' => $input['house_number'],
             'street' => $input['street'],
             'barangay' => $input['barangay'],
@@ -72,10 +64,10 @@ class CreatePatientInformation
             'province' => $input['province'],
             'region' => $input['region'],
             'country' => $input['country'],
-        ]);
+        ])->save();
 
-        if (! $patient->address()) {
-            throw new \Exception('Failed to insert address information.');
+        if (! Address::where('id', $patient->address->id)) {
+            throw new \Exception('Failed to update address information.');
         }
 
         return $patient;

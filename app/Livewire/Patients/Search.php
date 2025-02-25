@@ -2,20 +2,20 @@
 
 namespace App\Livewire\Patients;
 
+use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
 class Search extends Component
 {
-    public $search = '';
+    public string $search = '';
 
-    public function updatedSearch()
+    public function updated(): void
     {
-        session(['search' => $this->search]);
-        $this->emit('searchUpdated', $this->search);
+        $this->dispatch('patient-search-updated', $this->search);
     }
 
-    public function render()
+    public function render(): View
     {
-        return view('livewire.patients.patient-search');
+        return view('livewire.patients.search');
     }
 }

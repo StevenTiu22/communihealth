@@ -2,7 +2,9 @@
 
 namespace App\Livewire\Patients;
 
+use App\Actions\UpdatePatientInformation;
 use App\Events\UserActivityEvent;
+use App\Livewire\Forms\EditPatientForm;
 use App\Models\Patient;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
@@ -28,8 +30,22 @@ class Edit extends Component
 
         $this->form->fill($this->address->toArray());
 
-        if ($this->patient->parents) {
-            // Add logic here
+        if ($this->patient->parents->where('relationship', 'mother'))
+        {
+            $this->form->mother_id = $this->patient->parents->where('relationship', 'mother')->id;
+            $this->form->mother_first_name = $this->patient->parents->where('relationship', 'mother')->first_name;
+            $this->form->mother_middle_name = $this->patient->parents->where('relationship', 'mother')->middle_name;
+            $this->form->mother_last_name = $this->patient->parents->where('relationship', 'mother')->last_name;
+            $this->form->mother_philhealth = $this->patient->parents->where('relationship', 'mother')->philhealth_no;
+        }
+
+        if ($this->patient->parents->where('relationship', 'father'))
+        {
+            $this->form->father_id = $this->patient->parents->where('relationship', 'father')->id;
+            $this->form->father_first_name = $this->patient->parents->where('relationship', 'father')->first_name;
+            $this->form->father_middle_name = $this->patient->parents->where('relationship', 'father')->middle_name;
+            $this->form->father_last_name = $this->patient->parents->where('relationship', 'father')->last_name;
+            $this->form->father_philhealth = $this->patient->parents->where('relationship', 'father')->philhealth_no;
         }
     }
 
