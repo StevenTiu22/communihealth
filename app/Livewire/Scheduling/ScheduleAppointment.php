@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Scheduling;
 
-use App\Models\User;
 use App\Models\Appointment;
 use App\Models\AppointmentType;
-use Livewire\Component;
-use Illuminate\Support\Facades\DB;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Livewire\Component;
 
 class ScheduleAppointment extends Component
 {
@@ -18,7 +18,7 @@ class ScheduleAppointment extends Component
     public $chiefComplaint;
     public $appointmentDate;
     public $appointmentTime;
-    
+
     public $availableDoctors = [];
     public $appointmentTypes = [];
 
@@ -81,9 +81,9 @@ class ScheduleAppointment extends Component
 
             DB::commit();
 
-            session()->flash('success', 
-                $this->isWalkIn 
-                    ? 'Walk-in appointment recorded successfully.' 
+            session()->flash('success',
+                $this->isWalkIn
+                    ? 'Walk-in appointment recorded successfully.'
                     : 'Appointment scheduled successfully.'
             );
             $this->reset();
@@ -99,4 +99,4 @@ class ScheduleAppointment extends Component
     {
         return view('livewire.schedule-appointment');
     }
-} 
+}

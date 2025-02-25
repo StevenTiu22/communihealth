@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Scheduling;
 
 use App\Models\Appointment;
 use Livewire\Component;
@@ -84,4 +84,4 @@ class SchedulingTable extends Component
             'appointments' => $appointments
         ]);
     }
-} 
+}

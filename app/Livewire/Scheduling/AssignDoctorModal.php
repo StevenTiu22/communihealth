@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Scheduling;
 
 use App\Models\Patient;
 use App\Models\User;
@@ -41,9 +41,9 @@ class AssignDoctorModal extends Component
     public function render()
     {
         $doctors = User::where('role', 'doctor')->get();
-        
+
         return view('livewire.assign-doctor-modal', [
             'doctors' => $doctors
         ]);
     }
-} 
+}

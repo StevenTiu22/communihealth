@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Scheduling;
 
 use App\Models\Appointment;
 use App\Models\AppointmentType;
-use App\Models\User;
 use App\Models\Patient;
 use App\Models\Schedule;
-use Livewire\Component;
+use App\Models\User;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Carbon;
+use Livewire\Component;
 
 class AddScheduleModal extends Component
 {
@@ -96,4 +96,4 @@ class AddScheduleModal extends Component
             'doctors' => User::where('role', 1)->get(),
         ]);
     }
-} 
+}

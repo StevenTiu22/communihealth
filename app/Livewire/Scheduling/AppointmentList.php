@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Scheduling;
 
 use App\Models\Appointment;
 use Livewire\Component;
@@ -47,4 +47,4 @@ class AppointmentList extends Component
             'appointments' => $query
         ]);
     }
-} 
+}

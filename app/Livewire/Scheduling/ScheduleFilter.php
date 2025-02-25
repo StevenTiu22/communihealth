@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Scheduling;
 
 use App\Models\Doctor;
 use Livewire\Component;
@@ -56,4 +56,4 @@ class ScheduleFilter extends Component
     {
         return view('livewire.schedule-filter');
     }
-} 
+}

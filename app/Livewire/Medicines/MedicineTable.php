@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Medicines;
 
 use App\Models\Medicine;
 use Livewire\Component;
@@ -136,4 +136,4 @@ class MedicineTable extends Component
             'medicines' => $medicines
         ]);
     }
-} 
+}

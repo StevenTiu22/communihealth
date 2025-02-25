@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Scheduling;
 
-use Livewire\Component;
 use App\Models\Appointment;
+use Livewire\Component;
 
 class ScheduleDropdown extends Component
 {
@@ -34,4 +34,4 @@ class ScheduleDropdown extends Component
     {
         return view('livewire.schedule-dropdown');
     }
-} 
+}

@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Scheduling;
 
 use App\Models\Appointment;
 use App\Models\AppointmentType;
-use App\Models\User;
 use App\Models\Patient;
 use App\Models\Schedule;
-use Livewire\Component;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Livewire\Component;
 
 class AddWalkInModal extends Component
 {
@@ -91,4 +91,4 @@ class AddWalkInModal extends Component
             'patients' => User::where('role', 2)->get(),
         ]);
     }
-} 
+}
