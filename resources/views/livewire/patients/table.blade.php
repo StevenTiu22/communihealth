@@ -50,35 +50,6 @@
         </div>
     </div>
 
-    <!-- Active Filters -->
-    <div class="mt-2 px-2">
-        @if($filterGender || $filterAge || $filter4ps || $filterNhts)
-            <div class="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400">
-                <span>Filters:</span>
-                @if($filterGender !== '')
-                    <span class="px-2 py-0.5 bg-blue-100 text-blue-800 rounded-full dark:bg-blue-900 dark:text-blue-300">
-                        {{ $filterGender == '0' ? 'Male' : 'Female' }}
-                    </span>
-                @endif
-                @if($filterAge !== '')
-                    <span class="px-2 py-0.5 bg-blue-100 text-blue-800 rounded-full dark:bg-blue-900 dark:text-blue-300">
-                        {{ ucfirst($filterAge) }}
-                    </span>
-                @endif
-                @if($filter4ps !== '')
-                    <span class="px-2 py-0.5 bg-blue-100 text-blue-800 rounded-full dark:bg-blue-900 dark:text-blue-300">
-                        {{ $filter4ps == '1' ? '4Ps Member' : 'Non-4Ps' }}
-                    </span>
-                @endif
-                @if($filterNhts !== '')
-                    <span class="px-2 py-0.5 bg-blue-100 text-blue-800 rounded-full dark:bg-blue-900 dark:text-blue-300">
-                        {{ $filterNhts == '1' ? 'NHTS Member' : 'Non-NHTS' }}
-                    </span>
-                @endif
-            </div>
-        @endif
-    </div>
-
     <!-- Pagination -->
     <div class="mt-2 px-2">
         {{ $patients->links() }}

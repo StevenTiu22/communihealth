@@ -17,7 +17,7 @@ class CreatePatientForm extends Form
     public string $last_name = '';
 
     #[Validate]
-    public string $gender = '';
+    public string $sex = '';
 
     #[Validate]
     public string $birth_date = '';
@@ -67,6 +67,12 @@ class CreatePatientForm extends Form
     #[Validate]
     public string $city = '';
 
+    #[Validate]
+    public string $province = '';
+
+    #[Validate]
+    public string $region = '';
+
     public string $profile_photo_path = '';
 
     protected function rules(): array
@@ -75,7 +81,7 @@ class CreatePatientForm extends Form
             'first_name' => 'required|string|regex:/^[a-zA-Z\s.-]*$/',
             'middle_name' => 'nullable|string|regex:/^[a-zA-Z\s.-]*$/',
             'last_name' => 'required|string|regex:/^[a-zA-Z\s.-]*$/',
-            'gender' => 'required|numeric|in:0,1',
+            'sex' => 'required|numeric|in:0,1',
             'birth_date' => 'required|date|before:today',
             'contact_number' => 'required|numeric|digits:11',
             'is_4ps' => 'boolean',
@@ -103,8 +109,8 @@ class CreatePatientForm extends Form
             'middle_name.regex' => 'The middle name may only contain letters, spaces, dots and dashes.',
             'last_name.required' => 'The last name field is required.',
             'last_name.regex' => 'The last name may only contain letters, spaces, dots and dashes.',
-            'gender.required' => 'Please select a gender.',
-            'gender.in' => 'Please select a valid gender.',
+            'sex.required' => 'Please select a sex.',
+            'sex.in' => 'Please select a valid sex.',
             'birth_date.required' => 'The birth date field is required.',
             'birth_date.before' => 'The birth date must be before today.',
             'birth_date.date' => 'Please enter a valid date.',

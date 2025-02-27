@@ -12,10 +12,9 @@ class Table extends Component
 {
     use WithPagination;
 
-    public Patient $patients;
     public int $perPage = 10;
     public string $search = '';
-    public string $gender = '';
+    public string $sex = '';
     public int $age_from;
     public int $age_to;
 
@@ -35,7 +34,7 @@ class Table extends Component
     #[On('patient-filter-updated')]
     public function updatedFilter(array $filters): void
     {
-        $this->gender = $filters['gender'];
+        $this->sex = $filters['sex'];
         $this->age_from = $filters['age_from'];
         $this->age_to = $filters['age_to'];
 
@@ -52,16 +51,16 @@ class Table extends Component
                 ->orWhere('last_name', 'like', '%' . $this->search . '%');
         }
 
-        if (! empty($this->gender)) {
-            $query->where('gender', $this->gender);
+        if (! empty($this->sex)) {
+            $query->where('sex', $this->sex);
         }
 
         if (! empty($this->age_from)) {
-            $query->where('age', '>=', $this->age_from);
+            $query->whereRaw('TIMESTAMPDIFF(YEAR, birth_date, CURDATE()) >= ?', [$this->age_from]);
         }
 
         if (! empty($this->age_to)) {
-            $query->where('age', '<=', $this->age_to);
+            $query->whereRaw('TIMESTAMPDIFF(YEAR, birth_date, CURDATE()) <= ?', [$this->age_to]);
         }
 
         $patients = $query->paginate($this->perPage);
