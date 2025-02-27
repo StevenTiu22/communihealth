@@ -21,12 +21,11 @@
 
         <x-slot name="content">
             <form wire:submit.prevent="save">
-                @csrf
                 <div class="grid grid-cols-2 gap-8 h-[32rem] overflow-y-auto p-4">
                     <!-- Left Half - Basic Information -->
-                        <div class="col-span-1">
-                            <h2 class="text-lg font-medium mb-4">Basic Information</h2>
-                            <div class="grid grid-cols-2 gap-4">
+                    <div class="col-span-1">
+                        <h2 class="text-lg font-medium text-white mb-4">Basic Information</h2>
+                        <div class="grid grid-cols-2 gap-4">
                             <div class="col-span-2 mb-4">
                                 <x-label for="profile_photo" value="Profile Photo" class="mb-2" />
                                 <div class="mt-1 flex items-center gap-4">
@@ -50,7 +49,7 @@
                                     </div>
 
                                     <div class="flex items-center gap-3">
-                                        <label for="profile_photo_input" class="cursor-pointer bg-white px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                        <label for="profile_photo_input" class="cursor-pointer bg-white px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50">
                                             Choose photo
                                         </label>
                                         @if($profile_photo)
@@ -85,9 +84,9 @@
 
                             <div class="col-span-1">
                                 <x-label for="gender" value="Gender" />
-                                <select id="gender" wire:model.live="form.gender"
-                                        class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                                    <option value="">Select Gender</option>
+                                <select id="gender" wire:model.live="form.sex"
+                                        class="mt-1 block w-full bg-gray-900 focus:border-indigo-500 focus:ring-indigo-500 rounded-md">
+                                    <option value="">Select Sex</option>
                                     <option value="0">Male</option>
                                     <option value="1">Female</option>
                                 </select>
@@ -116,7 +115,7 @@
 
                             <div class="col-span-1">
                                 <label class="inline-flex items-center space-x-2">
-                                    <input type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" wire:model.live="form.is_NHTS" false-value="0" true-value="1">
+                                    <input type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" wire:model.live="form.is_NHTS">
                                     <span>NHTS Member</span>
                                 </label>
                                 <x-input-error for="form.is_NHTS" class="mt-2" />
@@ -126,7 +125,7 @@
 
                     <!-- Right Half - Address Information -->
                     <div class="col-span-1">
-                        <h2 class="text-lg font-medium mb-4">Address Information</h2>
+                        <h2 class="text-lg font-medium text-white mb-4">Address Information</h2>
                         <div class="grid grid-cols-2 gap-4">
                             <div class="col-span-2">
                                 <x-label for="house_number" value="House Number" />
@@ -173,12 +172,12 @@
                     </div>
                     <div class="col-span-2">
                         <div class="mt-8">
-                            <h2 class="text-lg font-medium mb-4">Parent Information</h2>
+                            <h2 class="text-lg font-medium text-white mb-4">Parent Information</h2>
                             <hr class="border-t border-gray-300 my-4">
                             <div class="grid grid-cols-2 gap-8">
                                 <!-- Mother's Information -->
                                 <div class="col-span-1">
-                                    <h3 class="text-base font-medium text-gray-700 mb-4">Mother's Information</h3>
+                                    <h3 class="text-base font-medium text-white mb-4">Mother's Information</h3>
                                     <div class="grid grid-cols-1 gap-4">
                                         <div>
                                             <x-label for="mother_first_name" value="First Name" />
@@ -208,7 +207,7 @@
 
                                 <!-- Father's Information -->
                                 <div class="col-span-1">
-                                    <h3 class="text-base font-medium text-gray-700 mb-4">Father's Information</h3>
+                                    <h3 class="text-base font-medium text-white mb-4">Father's Information</h3>
                                     <div class="grid grid-cols-1 gap-4">
                                         <div>
                                             <x-label for="father_first_name" value="First Name" />
@@ -219,7 +218,7 @@
                                         <div>
                                             <x-label for="father_middle_name" value="Middle Name" />
                                             <x-input id="father_middle_name" type="text" class="mt-1 block w-full" wire:model.live="father_middle_name" />
-                                            @error('father_middle_name') <x-input-error for="father_middle_name" class="mt-2" />
+                                            <x-input-error for="form.father_middle_name" class="mt-2" />
                                         </div>
 
                                         <div>
@@ -247,7 +246,7 @@
                 Cancel
             </x-secondary-button>
 
-            <x-button class="ml-3" wire:click="save" wire:loading.attr="disabled" :disabled="$errors->any()">
+            <x-button class="ml-3" wire:click="save" color="blue" wire:loading.attr="disabled" :disabled="$errors->any()">
                 Save
             </x-button>
         </x-slot>

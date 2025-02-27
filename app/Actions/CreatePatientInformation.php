@@ -13,7 +13,7 @@ class CreatePatientInformation
             'first_name' => $input['first_name'],
             'middle_name' => $input['middle_name'],
             'last_name' => $input['last_name'],
-            'gender' => $input['gender'],
+            'sex' => $input['sex'],
             'birth_date' => $input['birth_date'],
             'contact_number' => $input['contact_number'],
             'is_4ps' => $input['is_4ps'],
