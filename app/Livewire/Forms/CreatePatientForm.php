@@ -73,6 +73,9 @@ class CreatePatientForm extends Form
     #[Validate]
     public string $region = '';
 
+    #[Validate]
+    public string $country = '';
+
     public string $profile_photo_path = '';
 
     protected function rules(): array
