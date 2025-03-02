@@ -83,14 +83,14 @@
                             </div>
 
                             <div class="col-span-1">
-                                <x-label for="gender" value="Gender" />
-                                <select id="gender" wire:model.live="form.sex"
+                                <x-label for="sex" value="Sex" />
+                                <select id="sex" wire:model.live="form.sex"
                                         class="mt-1 block w-full bg-gray-900 focus:border-indigo-500 focus:ring-indigo-500 rounded-md">
                                     <option value="">Select Sex</option>
                                     <option value="0">Male</option>
                                     <option value="1">Female</option>
                                 </select>
-                                <x-input-error for="form.gender" class="mt-2" />
+                                <x-input-error for="form.sex" class="mt-2" />
                             </div>
 
                             <div class="col-span-1">
@@ -107,7 +107,7 @@
 
                             <div class="col-span-1">
                                 <label class="inline-flex items-center space-x-2">
-                                    <input type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" wire:model.live="form.is_4ps">
+                                    <input type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" wire:model.live="form.is_4ps" true-value="1" false-value="0">
                                     <span>4Ps Member</span>
                                 </label>
                                 <x-input-error for="form.is_4ps" class="mt-2" />
@@ -115,7 +115,7 @@
 
                             <div class="col-span-1">
                                 <label class="inline-flex items-center space-x-2">
-                                    <input type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" wire:model.live="form.is_NHTS">
+                                    <input type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" wire:model.live="form.is_NHTS" true-value="1" false-value="0">
                                     <span>NHTS Member</span>
                                 </label>
                                 <x-input-error for="form.is_NHTS" class="mt-2" />
@@ -141,7 +141,7 @@
 
                             <div class="col-span-1">
                                 <x-label for="barangay" value="Barangay" />
-                                <x-input id="barangay" type="text" class="mt-1 block w-full" wire:model.live="barangay" />
+                                <x-input id="barangay" type="text" class="mt-1 block w-full" wire:model.live="form.barangay" />
                                 <x-input-error for="form.barangay" class="mt-2" />
                             </div>
 
@@ -165,7 +165,7 @@
 
                             <div class="col-span-2">
                                 <x-label for="country" value="Country" />
-                                <x-input id="country" type="text" class="mt-1 block w-full" wire:model.live="form.country" />
+                                <x-input id="country" type="text" class="mt-1 block w-full" wire:model.live="form.country" readonly />
                                 <x-input-error for="form.country" class="mt-2" />
                             </div>
                         </div>
@@ -217,7 +217,7 @@
 
                                         <div>
                                             <x-label for="father_middle_name" value="Middle Name" />
-                                            <x-input id="father_middle_name" type="text" class="mt-1 block w-full" wire:model.live="father_middle_name" />
+                                            <x-input id="father_middle_name" type="text" class="mt-1 block w-full" wire:model.live="form.father_middle_name" />
                                             <x-input-error for="form.father_middle_name" class="mt-2" />
                                         </div>
 

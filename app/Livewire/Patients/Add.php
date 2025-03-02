@@ -44,10 +44,10 @@ class Add extends Component
     public function save(CreatePatientInformation $creator): void
     {
         // Profile photo handling
-        if ($this->profile_photo)
-            $this->form->profile_photo_path = $this->profile_photo->store('images', 'public');
-        else
+        if ($this->profile_photo === null)
             $this->form->profile_photo_path = 'images/default-avatar.png';
+        else
+            $this->form->profile_photo_path = $this->profile_photo->store('images', 'public');
 
         // Validating form data
         $validated_data = $this->form->validate();
@@ -58,7 +58,7 @@ class Add extends Component
             event(new UserActivityEvent(
                 auth()->user(),
                 'Added patient.',
-                "User {auth()->user()->name} added patient $patient->full_name.",
+                "User " . auth()->user()->username . " added patient $patient->full_name.",
                 [
                     'data' => $validated_data,
                 ],
@@ -73,7 +73,7 @@ class Add extends Component
             event(new UserActivityEvent(
                 auth()->user(),
                 'Failed to add patient.',
-                "User {auth()->user()->name} failed to add patient. Error: " . $e->getMessage(),
+                "User " . auth()->user()->username . " failed to add patient. Error: " . $e->getMessage(),
                 [
                     'error' => $e->getMessage(),
                     'validated_data' => $validated_data,

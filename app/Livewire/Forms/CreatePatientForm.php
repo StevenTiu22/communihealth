@@ -73,6 +73,10 @@ class CreatePatientForm extends Form
     #[Validate]
     public string $region = '';
 
+    #[Validate]
+    public string $country = 'Philippines';
+
+    #[Validate]
     public string $profile_photo_path = '';
 
     protected function rules(): array
@@ -98,6 +102,21 @@ class CreatePatientForm extends Form
             'street' => 'required|string|max:100',
             'barangay' => 'required|string|max:100',
             'city' => 'required|string|max:100',
+            'province' => [
+                'required',
+                'string',
+            ],
+            'region' => [
+                'required',
+                'string',
+            ],
+            'country' => [
+                'required',
+                'string',
+            ],
+            'profile_photo_path' => [
+                'string'
+            ],
         ];
     }
 
@@ -133,6 +152,12 @@ class CreatePatientForm extends Form
             'barangay.max' => 'The barangay must not exceed 100 characters.',
             'city.required' => 'The city field is required.',
             'city.max' => 'The city must not exceed 100 characters.',
+            'province' => [
+                'required' => 'The province field is required.',
+            ],
+            'region' => [
+                'required' => 'The region field is required.',
+            ]
         ];
     }
 }

@@ -216,7 +216,7 @@
                                         <div>
                                             <x-label for="father_middle_name" value="Middle Name" />
                                             <x-input id="father_middle_name" type="text" class="mt-1 block w-full" wire:model.live="father_middle_name" />
-                                            @error('father_middle_name') <x-input-error for="father_middle_name" class="mt-2" />
+                                            <x-input-error for="father_middle_name" class="mt-2" />
                                         </div>
 
                                         <div>

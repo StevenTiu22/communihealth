@@ -35,10 +35,7 @@
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
                         @forelse($medicines as $medicine)
-                            <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    {{ 'M-' . $medicine->id }}
-                                </td>
+                            <tr wire:key="{{ $medicine->id }}" class="hover:bg-gray-100 dark:hover:bg-gray-700">
                                 <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     {{ $medicine->name }}
                                 </td>
@@ -53,9 +50,9 @@
                                 </td>
                                 <td class="p-4 space-x-2 whitespace-nowrap">
                                     <div class="flex space-x-2">
-                                        <livewire:view-medicine-modal :medicine="$medicine" :wire:key="'view-medicine-'.$medicine->id.'-'.uniqid()" />
-                                        <livewire:edit-medicine-modal :medicine="$medicine" :wire:key="'edit-medicine-'.$medicine->id.'-'.uniqid()" />
-                                        <livewire:delete-medicine-modal :medicine="$medicine" :wire:key="'delete-medicine-'.$medicine->id.'-'.uniqid()" />
+                                        <livewire:view-medicine-modal :medicine_id="$medicine->id" :wire:key="'view-'.$medicine->id" />
+                                        <livewire:edit-medicine-modal :medicine_id="$medicine->id" :wire:key="'edit-'.$medicine->id" />
+                                        <livewire:delete-medicine-modal :medicine_id="$medicine->id" :wire:key="''delete-'.$medicine->id" />
                                     </div>
                                 </td>
                             </tr>
@@ -86,4 +83,4 @@
     <div class="mt-4 px-4">
         {{ $medicines->links() }}
     </div>
-</div> 
+</div>

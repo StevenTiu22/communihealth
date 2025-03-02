@@ -20,7 +20,7 @@ class Edit extends Component
 
     #[Validate('image', message: 'Invalid file type. Only image files are allowed.')]
     #[Validate('max:1024', message: 'File size too large. Max size allowed is 1MB.')]
-    public mixed $new_profile_photo = null;
+    public mixed $profile_photo = null;
 
     public function mount($patient_id): void
     {
@@ -28,24 +28,24 @@ class Edit extends Component
 
         $this->form->fill($this->patient->toArray());
 
-        $this->form->fill($this->address->toArray());
+        $this->form->fill($this->patient->address->toArray());
 
-        if ($this->patient->parents->where('relationship', 'mother'))
+        if ($this->patient->parents->where('pivot.relationship', 'mother'))
         {
-            $this->form->mother_id = $this->patient->parents->where('relationship', 'mother')->id;
-            $this->form->mother_first_name = $this->patient->parents->where('relationship', 'mother')->first_name;
-            $this->form->mother_middle_name = $this->patient->parents->where('relationship', 'mother')->middle_name;
-            $this->form->mother_last_name = $this->patient->parents->where('relationship', 'mother')->last_name;
-            $this->form->mother_philhealth = $this->patient->parents->where('relationship', 'mother')->philhealth_no;
+            $this->form->mother_id = $this->patient->parents->where('pivot.relationship', 'mother')->first()->id;
+            $this->form->mother_first_name = $this->patient->parents->where('pivot.relationship', 'mother')->first()->first_name;
+            $this->form->mother_middle_name = $this->patient->parents->where('pivot.relationship', 'mother')->first()->middle_name;
+            $this->form->mother_last_name = $this->patient->parents->where('pivot.relationship', 'mother')->first()->last_name;
+            $this->form->mother_philhealth = $this->patient->parents->where('pivot.relationship', 'mother')->first()->philhealth_no;
         }
 
-        if ($this->patient->parents->where('relationship', 'father'))
+        if ($this->patient->parents->where('pivot.relationship', 'father'))
         {
-            $this->form->father_id = $this->patient->parents->where('relationship', 'father')->id;
-            $this->form->father_first_name = $this->patient->parents->where('relationship', 'father')->first_name;
-            $this->form->father_middle_name = $this->patient->parents->where('relationship', 'father')->middle_name;
-            $this->form->father_last_name = $this->patient->parents->where('relationship', 'father')->last_name;
-            $this->form->father_philhealth = $this->patient->parents->where('relationship', 'father')->philhealth_no;
+            $this->form->father_id = $this->patient->parents->where('pivot.relationship', 'father')->first()->id;
+            $this->form->father_first_name = $this->patient->parents->where('pivot.relationship', 'father')->first()->first_name;
+            $this->form->father_middle_name = $this->patient->parents->where('pivot.relationship', 'father')->first()->middle_name;
+            $this->form->father_last_name = $this->patient->parents->where('pivot.relationship', 'father')->first()->last_name;
+            $this->form->father_philhealth = $this->patient->parents->where('pivot.relationship', 'father')->first()->philhealth_no;
         }
     }
 
