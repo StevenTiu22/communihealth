@@ -22,7 +22,7 @@ class EditPatientForm extends Form
     public string $last_name = '';
 
     #[Validate]
-    public string $gender = '';
+    public string $sex = '';
 
     #[Validate]
     public string $birth_date = '';
@@ -72,6 +72,15 @@ class EditPatientForm extends Form
     #[Validate]
     public string $city = '';
 
+    #[Validate]
+    public string $province = '';
+
+    #[Validate]
+    public string $region = '';
+
+    #[Validate]
+    public string $country = '';
+
     public string $profile_photo_path = '';
 
     protected function rules(): array
@@ -80,7 +89,7 @@ class EditPatientForm extends Form
             'first_name' => 'required|string|regex:/^[a-zA-Z\s.-]*$/',
             'middle_name' => 'nullable|string|regex:/^[a-zA-Z\s.-]*$/',
             'last_name' => 'required|string|regex:/^[a-zA-Z\s.-]*$/',
-            'gender' => 'required|numeric|in:0,1',
+            'sex' => 'required|numeric|in:0,1',
             'birth_date' => 'required|date|before:today',
             'contact_number' => 'required|numeric|digits:11',
             'is_4ps' => 'boolean',
@@ -103,6 +112,18 @@ class EditPatientForm extends Form
             'street' => 'required|string|max:100',
             'barangay' => 'required|string|max:100',
             'city' => 'required|string|max:100',
+            'province' => [
+                'required',
+                'string'
+            ],
+            'region' => [
+                'required',
+                'string'
+            ],
+            'country' => [
+                'required',
+                'string'
+            ],
         ];
     }
 
@@ -114,8 +135,8 @@ class EditPatientForm extends Form
             'middle_name.regex' => 'The middle name may only contain letters, spaces, dots and dashes.',
             'last_name.required' => 'The last name field is required.',
             'last_name.regex' => 'The last name may only contain letters, spaces, dots and dashes.',
-            'gender.required' => 'Please select a gender.',
-            'gender.in' => 'Please select a valid gender.',
+            'sex.required' => 'Please select a gender.',
+            'sex.in' => 'Please select a valid gender.',
             'birth_date.required' => 'The birth date field is required.',
             'birth_date.before' => 'The birth date must be before today.',
             'birth_date.date' => 'Please enter a valid date.',

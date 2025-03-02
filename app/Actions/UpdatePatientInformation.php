@@ -3,6 +3,7 @@
 namespace App\Actions;
 
 use App\Models\Address;
+use App\Models\ParentInfo;
 use App\Models\Patient;
 
 class UpdatePatientInformation
@@ -13,7 +14,7 @@ class UpdatePatientInformation
             'first_name' => $input['first_name'],
             'middle_name' => $input['middle_name'],
             'last_name' => $input['last_name'],
-            'gender' => $input['gender'],
+            'sex' => $input['sex'],
             'birth_date' => $input['birth_date'],
             'contact_number' => $input['contact_number'],
             'is_4ps' => $input['is_4ps'],
@@ -26,7 +27,7 @@ class UpdatePatientInformation
 
         if ($input['father_first_name'] &&
             $input['father_last_name']) {
-            $father = $patient->parents->where('relationship', 'father');
+            $father = $patient->parents->where('pivot.relationship', 'father')->first();
 
             $father->forceFill([
                 'first_name' => $input['father_first_name'],
@@ -34,15 +35,11 @@ class UpdatePatientInformation
                 'last_name' => $input['father_last_name'],
                 'philhealth_no' => $input['father_philhealth'],
             ])->save();
-
-            if (! ParentInfo::where('id', $father->id)) {
-                throw new \Exception('Failed to update father information.');
-            }
         }
 
         if ($input['mother_first_name'] &&
             $input['mother_last_name']) {
-            $mother = $patient->parents->where('relationship', 'mother');
+            $mother = $patient->parents->where('pivot.relationship', 'mother')->first();
 
             $mother->forceFill([
                 'first_name' => $input['mother_first_name'],
@@ -50,10 +47,6 @@ class UpdatePatientInformation
                 'last_name' => $input['mother_last_name'],
                 'philhealth_no' => $input['mother_philhealth'],
             ])->save();
-
-            if (! ParentInfo::where('id', $mother->id)) {
-                throw new \Exception('Failed to update mother information.');
-            }
         }
 
         $patient->address->forceFill([

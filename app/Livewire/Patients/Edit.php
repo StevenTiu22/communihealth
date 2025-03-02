@@ -11,16 +11,19 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class Edit extends Component
 {
+    use WithFileUploads;
+
     public bool $showModal = false;
     public ?Patient $patient = null;
     public EditPatientForm $form;
 
     #[Validate('image', message: 'Invalid file type. Only image files are allowed.')]
     #[Validate('max:1024', message: 'File size too large. Max size allowed is 1MB.')]
-    public mixed $profile_photo = null;
+    public mixed $new_profile_photo = null;
 
     public function mount($patient_id): void
     {
@@ -61,7 +64,7 @@ class Edit extends Component
         $this->reset(['new_profile_photo']);
     }
 
-    public function update(UpdatePatientInformation $updater): void
+    public function save(UpdatePatientInformation $updater): void
     {
         if ($this->new_profile_photo)
             $this->patient->updateProfilePhoto($this->new_profile_photo);
@@ -76,7 +79,7 @@ class Edit extends Component
             event(new UserActivityEvent(
                 auth()->user(),
                 'Updated patient information.',
-                "User " . auth()->user()->name . " updated patient information for patient " . $this->patient->full_name . ".",
+                "User " . auth()->user()->username . " updated patient information for patient " . $this->patient->full_name . ".",
                 [
                     'data' => $validated_data
                 ],
@@ -91,7 +94,7 @@ class Edit extends Component
             event (new UserActivityEvent(
                 auth()->user(),
                 'Failed to update patient information.',
-                "User " . auth()->user()->name . " failed to update patient information for patient " . $this->patient->full_name . ".",
+                "User " . auth()->user()->username . " failed to update patient information for patient " . $this->patient->full_name . ".",
                 [
                     'data' => $validated_data,
                     'error' => $e->getMessage()
