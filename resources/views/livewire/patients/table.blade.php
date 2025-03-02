@@ -32,6 +32,7 @@
                                 </td>
                                 <td class="p-4 space-x-2 whitespace-nowrap">
                                     <div class="flex space-x-2">
+                                        <livewire:patients.show :patient_id="$patient->id" :wire:key="'view-patient-'.$patient->id" />
                                         <livewire:patients.edit :patient_id="$patient->id" :wire:key="'edit-patient-'.$patient->id" />
                                         <livewire:patients.delete :patient_id="$patient->id" :wire:key="'delete-patient-'.$patient->id" />
                                     </div>

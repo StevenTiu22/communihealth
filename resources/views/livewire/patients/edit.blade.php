@@ -246,7 +246,7 @@
                 Cancel
             </x-secondary-button>
 
-            <x-button class="ml-3" wire:click="save" wire:loading.attr="disabled" color="blue" disabled="$errors->any()">
+            <x-button class="ml-3" wire:click="save" wire:loading.attr="disabled" :disabled="$errors->any()">
                 Save
             </x-button>
         </x-slot>
