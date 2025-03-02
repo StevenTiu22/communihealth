@@ -3,6 +3,7 @@
 namespace App\Livewire\Medicines;
 
 use App\Models\Medicine;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -10,7 +11,8 @@ class MedicineTable extends Component
 {
     use WithPagination;
 
-    public $search = '';
+    public int $perPage = 10;
+    public string $search = '';
     public $sortField = 'name';
     public $sortDirection = 'asc';
     public $filterStatus = '';
@@ -18,21 +20,11 @@ class MedicineTable extends Component
     public $filterStock = '';
     public $filterExpiry = '';
 
-    protected $listeners = [
-        'search-medicines' => 'updateSearch',
-        'medicine-added' => '$refresh',
-        'medicine-updated' => '$refresh',
-        'medicine-deleted' => '$refresh',
-        'filter-status' => 'filterByStatus',
-        'filter-category' => 'filterByCategory',
-        'filter-stock' => 'filterByStock',
-        'filter-expiry' => 'filterByExpiry',
-        'reset-filters' => 'resetFilters'
-    ];
-
-    public function updateSearch($search)
+    #[On('medicine-search-updated')]
+    public function updateSearch(string $search): void
     {
         $this->search = $search;
+
         $this->resetPage();
     }
 
@@ -79,60 +71,15 @@ class MedicineTable extends Component
 
     public function render()
     {
-        $medicines = Medicine::query()
-            ->when($this->search, function ($query) {
-                $query->where(function ($q) {
-                    $q->where('name', 'like', '%' . $this->search . '%')
-                      ->orWhere('generic_name', 'like', '%' . $this->search . '%')
-                      ->orWhere('manufacturer', 'like', '%' . $this->search . '%');
-                });
-            })
-            ->when($this->filterStatus, function ($query) {
-                if ($this->filterStatus === 'active') {
-                    $query->where('current_stock', '>', 0)
-                          ->whereDate('expiry_date', '>', now());
-                } elseif ($this->filterStatus === 'inactive') {
-                    $query->where('current_stock', 0)
-                          ->orWhereDate('expiry_date', '<=', now());
-                }
-            })
-            ->when($this->filterCategory, function ($query) {
-                $query->where('category_id', $this->filterCategory);
-            })
-            ->when($this->filterStock, function ($query) {
-                switch ($this->filterStock) {
-                    case 'in_stock':
-                        $query->where('current_stock', '>', 0);
-                        break;
-                    case 'out_of_stock':
-                        $query->where('current_stock', 0);
-                        break;
-                    case 'low_stock':
-                        $query->where('current_stock', '>', 0)
-                              ->where('current_stock', '<=', 100);
-                        break;
-                }
-                //isa po akong hatdog uwuuwu - 202
-            })
-            ->when($this->filterExpiry, function ($query) {
-                switch ($this->filterExpiry) {
-                    case 'active':
-                        $query->where('expiry_date', '>', now());
-                        break;
-                    case 'expired':
-                        $query->where('expiry_date', '<=', now());
-                        break;
-                    case 'expiring_soon':
-                        $query->where('expiry_date', '>', now())
-                              ->where('expiry_date', '<=', now()->addMonths(3));
-                        break;
-                }
-            })
-            ->orderBy($this->sortField, $this->sortDirection)
-            ->with('category')
-            ->paginate(10);
+        $query = Medicine::query();
 
-        return view('livewire.medicine-table', [
+        if (! empty($this->search)) {
+            $query->where('name', 'like', '%' . $this->search . '%');
+        }
+
+        $medicines = $query->orderBy('created_at', 'desc')->paginate($this->perPage);
+
+        return view('livewire.medicines.table', [
             'medicines' => $medicines
         ]);
     }

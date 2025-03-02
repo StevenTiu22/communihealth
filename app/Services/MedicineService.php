@@ -20,7 +20,7 @@ class MedicineService
 
             // Calculate initial stock
             $data['current_stock'] = $this->calculateInitialStock(
-                (int) $data['number_of_boxes'], 
+                (int) $data['number_of_boxes'],
                 (int) $data['quantity_per_boxes']
             );
 
@@ -33,7 +33,7 @@ class MedicineService
                 'description' => $data['description'],
                 'tracking_number' => $data['tracking_number'],
                 'delivery_date' => $data['delivery_date'],
-                'manufactured_date' => $data['manufactured_date'], 
+                'manufactured_date' => $data['manufactured_date'],
                 'expiry_date' => $data['expiry_date'],
                 'number_of_boxes' => $data['number_of_boxes'],
                 'quantity_per_boxes' => $data['quantity_per_boxes'],
@@ -63,7 +63,7 @@ class MedicineService
         return $date->isPast();
     }
 
-    public function updateMedicine(Medicine $medicine, array $data): Medicine
+    public function update(Medicine $medicine, array $data): Medicine
     {
         return DB::transaction(function () use ($medicine, $data) {
             try {
@@ -108,7 +108,7 @@ class MedicineService
     {
         return DB::transaction(function () use ($data) {
             $medicine = Medicine::findOrFail($data['medicine_id']);
-            
+
             if ($medicine->isExpired()) {
                 throw new Exception('Cannot dispense expired medicine');
             }
@@ -119,7 +119,7 @@ class MedicineService
 
             $transaction = MedicineTransaction::create($data);
             $medicine->updateStock($data['quantity'], 'out');
-            
+
             return $transaction;
         });
     }
@@ -129,13 +129,13 @@ class MedicineService
         return DB::transaction(function () use ($transaction, $data) {
             // Revert old stock
             $transaction->revertStock();
-            
+
             // Update transaction
             $transaction->update($data);
-            
+
             // Update new stock
             $transaction->medicine->updateStock($data['quantity'], 'out');
-            
+
             return $transaction;
         });
     }
@@ -155,4 +155,4 @@ class MedicineService
             return $transaction->forceDelete();
         });
     }
-} 
+}

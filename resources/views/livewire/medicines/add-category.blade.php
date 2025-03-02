@@ -15,16 +15,14 @@
             <div class="space-y-4">
                 <div>
                     <x-label for="name" value="Category Name" />
-                    <x-input 
-                        wire:model.live="name" 
-                        id="name" 
-                        type="text" 
-                        class="mt-1 block w-full" 
+                    <x-input
+                        wire:model.live="name"
+                        id="name"
+                        type="text"
+                        class="mt-1 block w-full"
                         placeholder="Enter category name"
                     />
-                    @error('name')
-                        <x-input-error for="name" class="mt-2" />
-                    @enderror
+                    <x-input-error for="name" class="mt-2" />
                 </div>
 
                 <!-- Helper text -->
@@ -52,4 +50,4 @@
             </div>
         </x-slot>
     </x-dialog-modal>
-</div> 
+</div>

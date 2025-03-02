@@ -4,43 +4,26 @@ namespace App\Livewire\Medicines;
 
 use App\Models\Medicine;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
-class ViewMedicineModal extends Component
+class Show extends Component
 {
-    public $showModal = false;
+    public bool $showModal = false;
     public Medicine $medicine;
 
-    public function mount(Medicine $medicine)
+    public function mount($medicine_id): void
     {
-        try {
-            $this->medicine = $medicine->load('category');
-        } catch (\Exception $e) {
-            Log::error('Error loading medicine details', [
-                'medicine_id' => $medicine->id,
-                'error' => $e->getMessage()
-            ]);
-            session()->flash('error', 'Error loading medicine details.');
-        }
+        $this->medicine = Medicine::findOrFail($medicine_id);
     }
 
-    public function openModal()
+    public function open(): void
     {
-        try {
-            // Refresh medicine data when opening modal
-            $this->medicine->refresh();
-            $this->showModal = true;
-        } catch (\Exception $e) {
-            Log::error('Error opening medicine modal', [
-                'medicine_id' => $this->medicine->id,
-                'error' => $e->getMessage()
-            ]);
-            session()->flash('error', 'Error loading medicine details.');
-        }
+        $this->medicine->refresh();
+        $this->showModal = true;
     }
 
-    public function closeModal()
+    public function close(): void
     {
         $this->showModal = false;
     }
@@ -79,8 +62,8 @@ class ViewMedicineModal extends Component
         ];
     }
 
-    public function render()
+    public function render(): View
     {
-        return view('livewire.view-medicine-modal');
+        return view('livewire.medicines.show');
     }
 }
