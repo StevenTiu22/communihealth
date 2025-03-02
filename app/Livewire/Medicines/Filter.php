@@ -3,11 +3,12 @@
 namespace App\Livewire\Medicines;
 
 use App\Models\MedicineCategory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
-class MedicineFilter extends Component
+class Filter extends Component
 {
     public $selectedStatus = '';
     public $selectedCategory = '';
@@ -19,11 +20,6 @@ class MedicineFilter extends Component
         'categoryUpdated' => 'clearCategoriesCache',
         'categoryDeleted' => 'clearCategoriesCache'
     ];
-
-    public function mount()
-    {
-        $this->resetFilters();
-    }
 
     public function updatedSelectedStatus()
     {
@@ -104,7 +100,7 @@ class MedicineFilter extends Component
         }
     }
 
-    public function render()
+    public function render(): View
     {
         $categories = $this->getCategories();
 

@@ -6,8 +6,10 @@ use Illuminate\Validation\Rule;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
 
-class CreateMedicineForm extends Form
+class EditMedicineForm extends Form
 {
+    public int $medicine_id;
+
     #[Validate]
     public string $name = '';
 
@@ -47,7 +49,11 @@ class CreateMedicineForm extends Form
     protected function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
+            'name' => [
+                'required',
+                'string',
+                'max:255'
+            ],
             'generic_name' => [
                 'required',
                 'string',
@@ -64,7 +70,7 @@ class CreateMedicineForm extends Form
                 'required',
                 'string',
                 'regex:/^[A-Z0-9-]+$/',
-                Rule::unique('medicines', 'tracking_number'),
+                Rule::unique('medicines', 'tracking_number')->ignore($this->medicine_id),
             ],
             'delivery_date' => [
                 'required',
