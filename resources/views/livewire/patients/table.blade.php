@@ -6,8 +6,9 @@
                     <thead class="bg-gray-100 dark:bg-gray-700 sticky top-0">
                         <tr>
                             <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400 cursor-pointer">Full Name</th>
+                            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400 cursor-pointer">Address</th>
                             <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400 cursor-pointer">Age</th>
-                            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Gender</th>
+                            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Sex</th>
                             <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Contact Number</th>
                             <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Actions</th>
                         </tr>
@@ -22,16 +23,20 @@
                                     </div>
                                 </td>
                                 <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{ $patient->address->full_address }}
+                                </td>
+                                <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     {{ $patient->age }}
                                 </td>
                                 <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    {{ $patient->gender == 0 ? 'Male' : 'Female' }}
+                                    {{ $patient->sex == 0 ? 'Male' : 'Female' }}
                                 </td>
                                 <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     {{ $patient->contact_number }}
                                 </td>
                                 <td class="p-4 space-x-2 whitespace-nowrap">
                                     <div class="flex space-x-2">
+                                        <livewire:patients.show :patient_id="$patient->id" :wire:key="'view-patient-'.$patient->id" />
                                         <livewire:patients.edit :patient_id="$patient->id" :wire:key="'edit-patient-'.$patient->id" />
                                         <livewire:patients.delete :patient_id="$patient->id" :wire:key="'delete-patient-'.$patient->id" />
                                     </div>

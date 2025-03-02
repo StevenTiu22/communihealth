@@ -52,7 +52,11 @@ class Table extends Component
         }
 
         if (! empty($this->sex)) {
-            $query->where('sex', $this->sex);
+            if ($this->sex === 'male') {
+                $query->where('sex', '=', 0);
+            } else {
+                $query->where('sex', '=', 1);
+            }
         }
 
         if (! empty($this->age_from)) {

@@ -9,7 +9,7 @@
         <div class="space-y-4">
             <div>
                 <label class="block text-sm font-medium text-gray-200">Gender</label>
-                <select wire:model.live="gender" class="w-full rounded-md bg-gray-800 border-gray-700 text-gray-200 focus:border-blue-500 focus:ring-blue-500 mt-2">
+                <select wire:model.live="sex" class="w-full rounded-md bg-gray-800 border-gray-700 text-gray-200 focus:border-blue-500 focus:ring-blue-500 mt-2">
                     <option value="">All</option>
                     <option value="male">Male</option>
                     <option value="female">Female</option>
