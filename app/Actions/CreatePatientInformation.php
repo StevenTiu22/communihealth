@@ -9,6 +9,16 @@ class CreatePatientInformation
 {
     public function create(array $input): \Exception|Patient
     {
+        if ($input['is_4ps'])
+            $input['is_4ps'] = 1;
+        else
+            $input['is_4ps'] = 0;
+
+        if ($input['is_NHTS'])
+            $input['is_NHTS'] = 1;
+        else
+            $input['is_NHTS'] = 0;
+
         $patient = Patient::create([
             'first_name' => $input['first_name'],
             'middle_name' => $input['middle_name'],
@@ -18,6 +28,7 @@ class CreatePatientInformation
             'contact_number' => $input['contact_number'],
             'is_4ps' => $input['is_4ps'],
             'is_NHTS' => $input['is_NHTS'],
+            'profile_photo_path' => $input['profile_photo_path'],
         ]);
 
         if (! Patient::where('id', $patient->id)) {

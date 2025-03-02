@@ -10,25 +10,26 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Jetstream\HasProfilePhoto;
 
 class Patient extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, HasProfilePhoto;
 
     protected $fillable = [
         'first_name',
         'middle_name',
         'last_name',
         'sex',
-        'birthdate',
+        'birth_date',
+        'contact_number',
         'is_4ps',
         'is_NHTS',
-        'contact_num',
-        'email',
+        'profile_photo_path',
     ];
 
     protected $casts = [
-        'birthdate' => 'datetime:Y-m-d',
+        'birth_date' => 'datetime:Y-m-d',
         'is_4ps' => 'boolean',
         'is_NHTS' => 'boolean',
     ];
@@ -37,7 +38,9 @@ class Patient extends Model
 
     public function parents(): BelongsToMany
     {
-        return $this->belongsToMany(ParentInfo::class);
+        return $this->belongsToMany(ParentInfo::class, 'patient_parent', 'patient_id', 'parent_id')
+            ->withPivot('relationship')
+            ->withTimestamps();
     }
 
     public function address(): MorphOne

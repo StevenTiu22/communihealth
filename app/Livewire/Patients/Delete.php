@@ -79,6 +79,6 @@ class Delete extends Component
 
     public function render(): View
     {
-        return view('livewire.delete-patient-modal');
+        return view('livewire.patients.delete');
     }
 }
