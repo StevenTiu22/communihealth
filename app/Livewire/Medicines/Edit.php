@@ -3,6 +3,7 @@
 namespace App\Livewire\Medicines;
 
 use App\Events\UserActivityEvent;
+use App\Livewire\Forms\EditMedicineForm;
 use App\Models\Medicine;
 use App\Models\MedicineCategory;
 use App\Services\MedicineService;
@@ -47,7 +48,6 @@ class Edit extends Component
         $this->showModal = false;
         $this->resetErrorBag();
         $this->resetValidation();
-        $this->form->reset();
     }
 
     public function save(MedicineService $updater): void
