@@ -8,7 +8,7 @@
         <input
             wire:model.live="search"
             type="search"
-            class="block p-2 pl-10 text-sm text-gray-900 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-lg w-80 bg-gray-50 dark:bg-gray-800 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="block p-2 pl-10 text-sm text-gray-800 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-lg w-80 bg-gray-50 dark:bg-gray-700 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Search medicines..."
         >
     </div>
