@@ -11,6 +11,8 @@ class Show extends Component
 {
     public bool $showModal = false;
     public Medicine $medicine;
+    public string $created_at = '';
+    public string $updated_at = '';
 
     public function mount($medicine_id): void
     {
@@ -20,46 +22,14 @@ class Show extends Component
     public function open(): void
     {
         $this->medicine->refresh();
+        $this->created_at = Carbon::parse($this->medicine->created_at)->addHours(8)->format('F j, Y g:i A');
+        $this->updated_at = Carbon::parse($this->medicine->updated_at)->addHours(8)->format('F j, Y g:i A');
         $this->showModal = true;
     }
 
     public function close(): void
     {
         $this->showModal = false;
-    }
-
-    public function getIsExpiringSoonProperty()
-    {
-        return !$this->medicine->isExpired() &&
-               Carbon::parse($this->medicine->expiry_date)->diffInMonths(now(), true) <= 3.0;
-    }
-
-    public function getStockStatusProperty()
-    {
-        if ($this->medicine->current_stock <= 0) {
-            return [
-                'label' => 'Out of Stock',
-                'classes' => 'bg-yellow-100 text-yellow-800'
-            ];
-        }
-        return [
-            'label' => 'In Stock',
-            'classes' => 'bg-blue-100 text-blue-800'
-        ];
-    }
-
-    public function getExpiryStatusProperty()
-    {
-        if ($this->medicine->isExpired()) {
-            return [
-                'label' => 'Expired',
-                'classes' => 'bg-red-100 text-red-800'
-            ];
-        }
-        return [
-            'label' => 'Active',
-            'classes' => 'bg-green-100 text-green-800'
-        ];
     }
 
     public function render(): View
