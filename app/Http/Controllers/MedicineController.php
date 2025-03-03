@@ -9,7 +9,7 @@ class MedicineController extends Controller
     public function index(): View
     {
         return view('medicines.index', [
-            'title' => 'Medicines',
+            'title' => 'Medicine Inventory',
         ]);
     }
 }

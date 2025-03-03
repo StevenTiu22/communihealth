@@ -103,6 +103,6 @@ class AddCategory extends Component
 
     public function render(): View
     {
-        return view('livewire.add-category');
+        return view('livewire.medicines.add-category');
     }
 }

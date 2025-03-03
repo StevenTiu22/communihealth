@@ -50,9 +50,9 @@
                                 </td>
                                 <td class="p-4 space-x-2 whitespace-nowrap">
                                     <div class="flex space-x-2">
-                                        <livewire:view-medicine-modal :medicine_id="$medicine->id" :wire:key="'view-'.$medicine->id" />
-                                        <livewire:edit-medicine-modal :medicine_id="$medicine->id" :wire:key="'edit-'.$medicine->id" />
-                                        <livewire:delete-medicine-modal :medicine_id="$medicine->id" :wire:key="''delete-'.$medicine->id" />
+                                        <livewire:medicines.show :medicine_id="$medicine->id" :wire:key="'view-'.$medicine->id" />
+                                        <livewire:medicines.edit :medicine_id="$medicine->id" :wire:key="'edit-'.$medicine->id" />
+                                        <livewire:medicines.delete :medicine_id="$medicine->id" :wire:key="'delete-'.$medicine->id" />
                                     </div>
                                 </td>
                             </tr>
