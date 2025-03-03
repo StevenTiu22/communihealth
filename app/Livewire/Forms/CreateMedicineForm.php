@@ -36,10 +36,13 @@ class CreateMedicineForm extends Form
     public string $expiry_date = '';
 
     #[Validate]
-    public string $number_of_boxes = '';
+    public string $num_of_boxes = '';
 
     #[Validate]
-    public string $quantity_per_boxes = '';
+    public string $qty_per_boxes = '';
+
+    #[Validate]
+    public string $unit_of_measure = '';
 
     #[Validate]
     public string $source = '';
@@ -47,14 +50,22 @@ class CreateMedicineForm extends Form
     protected function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
+            'name' => [
+                'required',
+                'string',
+                'max:255'
+            ],
             'generic_name' => [
                 'required',
                 'string',
                 'max:255',
                 'regex:/^[a-zA-Z\s-]+$/'
             ],
-            'manufacturer' => ['required', 'string', 'max:255'],
+            'manufacturer' => [
+                'required',
+                'string',
+                'max:255'
+            ],
             'category_id' => [
                 'required',
                 'exists:medicine_categories,id'
@@ -82,19 +93,27 @@ class CreateMedicineForm extends Form
                 'date',
                 'after:today'
             ],
-            'number_of_boxes' => [
+            'num_of_boxes' => [
                 'required',
                 'integer',
                 'min:1',
                 'max:999999'
             ],
-            'quantity_per_boxes' => [
+            'qty_per_boxes' => [
                 'required',
                 'integer',
                 'min:1',
                 'max:999999'
             ],
-            'source' => ['required', 'string', 'max:255'],
+            'source' => [
+                'required',
+                'string',
+                'max:255'
+            ],
+            'unit_of_measure' => [
+                'required',
+                'string',
+            ]
         ];
     }
 
@@ -114,8 +133,9 @@ class CreateMedicineForm extends Form
             'delivery_date.before_or_equal' => 'Delivery date cannot be in the future.',
             'manufactured_date.before_or_equal' => 'Manufactured date must be before or equal to delivery date.',
             'expiry_date.after' => 'Expiry date must be a future date.',
-            'number_of_boxes.min' => 'Number of boxes must be at least 1.',
-            'quantity_per_boxes.min' => 'Quantity per box must be at least 1.',
+            'num_of_boxes.min' => 'Number of boxes must be at least 1.',
+            'qty_per_boxes.min' => 'Quantity per box must be at least 1.',
+            'unit_of_measure.required' => 'Unit of measure is required.'
         ];
     }
 }

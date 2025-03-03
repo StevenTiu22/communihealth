@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder;
 
 class Medicine extends Model
 {
@@ -24,29 +25,24 @@ class Medicine extends Model
         'delivery_date',
         'manufactured_date',
         'expiry_date',
-        'number_of_boxes',
-        'quantity_per_boxes',
-        'source',
-        'current_stock'
+        'num_of_boxes',
+        'qty_per_boxes',
+        'unit_of_measure',
+        'stock_level',
+        'source'
     ];
 
     protected $casts = [
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-        'delivery_date' => 'date',
-        'manufactured_date' => 'date',
-        'expiry_date' => 'date',
-        'deleted_at' => 'datetime'
-    ];
-
-    protected $dates = [
-        'delivery_date',
-        'manufactured_date',
-        'expiry_date'
+        'delivery_date' => 'datetime:Y-m-d',
+        'manufactured_date' => 'datetime:Y-m-d',
+        'expiry_date' => 'datetime:Y-m-d',
+        'created_at' => 'datetime:Y-m-d h:i:s A',
+        'updated_at' => 'datetime:Y-m-d h:i:s A',
+        'deleted_at' => 'datetime:Y-m-d h:i:s A'
     ];
 
     // Relationships
-    public function category() : BelongsTo
+    public function category(): BelongsTo
     {
         return $this->belongsTo(MedicineCategory::class);
     }
@@ -57,7 +53,7 @@ class Medicine extends Model
     }
 
     // Accessors and mutators
-    protected function name() : Attribute
+    protected function name(): Attribute
     {
         return Attribute::make(
             get: fn ($value) => ucwords($value),
@@ -65,7 +61,7 @@ class Medicine extends Model
         );
     }
 
-    protected function genericName() : Attribute
+    protected function genericName(): Attribute
     {
         return Attribute::make(
             get: fn ($value) => ucwords($value),
@@ -73,7 +69,7 @@ class Medicine extends Model
         );
     }
 
-    protected function manufacturer() : Attribute
+    protected function manufacturer(): Attribute
     {
         return Attribute::make(
             get: fn ($value) => ucwords($value),
@@ -81,34 +77,7 @@ class Medicine extends Model
         );
     }
 
-    protected function deliveryDate() : Attribute
-    {
-        return Attribute::make(
-            get: function ($value) {
-                return Carbon::parse($value)->format('F d, Y');
-            }
-        );
-    }
-
-    protected function manufacturedDate() : Attribute
-    {
-        return Attribute::make(
-            get: function ($value) {
-                return Carbon::parse($value)->format('F d, Y');
-            }
-        );
-    }
-
-    protected function expiryDate() : Attribute
-    {
-        return Attribute::make(
-            get: function ($value) {
-                return Carbon::parse($value)->format('F d, Y');
-            }
-        );
-    }
-
-    protected function source() : Attribute
+    protected function source(): Attribute
     {
         return Attribute::make(
             get: fn ($value) => ucwords($value),
@@ -117,19 +86,13 @@ class Medicine extends Model
     }
 
     // Methods
-    public function updateStock(int $quantity, string $type = 'out'): void
+    public function expired(): bool
     {
-        $this->current_stock += $type === 'out' ? -$quantity : $quantity;
-        $this->save();
+        return $this->expiry_date < Carbon::now();
     }
 
-    public function hasEnoughStock(int $quantity): bool
+    public function scopeExpired($query): Builder
     {
-        return $this->current_stock >= $quantity;
-    }
-
-    public function isExpired(): bool
-    {
-        return Carbon::parse($this->expiry_date)->isPast();
+        return $query->where('expiry_date', '<', Carbon::now());
     }
 }

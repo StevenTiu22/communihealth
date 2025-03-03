@@ -22,6 +22,19 @@ class Add extends Component
         $this->form->manufactured_date = now()->format('Y-m-d');
         $this->form->delivery_date = now()->format('Y-m-d');
         $this->form->expiry_date = now()->addYear()->format('Y-m-d');
+        $this->form->source = "San Juan City Government";
+    }
+
+    public function open(): void
+    {
+        $this->showModal = true;
+    }
+
+    public function close(): void
+    {
+        $this->showModal = false;
+        $this->reset();
+        $this->resetErrorBag();
     }
 
     public function save(MedicineService $medicineService): void
@@ -36,13 +49,13 @@ class Add extends Component
             event(new UserActivityEvent(
                 auth()->user(),
                 'Successful medicine creation',
-            'User ' . auth()->user()->name . ' created a new medicine record with the tracking number ' . $medicine->tracking_number . '.',
+            'User ' . auth()->user()->username . ' created a new medicine record with the tracking number ' . $medicine->tracking_number . '.',
                 [
                     'medicine_id' => $medicine->id,
                     'tracking_number' => $medicine->tracking_number,
                     'name' => $medicine->name,
                     'category' => $medicine->category->name,
-                    'quantity' => $medicine->quantity,
+                    'stock' => $medicine->stock_level,
                 ],
                 Carbon::now()->toDateTimeString()
             ));
@@ -56,12 +69,12 @@ class Add extends Component
             event(new UserActivityEvent(
                 auth()->user(),
                 'Failed medicine creation',
-                'User ' . auth()->user()->name . ' attempted to create a new medicine record but an error occurred.',
+                'User ' . auth()->user()->username . ' attempted to create a new medicine record but an error occurred.',
                 [
                     'tracking_number' => $validated_data['tracking_number'],
                     'name' => $validated_data['name'],
                     'category' => $validated_data['category_id'],
-                    'quantity' => $validated_data['quantity'],
+                    'quantity' => $validated_data['qty_per_boxes'],
                     'error' => $e->getMessage(),
                 ],
                 Carbon::now()->toDateTimeString()
@@ -71,18 +84,6 @@ class Add extends Component
 
             $this->redirect(route('medicines.index'));
         }
-    }
-
-    public function openModal(): void
-    {
-        $this->showModal = true;
-    }
-
-    public function closeModal(): void
-    {
-        $this->showModal = false;
-        $this->reset();
-        $this->resetErrorBag();
     }
 
     public function render(): View
