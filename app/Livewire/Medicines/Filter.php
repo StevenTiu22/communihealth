@@ -15,33 +15,27 @@ class Filter extends Component
     public $selectedStock = '';
     public $selectedExpiry = '';
 
-    protected $listeners = [
-        'categoryAdded' => 'clearCategoriesCache',
-        'categoryUpdated' => 'clearCategoriesCache',
-        'categoryDeleted' => 'clearCategoriesCache'
-    ];
-
-    public function updatedSelectedStatus()
+    public function updatedSelectedStatus(): void
     {
         $this->dispatch('filter-status', $this->selectedStatus);
     }
 
-    public function updatedSelectedCategory()
+    public function updatedSelectedCategory(): void
     {
         $this->dispatch('filter-category', $this->selectedCategory);
     }
 
-    public function updatedSelectedStock()
+    public function updatedSelectedStock(): void
     {
         $this->dispatch('filter-stock', $this->selectedStock);
     }
 
-    public function updatedSelectedExpiry()
+    public function updatedSelectedExpiry(): void
     {
         $this->dispatch('filter-expiry', $this->selectedExpiry);
     }
 
-    public function resetFilters()
+    public function resetFilters(): void
     {
         $this->selectedStatus = '';
         $this->selectedCategory = '';
@@ -56,56 +50,9 @@ class Filter extends Component
         $this->dispatch('reset-filters');
     }
 
-    public function clearCategoriesCache()
-    {
-        Cache::forget('medicine_categories');
-    }
-
-    private function getCategories()
-    {
-        try {
-            return Cache::remember('medicine_categories', 3600, function () {
-                $categories = MedicineCategory::query()
-                    ->select('id', 'name')
-                    ->orderBy('name')
-                    ->get();
-
-                if ($categories->isEmpty()) {
-                    Log::info('No medicine categories found');
-                }
-
-                return $categories;
-            });
-        } catch (\Exception $e) {
-            Log::error('Error fetching medicine categories: ' . $e->getMessage());
-
-            // Attempt to get fresh data without cache in case of cache issues
-            try {
-                return MedicineCategory::select('id', 'name')
-                    ->orderBy('name')
-                    ->get();
-            } catch (\Exception $innerE) {
-                Log::error('Failed to fetch categories without cache: ' . $innerE->getMessage());
-                return collect(); // Return empty collection as fallback
-            }
-        }
-    }
-
-    public function boot()
-    {
-        // Clear categories cache if it's older than 1 hour
-        if (Cache::has('medicine_categories') &&
-            Cache::get('medicine_categories_timestamp', 0) < now()->subHour()->timestamp) {
-            $this->clearCategoriesCache();
-        }
-    }
-
     public function render(): View
     {
-        $categories = $this->getCategories();
-
-        // Update cache timestamp
-        Cache::put('medicine_categories_timestamp', now()->timestamp, 3600);
+        $categories = MedicineCategory::all();
 
         return view('livewire.medicines.filter', [
             'categories' => $categories

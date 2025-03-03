@@ -5,11 +5,8 @@
                 <table class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-600">
                     <thead class="bg-gray-100 dark:bg-gray-700">
                         <tr>
-                            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400 cursor-pointer" wire:click="sortBy('id')">
-                                Medicine ID
-                                {{-- @if($sortField === 'id')
-                                    <span class="ml-1">{{ $sortDirection === 'asc' ? '↑' : '↓' }}</span>
-                                @endif --}}
+                            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400 cursor-pointer" wire:click="sortBy('name')">
+                                Generic Name
                             </th>
                             <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400 cursor-pointer" wire:click="sortBy('name')">
                                 Brand Name
@@ -17,16 +14,18 @@
                                     <span class="ml-1">{{ $sortDirection === 'asc' ? '↑' : '↓' }}</span>
                                 @endif --}}
                             </th>
-                            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Category</th>
-                            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400 cursor-pointer" wire:click="sortBy('stock')">
-                                Stock
-                                {{-- @if($sortField === 'stock')
-                                    <span class="ml-1">{{ $sortDirection === 'asc' ? '↑' : '↓' }}</span>
-                                @endif --}}
+                            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
+                                Category
                             </th>
                             <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400 cursor-pointer" wire:click="sortBy('expiry_date')">
                                 Expiry Date
                                 {{-- @if($sortField === 'expiry_date')
+                                    <span class="ml-1">{{ $sortDirection === 'asc' ? '↑' : '↓' }}</span>
+                                @endif --}}
+                            </th>
+                            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400 cursor-pointer" wire:click="sortBy('stock')">
+                                Stock
+                                {{-- @if($sortField === 'stock')
                                     <span class="ml-1">{{ $sortDirection === 'asc' ? '↑' : '↓' }}</span>
                                 @endif --}}
                             </th>
@@ -43,10 +42,10 @@
                                     {{ $medicine->category->name }}
                                 </td>
                                 <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    {{ $medicine->current_stock }}
+                                    {{ $medicine->expiry_date }}
                                 </td>
                                 <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    {{ $medicine->expiry_date }}
+                                    {{ $medicine->current_stock }}
                                 </td>
                                 <td class="p-4 space-x-2 whitespace-nowrap">
                                     <div class="flex space-x-2">
@@ -68,16 +67,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Active Filters -->
-    {{-- @if($filterStatus)
-        <div class="mt-2 flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-            <span>Active Filters:</span>
-            <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full dark:bg-blue-900 dark:text-blue-300">
-                {{ ucfirst($filterStatus) }}
-            </span>
-        </div>
-    @endif --}}
 
     <!-- Pagination -->
     <div class="mt-4 px-4">

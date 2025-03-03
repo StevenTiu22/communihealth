@@ -27,7 +27,7 @@ class AddCategory extends Component
                 'min:3',
                 'max:255',
                 'regex:/^[a-zA-Z\s-]+$/',
-                Rule::unique('category_categories', 'name')
+                Rule::unique('medicine_categories', 'name')
             ],
         ];
     }
@@ -44,16 +44,16 @@ class AddCategory extends Component
         ];
     }
 
-    public function openModal(): void
+    public function open(): void
     {
         $this->showModal = true;
     }
 
-    public function closeModal(): void
+    public function close(): void
     {
+        $this->showModal = false;
         $this->reset();
         $this->resetErrorBag();
-        $this->showModal = false;
     }
 
     public function save(): void

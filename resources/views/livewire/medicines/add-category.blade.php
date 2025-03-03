@@ -1,12 +1,14 @@
 <div>
-    <x-button wire:click="openModal" class="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700">
+    <x-button wire:click="open"
+              color="green"
+              class="flex items-center gap-2">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
         </svg>
         Add Category
     </x-button>
 
-    <x-dialog-modal wire:model.live="showModal">
+    <x-dialog-modal max-width="lg" wire:model.live="showModal">
         <x-slot name="title">
             Add New Medicine Category
         </x-slot>
@@ -38,12 +40,15 @@
         </x-slot>
 
         <x-slot name="footer">
-            <div class="flex justify-end gap-4">
-                <x-secondary-button wire:click="closeModal" wire:loading.attr="disabled">
+            <div class="flex justify-end">
+                <x-secondary-button wire:click="close" wire:loading.attr="disabled">
                     Cancel
                 </x-secondary-button>
 
-                <x-button class="ml-3" wire:click="save" wire:loading.attr="disabled">
+                <x-button class="ml-3"
+                          color="green"
+                          wire:click="save"
+                          wire:loading.attr="disabled">
                     <span wire:loading.remove>Save Category</span>
                     <span wire:loading>Saving...</span>
                 </x-button>
