@@ -1,7 +1,7 @@
 <div>
-    <button 
-        wire:click="openModal" 
-        class="text-red-600 hover:text-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 rounded-md p-1"
+    <button
+        wire:click="open"
+        class="text-red-600 hover:text-red-900"
         title="Delete Medicine"
     >
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -9,7 +9,7 @@
         </svg>
     </button>
 
-    <x-dialog-modal wire:model="showModal">
+    <x-dialog-modal maxWidth="md" wire:model="showModal">
         <x-slot name="title">
             <div class="flex items-center justify-between border-b pb-4">
                 <h2 class="text-xl font-semibold text-red-600">Delete Medicine</h2>
@@ -26,55 +26,53 @@
                             </svg>
                         </div>
                         <div class="ml-3">
-                            <p class="text-sm text-yellow-700">
+                            <p class="text-sm text-yellow-700 text-wrap">
                                 This action cannot be undone. The medicine will be removed from the inventory.
                             </p>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-gray-50 p-4 rounded-md">
+                <div class="dark:bg-gray-900 p-4 rounded-md">
                     <dl class="space-y-2">
                         <div class="flex justify-between">
-                            <dt class="text-sm font-medium text-gray-500">Medicine Name:</dt>
-                            <dd class="text-sm text-gray-900">{{ $medicine->name }}</dd>
+                            <dt class="text-sm font-medium text-white">Medicine Name:</dt>
+                            <dd class="text-sm dark:text-white">{{ $medicine->name }}</dd>
                         </div>
                         <div class="flex justify-between">
-                            <dt class="text-sm font-medium text-gray-500">Category:</dt>
-                            <dd class="text-sm text-gray-900">{{ $medicine->category->name }}</dd>
+                            <dt class="text-sm font-medium text-white">Category:</dt>
+                            <dd class="text-sm dark:text-white">{{ $medicine->category->name }}</dd>
                         </div>
                         <div class="flex justify-between">
-                            <dt class="text-sm font-medium text-gray-500">Current Stock:</dt>
-                            <dd class="text-sm text-gray-900">{{ $medicine->current_stock }}</dd>
+                            <dt class="text-sm font-medium text-white">Current Stock:</dt>
+                            <dd class="text-sm dark:text-white">{{ $medicine->stock_level }}</dd>
                         </div>
                     </dl>
                 </div>
 
                 <div class="mt-4">
-                    <label class="block text-sm font-medium text-gray-700">
+                    <label class="block text-sm font-medium text-gray-100">
                         Please type <span class="font-semibold">{{ $medicine->name }}</span> to confirm deletion
                     </label>
-                    <input 
-                        type="text" 
-                        wire:model="confirmationName"
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 sm:text-sm"
-                        placeholder="Enter medicine name"
+                    <input
+                        type="text"
+                        wire:model="confirmation_name"
+                        class="mt-1 block w-full rounded-md dark:bg-gray-900 shadow-sm focus:border-red-500 focus:ring-red-500 sm:text-sm"
+                        placeholder="{{ $medicine->name }}"
                     >
-                    @error('confirmationName') 
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+                    <x-input-error for="confirmation_name" class="mt-2" />
                 </div>
             </div>
         </x-slot>
 
         <x-slot name="footer">
             <div class="flex justify-end space-x-3">
-                <x-secondary-button wire:click="closeModal" wire:loading.attr="disabled">
+                <x-secondary-button wire:click="close" wire:loading.attr="disabled">
                     Cancel
                 </x-secondary-button>
 
-                <x-danger-button 
-                    wire:click="delete" 
+                <x-danger-button
+                    wire:click="delete"
                     wire:loading.attr="disabled"
                     class="px-4 py-2"
                 >
@@ -84,4 +82,4 @@
             </div>
         </x-slot>
     </x-dialog-modal>
-</div> 
+</div>

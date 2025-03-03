@@ -47,8 +47,8 @@
                                 <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     {{ $medicine->stock_level }}
                                 </td>
-                                <td class="p-4 space-x-2 whitespace-nowrap">
-                                    <div class="flex space-x-2">
+                                <td class="p-4 whitespace-nowrap">
+                                    <div class="inline-flex items-center gap-2 h-[20px]">
                                         <livewire:medicines.show :medicine_id="$medicine->id" wire:key="'view-'.$medicine->id" />
                                         <livewire:medicines.edit :medicine_id="$medicine->id" wire:key="'edit-'.$medicine->id" />
                                         <livewire:medicines.delete :medicine_id="$medicine->id" wire:key="'delete-'.$medicine->id" />
