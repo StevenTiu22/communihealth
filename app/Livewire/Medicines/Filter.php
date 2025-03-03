@@ -107,7 +107,7 @@ class Filter extends Component
         // Update cache timestamp
         Cache::put('medicine_categories_timestamp', now()->timestamp, 3600);
 
-        return view('livewire.medicine-filter', [
+        return view('livewire.medicines.filter', [
             'categories' => $categories
         ]);
     }
