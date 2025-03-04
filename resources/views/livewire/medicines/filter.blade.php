@@ -43,18 +43,6 @@
         x-transition:leave-end="transform opacity-0 -translate-y-2"
         class="grid grid-cols-1 md:grid-cols-4 gap-4 pt-2"
     >
-        <!-- Status Filter -->
-        <div>
-            <label class="block text-sm font-medium text-gray-300">Status</label>
-            <select
-                wire:model.live="selectedStatus"
-                class="mt-1 block w-full rounded-md border-gray-600 bg-gray-700 text-gray-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-            >
-                <option value="">All Status</option>
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-            </select>
-        </div>
 
         <!-- Category Filter -->
         <div>

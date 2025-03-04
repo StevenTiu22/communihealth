@@ -49,27 +49,20 @@ class MedicineService
 
     public function update(Medicine $medicine, array $data): Medicine
     {
-        return DB::transaction(function () use ($medicine, $data) {
-            try {
-                // Format dates properly
-                $data['manufactured_date'] = Carbon::parse($data['manufactured_date'])->startOfDay();
-                $data['delivery_date'] = Carbon::parse($data['delivery_date'])->startOfDay();
-                $data['expiry_date'] = Carbon::parse($data['expiry_date'])->endOfDay();
+        try {
+            // Calculate updated stock
+            $data['stock_level'] = $this->calculateStockLevel(
+                (int) $data['num_of_boxes'],
+                (int) $data['qty_per_boxes']
+            );
 
-                // Calculate updated stock
-                $data['current_stock'] = $this->calculateInitialStock(
-                    (int) $data['number_of_boxes'],
-                    (int) $data['quantity_per_boxes']
-                );
+            // Update the medicine record
+            $medicine->update($data);
 
-                // Update the medicine record
-                $medicine->update($data);
-
-                return $medicine->fresh();
-            } catch (\Exception $e) {
-                throw new Exception('Failed to update medicine: ' . $e->getMessage());
-            }
-        });
+            return $medicine->fresh();
+        } catch (\Exception $e) {
+            throw new Exception('Failed to update medicine: ' . $e->getMessage());
+        }
     }
 
     public function deleteMedicine(Medicine $medicine): bool
