@@ -23,19 +23,19 @@
                             <div>
                                 <x-label for="name" value="Medicine Name" class="dark:text-gray-300" />
                                 <x-input wire:model.live="form.name" id="name" type="text" class="mt-1 block w-full dark:bg-gray-600 dark:border-gray-500 dark:text-gray-200" placeholder="Enter medicine name" />
-                                <x-input-error for="form.name" class="mt-2" />
+                                <x-input-error for="form.name" class="mt-2 break-words" />
                             </div>
 
                             <div>
                                 <x-label for="generic_name" value="Generic Name" class="dark:text-gray-300" />
                                 <x-input wire:model.live="form.generic_name" id="generic_name" type="text" class="mt-1 block w-full dark:bg-gray-600 dark:border-gray-500 dark:text-gray-200" placeholder="Enter generic name" />
-                                <x-input-error for="form.generic_name" class="mt-2" />
+                                <x-input-error for="form.generic_name" class="mt-2 break-words" />
                             </div>
 
                             <div>
                                 <x-label for="manufacturer" value="Manufacturer" class="dark:text-gray-300" />
                                 <x-input wire:model.live="form.manufacturer" id="manufacturer" type="text" class="mt-1 block w-full dark:bg-gray-600 dark:border-gray-500 dark:text-gray-200" placeholder="Enter manufacturer" />
-                                <x-input-error for="form.manufacturer" class="mt-2" />
+                                <x-input-error for="form.manufacturer" class="mt-2 break-words" />
                             </div>
 
                             <div>
@@ -49,14 +49,14 @@
                                     @endforelse
                                 </select>
 
-                                <x-input-error for="form.category_id" class="mt-2" />
+                                <x-input-error for="form.category_id" class="mt-2 break-words" />
                             </div>
                         </div>
 
                         <div>
                             <x-label for="description" value="Description" class="dark:text-gray-300" />
                             <textarea wire:model.live="form.description" id="description" rows="3" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm dark:bg-gray-900 dark:border-gray-600 dark:text-gray-100" placeholder="Enter medicine description"></textarea>
-                            <x-input-error for="form.description" class="mt-2" />
+                            <x-input-error for="form.description" class="mt-2 break-words" />
                         </div>
                     </div>
 
@@ -67,13 +67,13 @@
                             <div>
                                 <x-label for="tracking_number" value="Tracking Number" class="dark:text-gray-300" />
                                 <x-input wire:model.live="form.tracking_number" id="tracking_number" type="text" class="mt-1 block w-full dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300" placeholder="Enter tracking number" />
-                                <x-input-error for="form.tracking_number" class="mt-2" />
+                                <x-input-error for="form.tracking_number" class="mt-2 break-words" />
                             </div>
 
                             <div>
                                 <x-label for="source" value="Source" class="dark:text-gray-300" />
                                 <x-input wire:model.live="form.source" id="source" type="text" class="mt-1 block w-full dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300" placeholder="Enter source" readonly />
-                                <x-input-error for="form.source" class="mt-2" />
+                                <x-input-error for="form.source" class="mt-2 break-words" />
                             </div>
                         </div>
                     </div>
@@ -84,20 +84,20 @@
                         <div class="grid grid-cols-3 gap-4">
                             <div>
                                 <x-label for="manufactured_date" value="Manufactured Date" class="dark:text-gray-300" />
-                                <x-input wire:model.live="form.manufactured_date" id="manufactured_date" type="date" class="mt-1 block w-full dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300" />
-                                <x-input-error for="form.manufactured_date" class="mt-2" />
+                                <x-input wire:model="form.manufactured_date" id="manufactured_date" type="date" class="mt-1 block w-full dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300" />
+                                <x-input-error for="form.manufactured_date" class="mt-2 break-words" />
                             </div>
 
                             <div>
                                 <x-label for="delivery_date" value="Delivery Date" class="dark:text-gray-300" />
-                                <x-input wire:model.live="form.delivery_date" id="delivery_date" type="date" class="mt-1 block w-full dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300" />
-                                <x-input-error for="form.delivery_date" class="mt-2" />
+                                <x-input wire:model="form.delivery_date" id="delivery_date" type="date" class="mt-1 block w-full dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300" />
+                                <x-input-error for="form.delivery_date" class="mt-2 break-words" />
                             </div>
 
                             <div>
                                 <x-label for="expiry_date" value="Expiry Date" class="dark:text-gray-300" />
-                                <x-input wire:model.live="form.expiry_date" id="expiry_date" type="date" class="mt-1 block w-full dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300" />
-                                <x-input-error for="form.expiry_date" class="mt-2" />
+                                <x-input wire:model="form.expiry_date" id="expiry_date" type="date" class="mt-1 block w-full dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300" />
+                                <x-input-error for="form.expiry_date" class="mt-2 break-words" />
                             </div>
                         </div>
                     </div>
@@ -108,19 +108,19 @@
                         <div class="grid grid-cols-3 gap-4">
                             <div>
                                 <x-label for="number_of_boxes" value="Number of Boxes" class="dark:text-gray-300" />
-                                <x-input wire:model.live="form.num_of_boxes" id="number_of_boxes" type="number" min="1" class="mt-1 block w-full dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300" placeholder="Enter number of boxes" />
-                                <x-input-error for="form.number_of_boxes" class="mt-2" />
+                                <x-input wire:model="form.num_of_boxes" id="number_of_boxes" type="number" min="1" class="mt-1 block w-full dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300" placeholder="Enter number of boxes" />
+                                <x-input-error for="form.num_of_boxes" class="mt-2 break-words" />
                             </div>
 
                             <div>
                                 <x-label for="quantity_per_boxes" value="Quantity per Box" class="dark:text-gray-300" />
-                                <x-input wire:model.live="form.qty_per_boxes" id="quantity_per_boxes" type="number" min="1" class="mt-1 block w-full dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300" placeholder="Enter quantity per box" />
-                                <x-input-error for="form.quantity_per_boxes" class="mt-2" />
+                                <x-input wire:model="form.qty_per_boxes" id="quantity_per_boxes" type="number" min="1" class="mt-1 block w-full dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300" placeholder="Enter quantity per box" />
+                                <x-input-error for="form.qty_per_boxes" class="mt-2 break-words" />
                             </div>
 
                             <div>
                                 <x-label for="unit_of_measure" value="Unit of Measure" class="dark:text-gray-300" />
-                                <select wire:model.live="form.unit_of_measure" id="unit_of_measure" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300">
+                                <select wire:model="form.unit_of_measure" id="unit_of_measure" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300">
                                     <option value="">Select Unit</option>
                                     <option value="ml">ml (Milliliter)</option>
                                     <option value="mg">mg (Milligram)</option>
@@ -133,7 +133,7 @@
                                     <option value="supp">Suppository</option>
                                     <option value="inhaler">Inhaler</option>
                                 </select>
-                                <x-input-error for="form.unit_of_measure" class="mt-2" />
+                                <x-input-error for="form.unit_of_measure" class="mt-2 break-words" />
                             </div>
                         </div>
                     </div>

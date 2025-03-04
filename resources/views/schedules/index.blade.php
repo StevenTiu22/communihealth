@@ -1,5 +1,4 @@
-<x-app-layout title={{ __($title) }}>
-    <x-staff-sidebar />
+<x-app-layout title={{__($title)}}>
     <div class="p-4 block sm:flex items-center justify-between">
         <div class="w-full">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg h-[calc(97vh-1rem)] w-full">
