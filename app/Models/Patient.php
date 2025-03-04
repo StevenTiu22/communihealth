@@ -48,6 +48,11 @@ class Patient extends Model
         return $this->morphOne(Address::class, 'addressable');
     }
 
+    public function schedules(): HasMany
+    {
+        return $this->hasMany(Schedule::class);
+    }
+
     // Accessors and mutators
     protected function firstName() : Attribute
     {
