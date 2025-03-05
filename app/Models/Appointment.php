@@ -1,4 +1,4 @@
-<?php
+    <?php
 
 namespace App\Models;
 
@@ -16,10 +16,15 @@ class Appointment extends Model
         'doctor_id',
         'bhw_id',
         'appointment_type_id',
+        'treatment_record_id',
+        'vital_signs_id',
+        'appointment_date',
+        'time_in',
+        'time_out',
         'chief_complaint',
-        'status',
-        'is_walk_in',
-        'recorded_at'
+        'remarks',
+        'is_cancelled',
+        'cancellation_reason',
     ];
 
     protected $casts = [
@@ -36,17 +41,17 @@ class Appointment extends Model
 
     public function patient(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'patient_id');
+        return $this->belongsTo(Patient::class);
     }
 
     public function doctor(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'doctor_id');
+        return $this->belongsTo(Doctor::class, 'user_id');
     }
 
     public function bhw(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'bhw_id');
+        return $this->belongsTo(BHW::class, 'user_id');
     }
 
     public function appointmentType(): BelongsTo
@@ -54,19 +59,8 @@ class Appointment extends Model
         return $this->belongsTo(AppointmentType::class);
     }
 
-    public function schedule(): HasOne
+    public function appointmentQueue(): BelongsTo
     {
-        return $this->hasOne(Schedule::class);
+        return $this->belongsTo(AppointmentQueue::class);
     }
-
-    // Helper methods
-    public function getScheduledDateAttribute()
-    {
-        return $this->schedule?->date;
-    }
-
-    public function getScheduledTimeAttribute()
-    {
-        return $this->schedule?->scheduled_time;
-    }
-} 
+}
