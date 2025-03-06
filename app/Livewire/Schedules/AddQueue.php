@@ -3,6 +3,9 @@
 namespace App\Livewire\Schedules;
 
 use App\Events\UserActivityEvent;
+use App\Livewire\Forms\CreateAppointmentForm;
+use App\Models\AppointmentType;
+use App\Models\Patient;
 use App\Models\User;
 use App\Services\QueueService;
 use Carbon\Carbon;
@@ -14,6 +17,7 @@ use Illuminate\Contracts\View\View;
 class AddQueue extends Component
 {
     public bool $showModal = false;
+    public CreateAppointmentForm $form;
 
     // Queue properties
     #[Validate('required', message: "Please specify an appointment. If there's none, add first.")]
@@ -109,14 +113,24 @@ class AddQueue extends Component
 
     public function render(): View
     {
+        $appointment_types = AppointmentType::all();
+
+        $patients = Patient::all();
+
         $doctors = User::query()->role('doctor');
 
-        if ($doctors->isEmpty()) {
-            $doctors->orderByDesc('last_login_at', 'desc');
-        } else {
-            $doctors->whereHas()->orderBy('last_login_at', 'desc');
+        if (! empty($this->form->appointment_type_id)) {
+            $doctors->whereHas('specializations', function($query) {
+                $query->where('appointment_type_id', $this->form->appointment_type_id);
+            });
         }
 
-        return view('livewire.schedules.add-queue');
+        $doctors->orderByDesc('last_login_at')->get();
+
+        return view('livewire.schedules.add-queue', [
+            'appointment_types' => $appointment_types,
+            'patients' => $patients,
+            'doctors' => $doctors,
+        ]);
     }
 }
