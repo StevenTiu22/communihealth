@@ -8,7 +8,7 @@
         Add Medicine
     </x-button>
 
-    <x-dialog-modal wire:model.live.live="showModal" maxWidth="2xl">
+    <x-dialog-modal wire:model.live="showModal" maxWidth="2xl">
         <x-slot name="title">
             Add New Medicine
         </x-slot>

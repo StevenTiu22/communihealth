@@ -3,10 +3,9 @@
 namespace App\Livewire\Schedules;
 
 use App\Events\UserActivityEvent;
-use App\Livewire\Forms\CreateAppointmentForm;
+use App\Models\User;
 use App\Services\QueueService;
 use Carbon\Carbon;
-use Illuminate\Queue\Queue;
 use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -110,6 +109,14 @@ class AddQueue extends Component
 
     public function render(): View
     {
+        $doctors = User::query()->role('doctor');
+
+        if ($doctors->isEmpty()) {
+            $doctors->orderByDesc('last_login_at', 'desc');
+        } else {
+            $doctors->whereHas()->orderBy('last_login_at', 'desc');
+        }
+
         return view('livewire.schedules.add-queue');
     }
 }
