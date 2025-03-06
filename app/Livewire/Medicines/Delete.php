@@ -35,8 +35,6 @@ class Delete extends Component
         $this->showModal = false;
         $this->resetErrorBag();
         $this->resetValidation();
-        $this->reset();
-
     }
 
     public function delete(): void
