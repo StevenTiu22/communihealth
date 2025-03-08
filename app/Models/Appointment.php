@@ -46,12 +46,12 @@ class Appointment extends Model
 
     public function doctor(): BelongsTo
     {
-        return $this->belongsTo(Doctor::class, 'user_id');
+        return $this->belongsTo(User::class, 'doctor_id');
     }
 
     public function bhw(): BelongsTo
     {
-        return $this->belongsTo(BHW::class, 'user_id');
+        return $this->belongsTo(User::class, 'bhw_id');
     }
 
     public function appointmentType(): BelongsTo
@@ -59,8 +59,8 @@ class Appointment extends Model
         return $this->belongsTo(AppointmentType::class);
     }
 
-    public function appointmentQueue(): BelongsTo
+    public function appointmentQueue(): HasOne
     {
-        return $this->belongsTo(AppointmentQueue::class);
+        return $this->hasOne(AppointmentQueue::class);
     }
 }
