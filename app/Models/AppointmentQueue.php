@@ -13,7 +13,6 @@ class AppointmentQueue extends Model
         'queue_date',
         'queue_status',
         'queue_type',
-        'remarks',
         'called_at',
         'completed_at',
     ];

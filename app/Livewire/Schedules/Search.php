@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Livewire\Scheduling;
+namespace App\Livewire\Schedules;
 
-use Livewire\Component;
 use Illuminate\Contracts\View\View;
+use Livewire\Component;
 
 class Search extends Component
 {

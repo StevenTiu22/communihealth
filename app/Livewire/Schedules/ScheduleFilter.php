@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Scheduling;
+namespace App\Livewire\Schedules;
 
 use App\Models\Doctor;
 use Livewire\Component;

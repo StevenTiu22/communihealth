@@ -36,7 +36,6 @@ class AddQueue extends Component
 
     #[Validate('required', message: "Please specify a queue type.")]
     public string $queueType = 'walk-in';
-    public string $remarks = '';
 
     public function open(): void
     {
@@ -46,7 +45,8 @@ class AddQueue extends Component
     public function close(): void
     {
         $this->showModal = false;
-        $this->form->reset();
+        $this->resetErrorBag();
+        $this->resetValidation();
         $this->reset();
     }
 
@@ -115,22 +115,14 @@ class AddQueue extends Component
     {
         $appointment_types = AppointmentType::all();
 
-        $patients = Patient::all();
+        $patients = Patient::orderBy('last_name', 'desc')->get();
 
-        $doctors = User::query()->role('doctor');
-
-        if (! empty($this->form->appointment_type_id)) {
-            $doctors->whereHas('specializations', function($query) {
-                $query->where('appointment_type_id', $this->form->appointment_type_id);
-            });
-        }
-
-        $doctors->orderByDesc('last_login_at')->get();
+        $doctors = User::query()->role('doctor')->orderBy('last_login_at', 'desc')->get();
 
         return view('livewire.schedules.add-queue', [
-            'appointment_types' => $appointment_types,
-            'patients' => $patients,
             'doctors' => $doctors,
+            'appointmentTypes' => $appointment_types,
+            'patients' => $patients,
         ]);
     }
 }
