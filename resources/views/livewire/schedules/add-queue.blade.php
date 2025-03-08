@@ -46,11 +46,11 @@
                 </div>
 
                 <div>
-                    <label for="doctor_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Assign Doctor (Optional)</label>
+                    <label for="doctor_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Assigned Doctor</label>
                     <select id="doctor_id" wire:model.blur="form.doctor_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-600 focus:border-indigo-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500">
                         <option value="">Assign later</option>
                         @forelse($doctors as $doctor)
-                            <option value="{{ $doctor->id }}">{{ "Dr. " . $doctor->user->full_name }}</option>
+                            <option value="{{ $doctor->id }}">{{ "Dr. " . $doctor->full_name }}</option>
                         @empty
                             <option disabled>No doctors available</option>
                         @endforelse

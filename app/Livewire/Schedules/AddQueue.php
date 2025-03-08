@@ -5,10 +5,12 @@ namespace App\Livewire\Schedules;
 use App\Events\UserActivityEvent;
 use App\Livewire\Forms\CreateAppointmentForm;
 use App\Models\AppointmentType;
+use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\User;
 use App\Services\QueueService;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -37,6 +39,8 @@ class AddQueue extends Component
     #[Validate('required', message: "Please specify a queue type.")]
     public string $queueType = 'walk-in';
 
+    public Doctor|Collection $doctors;
+
     public function open(): void
     {
         $this->showModal = true;
@@ -48,6 +52,18 @@ class AddQueue extends Component
         $this->resetErrorBag();
         $this->resetValidation();
         $this->reset();
+    }
+
+    public function updated($propertyName): void
+    {
+        if ($propertyName === 'form.appointment_type_id') {
+            $this->doctors = User::query()->role('doctor')
+                ->whereHas('specializations', function ($query) {
+                    $query->where('appointment_type_id', $this->form->appointment_type_id);
+                })
+                ->orderBy('last_login_at', 'desc')
+                ->get();
+        }
     }
 
     public function save(QueueService $queue_service): void
@@ -117,10 +133,9 @@ class AddQueue extends Component
 
         $patients = Patient::orderBy('last_name', 'desc')->get();
 
-        $doctors = User::query()->role('doctor')->orderBy('last_login_at', 'desc')->get();
+        $this->doctors = User::query()->role('doctor')->orderBy('last_login_at', 'desc')->get();
 
         return view('livewire.schedules.add-queue', [
-            'doctors' => $doctors,
             'appointmentTypes' => $appointment_types,
             'patients' => $patients,
         ]);
