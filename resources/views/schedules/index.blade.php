@@ -12,7 +12,7 @@
                         <div class="flex justify-between items-center gap-3">
                             <div class="flex-1">
                                 <!-- Search Box -->
-                                <livewire:scheduling.search />
+                                <livewire:schedules.search />
                             </div>
 
                             <div class="flex gap-3">
@@ -32,16 +32,7 @@
                                 </div>
 
                                 <!-- Add to Queue Button -->
-                                <x-button
-                                    id="addToQueueBtn"
-                                    color="indigo"
-                                    class="flex items-center gap-2"
-                                >
-                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path>
-                                    </svg>
-                                    Add to Queue
-                                </x-button>
+                                <livewire:schedules.add-queue />
                             </div>
                         </div>
 
@@ -293,65 +284,6 @@
                                         </svg>
                                         <span>No more completed appointments today</span>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Add to Queue Modal -->
-                        <div id="queueModal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                            <div class="relative w-full max-w-md max-h-full">
-                                <!-- Modal content -->
-                                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                                    <!-- Modal header -->
-                                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                                            Add to Queue
-                                        </h3>
-                                        <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="queueModal">
-                                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                                            </svg>
-                                            <span class="sr-only">Close modal</span>
-                                        </button>
-                                    </div>
-                                    <!-- Modal body -->
-                                    <form action="#" method="POST" class="p-4 md:p-5">
-                                        @csrf
-                                        <div class="grid gap-4 mb-4">
-                                            <div>
-                                                <label for="patient_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Patient</label>
-                                                <select id="patient_id" name="patient_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-600 focus:border-indigo-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500" required>
-                                                    <option value="" selected disabled>Select patient</option>
-                                                </select>
-                                            </div>
-                                            <div>
-                                                <label for="doctor_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Assign Doctor</label>
-                                                <select id="doctor_id" name="doctor_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-600 focus:border-indigo-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500">
-                                                    <option value="" selected>Assign later</option>
-                                                </select>
-                                            </div>
-                                            <div>
-                                                <label for="appointment_type_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Appointment Type</label>
-                                                <select id="appointment_type_id" name="appointment_type_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-600 focus:border-indigo-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500" required>
-                                                    <option value="" selected disabled>Select type</option>
-                                                </select>
-                                            </div>
-                                            <div>
-                                                <label for="chief_complaint" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Chief Complaint</label>
-                                                <textarea id="chief_complaint" name="chief_complaint" rows="3" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500" placeholder="Describe patient's complaint..." required></textarea>
-                                            </div>
-                                            <div>
-                                                <label for="remarks" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Remarks (Optional)</label>
-                                                <textarea id="remarks" name="remarks" rows="2" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500" placeholder="Additional notes..."></textarea>
-                                            </div>
-                                            <input type="hidden" name="added_by" value="{{ auth()->id() }}">
-                                            <input type="hidden" name="queue_date" value="{{ now()->toDateString() }}">
-                                        </div>
-                                        <div class="flex items-center justify-end space-x-4">
-                                            <button type="button" data-modal-hide="queueModal" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Cancel</button>
-                                            <button type="submit" class="text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800">Add to Queue</button>
-                                        </div>
-                                    </form>
                                 </div>
                             </div>
                         </div>

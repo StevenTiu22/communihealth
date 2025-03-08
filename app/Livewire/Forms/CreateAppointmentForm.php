@@ -48,7 +48,6 @@ class CreateAppointmentForm extends Form
                 'exists:patients,id'
             ],
             'doctor_id' => [
-                'required',
                 'exists:doctors,id'
             ],
             'bhw_id' => [
@@ -100,7 +99,6 @@ class CreateAppointmentForm extends Form
                 'exists' => 'The selected patient is invalid.'
             ],
             'doctor_id' => [
-                'required' => 'The doctor field is required.',
                 'exists' => 'The selected doctor is invalid.'
             ],
             'bhw_id' => [
