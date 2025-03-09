@@ -11,11 +11,11 @@ class Search extends Component
 
     public function updated(): void
     {
-        $this->dispatch('scheduling-search-updated', $this->search);
+        $this->dispatch('schedules-search-updated', $this->search);
     }
 
     public function render(): View
     {
-        return view('livewire.scheduling.search');
+        return view('livewire.schedules.search');
     }
 }
