@@ -28,8 +28,9 @@ class Appointment extends Model
     ];
 
     protected $casts = [
-        'is_walk_in' => 'boolean',
-        'recorded_at' => 'datetime'
+        'time_in' => 'time',
+        'time_out' => 'time',
+        'appointment_date' => 'date',
     ];
 
     public const STATUSES = [
@@ -57,6 +58,16 @@ class Appointment extends Model
     public function appointmentType(): BelongsTo
     {
         return $this->belongsTo(AppointmentType::class);
+    }
+
+    public function vitalSign(): BelongsTo
+    {
+        return $this->belongsTo(VitalSign::class, 'vital_signs_id');
+    }
+
+    public function treatmentRecord(): BelongsTo
+    {
+        return $this->belongsTo(TreatmentRecord::class, 'treatment_record_id');
     }
 
     public function appointmentQueue(): HasOne

@@ -11,7 +11,6 @@ class WaitingTable extends Component
     public string $search = '';
     public string $doctor_id = '';
 
-
     public function updatedSearch($search): void
     {
         $this->search = $search;
