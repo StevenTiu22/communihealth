@@ -5,51 +5,49 @@
             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 10.414l2.293 2.293a1 1 0 001.414-1.414L12.414 11H15a1 1 0 100-2h-2.586l2.293-2.293a1 1 0 00-1.414-1.414L11 7.586V5a1 1 0 10-2 0v2.586L6.707 5.293a1 1 0 00-1.414 1.414L7.586 9H5a1 1 0 100 2h2.586l-2.293 2.293a1 1 0 001.414 1.414L9 12.414V15a1 1 0 102 0v-2.586z" clip-rule="evenodd"></path>
             </svg>
-            In Progress (2)
+            {{ "In Progress (" . $appointment_queues->count() . ")" }}
         </h3>
     </div>
     <div class="p-3 flex-1 overflow-y-auto space-y-2">
         <!-- In Progress Items -->
-        <div class="p-3 bg-white dark:bg-gray-700 rounded-lg border-l-4 border-amber-500 border-t border-r border-b border-gray-200 dark:border-gray-600 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">
-            <div class="flex justify-between items-start">
-                <div>
-                    <div class="flex items-center gap-2">
-                        <span class="bg-amber-100 text-amber-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-amber-900 dark:text-amber-300">In Progress</span>
-                        <span class="text-xs text-gray-500 dark:text-gray-400">Since 2:30 PM</span>
+        @forelse($appointment_queues as $appointment_queue)
+            <div wire:key="{{ $appointment_queue->id }}" class="p-3 bg-white dark:bg-gray-700 rounded-lg border-l-4 border-amber-500 border-t border-r border-b dark:border-gray-600 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="bg-amber-100 text-amber-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-amber-900 dark:text-amber-300">In Progress</span>
+                            <span class="text-xs text-gray-500 dark:text-gray-400">{{ "Since " . $appointment_queues->appointment->time_in->addHours(8)->format('g:i A') }}</span>
+                        </div>
+                        <h4 class="font-medium mt-1">{{ $appointment_queue->appointment->patient->full_name }}</h4>
+                        <div class="text-sm text-gray-600 dark:text-gray-300">{{ $appointment_queue->appointment->appointment_type->name }}</div>
+                        <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ "Doctor: Dr. " . $appointment_queues->appointment->doctor->user->last_name }}</div>
                     </div>
-                    <h4 class="font-medium mt-1">Carlo Mendoza</h4>
-                    <div class="text-sm text-gray-600 dark:text-gray-300">Consultation</div>
-                    <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Doctor: Dr. Smith</div>
-                </div>
-                <div class="flex flex-col gap-2">
-                    <button type="button" class="text-white bg-green-600 hover:bg-green-700 focus:ring-2 focus:ring-green-300 font-medium rounded-lg text-xs px-3 py-1 dark:bg-green-500 dark:hover:bg-green-600 focus:outline-none dark:focus:ring-green-700">Complete</button>
-                </div>
-            </div>
-            <div class="mt-2 pt-2 border-t border-gray-200 dark:border-gray-600">
-                <div class="text-xs text-gray-500 dark:text-gray-400">Time-in: 2:30 PM</div>
-                <div class="text-xs text-gray-500 dark:text-gray-400">Duration: 25 minutes</div>
-            </div>
-        </div>
+                    <div class="flex flex-col gap-2">
+                        @role('bhw')
+                            <livewire:schedules.add-vital-sign :appointment_id="$appointment_queue->appointment_id" :wire:key="'vital-sign-'.$appointment_queue->id" />
+                        @endrole
 
-        <div class="p-3 bg-white dark:bg-gray-700 rounded-lg border-l-4 border-amber-500 border-t border-r border-b border-gray-200 dark:border-gray-600 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">
-            <div class="flex justify-between items-start">
-                <div>
-                    <div class="flex items-center gap-2">
-                        <span class="bg-amber-100 text-amber-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-amber-900 dark:text-amber-300">In Progress</span>
-                        <span class="text-xs text-gray-500 dark:text-gray-400">Since 2:45 PM</span>
+                        @role('doctor')
+                            <livewire:schedules.add-treatment-record :appointment_id="$appointment_queue->appointment_id" :wire:key="'treatment-record-'.$appointment_queue->id" />
+                        @endrole
+
+                        <livewire:schedules.complete :appointment_id="$appointment_queue->appointment_id" :wire:key="'complete-'.$appointment_queue->id" />
                     </div>
-                    <h4 class="font-medium mt-1">Sofia Reyes</h4>
-                    <div class="text-sm text-gray-600 dark:text-gray-300">Follow-up</div>
-                    <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Doctor: Dr. Johnson</div>
                 </div>
-                <div class="flex flex-col gap-2">
-                    <button type="button" class="text-white bg-green-600 hover:bg-green-700 focus:ring-2 focus:ring-green-300 font-medium rounded-lg text-xs px-3 py-1 dark:bg-green-500 dark:hover:bg-green-600 focus:outline-none dark:focus:ring-green-700">Complete</button>
+                <div class="mt-2 pt-2 border-t border-gray-200 dark:border-gray-600">
+                    <div class="text-xs text-gray-500 dark:text-gray-400">{{ "Time-in: " . $appointment_queues->appointment->time_in->addHours(8)->format('g:i A') }}</div>
+                    <div class="text-xs text-gray-500 dark:text-gray-400">{{ "Duration: " . $appointment_queues->appointment->appointment_type->duration . " minutes" }}</div>
                 </div>
             </div>
-            <div class="mt-2 pt-2 border-t border-gray-200 dark:border-gray-600">
-                <div class="text-xs text-gray-500 dark:text-gray-400">Time-in: 2:45 PM</div>
-                <div class="text-xs text-gray-500 dark:text-gray-400">Duration: 10 minutes</div>
+        @empty
+            <div class="p-3 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 shadow-sm">
+                <div class="flex items-center justify-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1v-3a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span>No more in progress appointments today</span>
+                </div>
             </div>
-        </div>
+        @endforelse
     </div>
 </div>

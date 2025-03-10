@@ -16,18 +16,40 @@
                             </div>
 
                             <div class="flex gap-3">
-                                <div class="text-sm font-medium text-gray-700 dark:text-gray-300 flex flex-col items-end">
+                                <div class="text-sm font-medium text-gray-700 dark:text-gray-300 flex flex-col items-end"
+                                     x-data="{
+                                        currentDate: '',
+                                        currentTime: '',
+                                        updateDateTime() {
+                                            const now = new Date();
+                                            // Convert to Manila time (UTC+8)
+                                            const manilaTime = new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + (8 * 3600000));
+
+                                            // Format date: March 10, 2025
+                                            const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                                            this.currentDate = `${months[manilaTime.getMonth()]} ${manilaTime.getDate()}, ${manilaTime.getFullYear()}`;
+
+                                            // Format time: 4:12 PM (UTC+8)
+                                            let hours = manilaTime.getHours();
+                                            const minutes = manilaTime.getMinutes().toString().padStart(2, '0');
+                                            const ampm = hours >= 12 ? 'PM' : 'AM';
+                                            hours = hours % 12;
+                                            hours = hours ? hours : 12; // Convert 0 to 12
+                                            this.currentTime = `${hours}:${minutes} ${ampm} (UTC+8)`;
+                                        }
+                                     }"
+                                     x-init="updateDateTime(); setInterval(() => updateDateTime(), 1000)">
                                     <div class="flex items-center gap-2">
                                         <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                         </svg>
-                                        <span>{{ now()->setTimezone('Asia/Manila')->format('F d, Y') }}</span>
+                                        <span x-text="currentDate">{{ now()->setTimezone('Asia/Manila')->format('F d, Y') }}</span>
                                     </div>
                                     <div class="flex items-center gap-2">
                                         <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                         </svg>
-                                        <span>{{ now()->setTimezone('Asia/Manila')->format('h:i A') }} (UTC+8)</span>
+                                        <span x-text="currentTime">{{ now()->setTimezone('Asia/Manila')->format('h:i A') }} (UTC+8)</span>
                                     </div>
                                 </div>
 
@@ -37,202 +59,19 @@
                         </div>
 
                         <!-- Filter Options -->
-                        <div class="flex flex-wrap gap-3">
-                            <div x-data="{ open: false, selectedDoctor: 'All Doctors' }" class="relative">
-                                <button @click="open = !open" @click.away="open = false" type="button" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 flex items-center gap-2">
-                                    <!-- Doctor icon added -->
-                                    <svg class="w-4 h-4 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                                    </svg>
-                                    <span x-text="selectedDoctor">All Doctors</span>
-                                    <svg class="w-2.5 h-2.5 ms-1 transition-transform" :class="{ 'rotate-180': open }" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                                    </svg>
-                                </button>
-                                <div x-show="open" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="transform opacity-0 scale-95" x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="transform opacity-100 scale-100" x-transition:leave-end="transform opacity-0 scale-95" class="absolute left-0 mt-2 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700" style="display: none;">
-                                    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
-                                        <li><a @click="selectedDoctor = 'All Doctors'; open = false" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer">All Doctors</a></li>
-                                        <li><a @click="selectedDoctor = 'Dr. Smith'; open = false" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer">Dr. Smith</a></li>
-                                        <li><a @click="selectedDoctor = 'Dr. Johnson'; open = false" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer">Dr. Johnson</a></li>
-                                        <li><a @click="selectedDoctor = 'Dr. Williams'; open = false" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer">Dr. Williams</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
+                        <livewire:schedules.filter />
                     </div>
 
                     <!-- Queue Display -->
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 h-[calc(75vh-9rem)]">
                         <!-- Waiting Queue -->
-                        <div class="h-full flex flex-col bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 overflow-hidden">
-                            <div class="p-3 bg-yellow-100 dark:bg-yellow-900 border-b border-yellow-200 dark:border-yellow-800 rounded-t-lg">
-                                <h3 class="font-semibold text-yellow-800 dark:text-yellow-200 flex items-center gap-2">
-                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
-                                    </svg>
-                                    Waiting (5)
-                                </h3>
-                            </div>
-                            <div class="p-3 flex-1 overflow-y-auto space-y-2">
-                                <!-- Queue Items -->
-                                <div class="p-3 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">
-                                    <div class="flex justify-between items-start">
-                                        <div>
-                                            <div class="flex items-center gap-2">
-                                                <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">Queue #1</span>
-                                                <span class="text-xs text-gray-500 dark:text-gray-400">9:30 AM</span>
-                                            </div>
-                                            <h4 class="font-medium mt-1">Juan Dela Cruz</h4>
-                                            <div class="text-sm text-gray-600 dark:text-gray-300">Check-up</div>
-                                            <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Added by: BHW Maria</div>
-                                        </div>
-                                        <div class="flex flex-col gap-2">
-                                            <button type="button" class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-300 font-medium rounded-lg text-xs px-3 py-1 dark:bg-blue-500 dark:hover:bg-blue-600 focus:outline-none dark:focus:ring-blue-700">Start</button>
-                                            <button type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-2 focus:ring-gray-300 font-medium rounded-lg text-xs px-3 py-1 border border-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:bg-gray-600 focus:outline-none dark:focus:ring-gray-600">No Show</button>
-                                        </div>
-                                    </div>
-                                </div>
+                        <livewire:schedules.waiting-table />
 
-                                <div class="p-3 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">
-                                    <div class="flex justify-between items-start">
-                                        <div>
-                                            <div class="flex items-center gap-2">
-                                                <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">Queue #2</span>
-                                                <span class="text-xs text-gray-500 dark:text-gray-400">10:15 AM</span>
-                                            </div>
-                                            <h4 class="font-medium mt-1">Maria Santos</h4>
-                                            <div class="text-sm text-gray-600 dark:text-gray-300">Consultation</div>
-                                            <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Added by: BHW Jose</div>
-                                        </div>
-                                        <div class="flex flex-col gap-2">
-                                            <button type="button" class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-300 font-medium rounded-lg text-xs px-3 py-1 dark:bg-blue-500 dark:hover:bg-blue-600 focus:outline-none dark:focus:ring-blue-700">Start</button>
-                                            <button type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-2 focus:ring-gray-300 font-medium rounded-lg text-xs px-3 py-1 border border-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:bg-gray-600 focus:outline-none dark:focus:ring-gray-600">No Show</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="p-3 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">
-                                    <div class="flex justify-between items-start">
-                                        <div>
-                                            <div class="flex items-center gap-2">
-                                                <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">Queue #3</span>
-                                                <span class="text-xs text-gray-500 dark:text-gray-400">11:20 AM</span>
-                                            </div>
-                                            <h4 class="font-medium mt-1">Pedro Reyes</h4>
-                                            <div class="text-sm text-gray-600 dark:text-gray-300">Follow-up</div>
-                                            <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Added by: BHW Maria</div>
-                                        </div>
-                                        <div class="flex flex-col gap-2">
-                                            <button type="button" class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-300 font-medium rounded-lg text-xs px-3 py-1 dark:bg-blue-500 dark:hover:bg-blue-600 focus:outline-none dark:focus:ring-blue-700">Start</button>
-                                            <button type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-2 focus:ring-gray-300 font-medium rounded-lg text-xs px-3 py-1 border border-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:bg-gray-600 focus:outline-none dark:focus:ring-gray-600">No Show</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="p-3 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">
-                                    <div class="flex justify-between items-start">
-                                        <div>
-                                            <div class="flex items-center gap-2">
-                                                <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">Queue #4</span>
-                                                <span class="text-xs text-gray-500 dark:text-gray-400">1:45 PM</span>
-                                            </div>
-                                            <h4 class="font-medium mt-1">Ana Gonzales</h4>
-                                            <div class="text-sm text-gray-600 dark:text-gray-300">Check-up</div>
-                                            <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Added by: BHW Jose</div>
-                                        </div>
-                                        <div class="flex flex-col gap-2">
-                                            <button type="button" class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-300 font-medium rounded-lg text-xs px-3 py-1 dark:bg-blue-500 dark:hover:bg-blue-600 focus:outline-none dark:focus:ring-blue-700">Start</button>
-                                            <button type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-2 focus:ring-gray-300 font-medium rounded-lg text-xs px-3 py-1 border border-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:bg-gray-600 focus:outline-none dark:focus:ring-gray-600">No Show</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
+                        <!-- In Progress Queue -->
                         <livewire:schedules.in-progress-table />
 
-                        <!-- Completed Today -->
-                        <div class="h-full flex flex-col bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 overflow-hidden">
-                            <div class="p-3 bg-green-100 dark:bg-green-900 border-b border-green-200 dark:border-green-800 rounded-t-lg">
-                                <h3 class="font-semibold text-green-800 dark:text-green-200 flex items-center gap-2">
-                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                                    </svg>
-                                    Completed Today (3)
-                                </h3>
-                            </div>
-                            <div class="p-3 flex-1 overflow-y-auto space-y-2">
-                                <!-- Completed Items -->
-                                <div class="p-3 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">
-                                    <div class="flex justify-between items-start">
-                                        <div>
-                                            <div class="flex items-center gap-2">
-                                                <span class="bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Completed</span>
-                                            </div>
-                                            <h4 class="font-medium mt-1">Isabela Cruz</h4>
-                                            <div class="text-sm text-gray-600 dark:text-gray-300">Check-up</div>
-                                            <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Doctor: Dr. Williams</div>
-                                        </div>
-                                    </div>
-                                    <div class="mt-2 pt-2 border-t border-gray-200 dark:border-gray-600 text-xs text-gray-500 dark:text-gray-400">
-                                        <div class="grid grid-cols-2 gap-1">
-                                            <div>Time-in: 10:15 AM</div>
-                                            <div>Time-out: 10:45 AM</div>
-                                            <div>Duration: 30 minutes</div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="p-3 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">
-                                    <div class="flex justify-between items-start">
-                                        <div>
-                                            <div class="flex items-center gap-2">
-                                                <span class="bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Completed</span>
-                                            </div>
-                                            <h4 class="font-medium mt-1">Miguel Santos</h4>
-                                            <div class="text-sm text-gray-600 dark:text-gray-300">Consultation</div>
-                                            <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Doctor: Dr. Smith</div>
-                                        </div>
-                                    </div>
-                                    <div class="mt-2 pt-2 border-t border-gray-200 dark:border-gray-600 text-xs text-gray-500 dark:text-gray-400">
-                                        <div class="grid grid-cols-2 gap-1">
-                                            <div>Time-in: 11:30 AM</div>
-                                            <div>Time-out: 12:15 PM</div>
-                                            <div>Duration: 45 minutes</div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="p-3 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">
-                                    <div class="flex justify-between items-start">
-                                        <div>
-                                            <div class="flex items-center gap-2">
-                                                <span class="bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Completed</span>
-                                            </div>
-                                            <h4 class="font-medium mt-1">Luis Reyes</h4>
-                                            <div class="text-sm text-gray-600 dark:text-gray-300">Follow-up</div>
-                                            <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Doctor: Dr. Johnson</div>
-                                        </div>
-                                    </div>
-                                    <div class="mt-2 pt-2 border-t border-gray-200 dark:border-gray-600 text-xs text-gray-500 dark:text-gray-400">
-                                        <div class="grid grid-cols-2 gap-1">
-                                            <div>Time-in: 1:20 PM</div>
-                                            <div>Time-out: 2:00 PM</div>
-                                            <div>Duration: 40 minutes</div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="p-3 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 shadow-sm">
-                                    <div class="flex items-center justify-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1v-3a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                        </svg>
-                                        <span>No more completed appointments today</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <!-- Completed Queue -->
+                        <livewire:schedules.completed-table />
                     </div>
 
                     <!-- Success Message -->

@@ -10,13 +10,26 @@ use Livewire\Component;
 
 class Complete extends Component
 {
+    public bool $showModal = false;
+
     public ?int $appointment_id = null;
     public ?int $vital_sign_id = null;
     public ?int $treatment_record_id = null;
 
+
     public function mount($appointment_id): void
     {
         $this->appointment_id = $appointment_id;
+    }
+
+    public function open(): void
+    {
+        $this->showModal = true;
+    }
+
+    public function close(): void
+    {
+        $this->showModal = false;
     }
 
     public function complete(): void

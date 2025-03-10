@@ -33,9 +33,9 @@ class WaitingTable extends Component
                     ->orWhere('middle_name', 'like', '%' . $this->search . '%')
                     ->orWhere('last_name', 'like', '%' . $this->search . '%');
             })
-            ->orWhereHas('appointment.appointment_type', function ($query) {
-                $query->where('name', 'like', '%' . $this->search . '%');
-            });
+                ->orWhereHas('appointment.appointment_type', function ($query) {
+                    $query->where('name', 'like', '%' . $this->search . '%');
+                });
         }
 
         if (! empty($this->doctor_id)) {
@@ -43,6 +43,9 @@ class WaitingTable extends Component
                 $query->where('user_id', $this->doctor_id);
             });
         }
+
+        // Assign the collection to the variable
+        $appointment_queues = $appointment_queues->orderBy('queue_number')->get();
 
         return view('livewire.schedules.waiting-table', [
             'appointment_queues' => $appointment_queues

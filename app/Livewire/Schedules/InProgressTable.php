@@ -44,7 +44,7 @@ class InProgressTable extends Component
             });
         }
 
-        $appointment_queues->orderBy('called_at', 'desc')->get();
+        $appointment_queues = $appointment_queues->orderBy('queue_number')->get();
 
         return view('livewire.schedules.in-progress-table', [
             'appointment_queues' => $appointment_queues
