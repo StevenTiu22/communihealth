@@ -48,11 +48,11 @@ class CreateAppointmentForm extends Form
                 'exists:patients,id'
             ],
             'doctor_id' => [
-                'exists:doctors,id'
+                'exists:doctors,user_id'
             ],
             'bhw_id' => [
                 'required',
-                'exists:bhws,id'
+                'exists:bhws,user_id'
             ],
             'appointment_type_id' => [
                 'required',

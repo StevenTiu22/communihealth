@@ -4,6 +4,7 @@ namespace App\Livewire\Schedules;
 
 use App\Events\UserActivityEvent;
 use App\Models\Appointment;
+use App\Models\Disease;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Validate;
@@ -111,6 +112,10 @@ class AddTreatmentRecord extends Component
 
     public function render(): View
     {
-        return view('livewire.schedules.add-treatment-record');
+        $diseases = Disease::all()->orderBy('name', 'asc');
+
+        return view('livewire.schedules.add-treatment-record', [
+            'diseases' => $diseases,
+        ]);
     }
 }
