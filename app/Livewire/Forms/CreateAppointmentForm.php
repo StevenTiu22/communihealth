@@ -10,7 +10,6 @@ class CreateAppointmentForm extends Form
     #[Validate]
     public int $patient_id;
 
-    #[Validate]
     public int $doctor_id;
 
     #[Validate]
@@ -47,12 +46,9 @@ class CreateAppointmentForm extends Form
                 'required',
                 'exists:patients,id'
             ],
-            'doctor_id' => [
-                'exists:doctors,user_id'
-            ],
             'bhw_id' => [
                 'required',
-                'exists:bhws,user_id'
+                'exists:bhw,user_id'
             ],
             'appointment_type_id' => [
                 'required',
@@ -68,7 +64,6 @@ class CreateAppointmentForm extends Form
                 'date_format:H:i:s'
             ],
             'time_out' => [
-                'required',
                 'date_format:H:i:s'
             ],
             'chief_complaint' => [
@@ -97,9 +92,6 @@ class CreateAppointmentForm extends Form
             'patient_id' => [
                 'required' => 'The patient field is required.',
                 'exists' => 'The selected patient is invalid.'
-            ],
-            'doctor_id' => [
-                'exists' => 'The selected doctor is invalid.'
             ],
             'bhw_id' => [
                 'required' => 'The BHW field is required.',
