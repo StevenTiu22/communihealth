@@ -18,7 +18,7 @@ class AppointmentQueue extends Model
     ];
 
     protected $casts = [
-        'queue_date' => 'date',
+        'queue_date' => 'datetime:Y-m-d',
         'called_at' => 'datetime:Y-m-d H:i:s',
         'completed_at' => 'datetime:Y-m-d H:i:s',
     ];

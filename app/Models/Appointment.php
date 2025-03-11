@@ -28,9 +28,9 @@ class Appointment extends Model
     ];
 
     protected $casts = [
-        'time_in' => 'time',
-        'time_out' => 'time',
-        'appointment_date' => 'date',
+        'time_in' => 'timestamp',
+        'time_out' => 'timestamp',
+        'appointment_date' => 'datetime:Y-m-d',
     ];
 
     public const STATUSES = [

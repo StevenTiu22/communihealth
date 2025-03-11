@@ -20,6 +20,11 @@ class CancelAppointment extends Component
     #[Validate('string', message: 'The reason for cancellation must be a string')]
     public string $reason = '';
 
+    public function mount($appointment_id): void
+    {
+        $this->appointment = Appointment::findOrFail($appointment_id);
+    }
+
     public function open(): void
     {
         $this->showModal = true;

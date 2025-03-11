@@ -31,7 +31,7 @@ class CreateAppointmentForm extends Form
     public string $chief_complaint;
 
     #[Validate]
-    public string $remarks;
+    public string $remarks = '';
 
     #[Validate]
     public int $is_cancelled = 0;
@@ -61,10 +61,9 @@ class CreateAppointmentForm extends Form
             ],
             'time_in' => [
                 'required',
-                'date_format:H:i:s'
             ],
             'time_out' => [
-                'date_format:H:i:s'
+                'nullable'
             ],
             'chief_complaint' => [
                 'required',
@@ -107,12 +106,8 @@ class CreateAppointmentForm extends Form
                 'date_format' => 'The appointment date is in invalid format.'
             ],
             'time_in' => [
-                'required' => 'The time in field is required.',
-                'date_format' => 'The time in is in invalid format.'
-            ],
-            'time_out' => [
-                'required' => 'The time out field is required.',
-                'date_format' => 'The time out is in invalid format.'
+                'required' => 'The time-in field is required.',
+                'date_format' => 'The time-in is in invalid format.'
             ],
             'chief_complaint' => [
                 'required' => 'The chief complaint field is required.',

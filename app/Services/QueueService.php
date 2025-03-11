@@ -13,6 +13,7 @@ class QueueService
         $appointment = Appointment::create([
             'patient_id' => $data['patient_id'],
             'bhw_id' => $data['bhw_id'],
+            'doctor_id' => $data['doctor_id'],
             'appointment_type_id' => $data['appointment_type_id'],
             'appointment_date' => $data['appointment_date'],
             'time_in' => $data['time_in'],
@@ -22,7 +23,7 @@ class QueueService
 
         $queue_number = $this->generateQueueNumber();
 
-        return $appointment->appointment_queue->create([
+        return $appointment->appointmentQueue()->create([
             'queue_number' => $queue_number,
             'queue_date' => $data['queue_date'],
             'queue_status' => $data['queue_status'],
