@@ -208,6 +208,7 @@ class CreateUserForm extends Form
             ],
             'specialization' => [
                 'required_if:role,doctor',
+                'exists:specializations,id',
             ],
             'profile_photo_path' => [
                 'nullable',

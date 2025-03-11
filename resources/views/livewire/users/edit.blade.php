@@ -536,37 +536,9 @@
                                             required
                                         >
                                             <option value="">Select Specialization</option>
-                                            <optgroup label="Primary Care">
-                                                <option value="family_medicine">Family Medicine</option>
-                                                <option value="internal_medicine">Internal Medicine</option>
-                                                <option value="pediatrics">Pediatrics</option>
-                                                <option value="general_practice">General Practice</option>
-                                            </optgroup>
-                                            <optgroup label="Medical Specialties">
-                                                <option value="cardiology">Cardiology</option>
-                                                <option value="dermatology">Dermatology</option>
-                                                <option value="endocrinology">Endocrinology</option>
-                                                <option value="gastroenterology">Gastroenterology</option>
-                                                <option value="neurology">Neurology</option>
-                                                <option value="oncology">Oncology</option>
-                                                <option value="psychiatry">Psychiatry</option>
-                                                <option value="pulmonology">Pulmonology</option>
-                                            </optgroup>
-                                            <optgroup label="Surgical Specialties">
-                                                <option value="general_surgery">General Surgery</option>
-                                                <option value="neurosurgery">Neurosurgery</option>
-                                                <option value="orthopedics">Orthopedics</option>
-                                                <option value="plastic_surgery">Plastic Surgery</option>
-                                                <option value="urology">Urology</option>
-                                            </optgroup>
-                                            <optgroup label="Other Specialties">
-                                                <option value="anesthesiology">Anesthesiology</option>
-                                                <option value="obstetrics_gynecology">Obstetrics & Gynecology</option>
-                                                <option value="ophthalmology">Ophthalmology</option>
-                                                <option value="otolaryngology">Otolaryngology (ENT)</option>
-                                                <option value="pathology">Pathology</option>
-                                                <option value="radiology">Radiology</option>
-                                            </optgroup>
+                                            @foreach($specializations as $specialization)
+                                                <option value="{{ $specialization->id }}">{{ ucwords($specialization->name) }}</option>
+                                            @endforeach
                                         </select>
 
                                         <x-input-error for="form.specialization" class="mt-2" />

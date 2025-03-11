@@ -5,6 +5,7 @@ namespace App\Livewire\Users;
 use App\Actions\CreateNewUser;
 use App\Events\UserActivityEvent;
 use App\Livewire\Forms\CreateUserForm;
+use App\Models\Specialization;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Registered;
@@ -28,7 +29,7 @@ class Add extends Component
 
     public function mount(): void
     {
-
+        //
     }
 
     public function open(): void
@@ -100,6 +101,10 @@ class Add extends Component
 
     public function render(): View
     {
-        return view('livewire.users.add');
+        $specializations = Specialization::all();
+
+        return view('livewire.users.add', [
+            'specializations' => $specializations,
+        ]);
     }
 }

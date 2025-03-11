@@ -5,6 +5,7 @@ namespace App\Livewire\Users;
 use App\Actions\UpdateUserInformation;
 use App\Events\UserActivityEvent;
 use App\Livewire\Forms\EditUserForm;
+use App\Models\Specialization;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
@@ -52,7 +53,7 @@ class Edit extends Component
         else
         {
             $this->form->license_number = $this->user->doctor->license_number;
-            $this->form->specialization = $this->user->doctor->specializations->first()->name;
+            $this->form->specialization = $this->user->doctor->specializations->first()->id;
         }
     }
 
@@ -113,6 +114,10 @@ class Edit extends Component
 
     public function render(): View
     {
-        return view('livewire.users.edit');
+        $specializations = Specialization::all();
+
+        return view('livewire.users.edit', [
+            'specializations' => $specializations
+        ]);
     }
 }
