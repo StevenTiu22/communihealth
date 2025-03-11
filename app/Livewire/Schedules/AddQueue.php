@@ -34,7 +34,7 @@ class AddQueue extends Component
 
     #[Validate('required', message: "Please specify a queue status.")]
     #[Validate('in:waiting,in progress,completed,no show,cancelled', message: "The queue status must be one of the following: waiting, in progress, completed, no show, cancelled.")]
-    public string $queueStatus = '';
+    public string $queueStatus = 'waiting';
 
     #[Validate('required', message: "Please specify a queue type.")]
     public string $queueType = 'walk-in';
@@ -57,12 +57,25 @@ class AddQueue extends Component
     public function updated($propertyName): void
     {
         if ($propertyName === 'form.appointment_type_id') {
-            $this->doctors = User::query()->role('doctor')
-                ->whereHas('specializations', function ($query) {
-                    $query->where('appointment_type_id', $this->form->appointment_type_id);
-                })
-                ->orderBy('last_login_at', 'desc')
-                ->get();
+            // First get the specialization_id that this appointment type belongs to
+            $appointmentType = AppointmentType::find($this->form->appointment_type_id);
+
+            if ($appointmentType) {
+                $appointmentType = AppointmentType::find($this->form->appointment_type_id);
+
+                if ($appointmentType) {
+                    $this->doctors = User::query()->role('doctor')
+                        ->whereHas('doctor', function ($doctorQuery) use ($appointmentType) {
+                            $doctorQuery->whereHas('specializations', function ($specializationQuery) use ($appointmentType) {
+                                $specializationQuery->where('specializations.id', $appointmentType->specialization_id);
+                            });
+                        })
+                        ->orderBy('last_login_at', 'desc')
+                        ->get();
+                } else {
+                    $this->doctors = collect();
+                }
+            }
         }
     }
 
@@ -71,16 +84,22 @@ class AddQueue extends Component
         $this->validate();
 
         try {
-            $queue_service->create([
+            $appointment_queue = $queue_service->create([
+                'patient_id' => $this->form->patient_id,
+                'bhw_id' => $this->form->bhw_id,
+                'appointment_type_id' => $this->form->appointment_type_id,
+                'appointment_date' => $this->form->appointment_date,
+                'time_in' => $this->form->time_in,
+                'chief_complaint' => $this->form->chief_complaint,
                 'appointment_id' => $this->appointment_id,
                 'queue_date' => $this->queueDate,
                 'queue_status' => $this->queueStatus,
                 'queue_type' => $this->queueType,
-                'remarks' => $this->remarks,
+                'remarks' => $this->form->remarks,
             ]);
 
             Log::info('Queue added successfully', [
-                'appointment_id' => $this->appointment_id,
+                'appointment_id' => $appointment_queue->appointment->id,
                 'queue_number' => $this->queueNumber,
                 'queue_date' => $this->queueDate,
                 'queue_status' => $this->queueStatus,
@@ -92,7 +111,7 @@ class AddQueue extends Component
                 'Successfully added a queue',
                 "User " . auth()->user()->username . " added a queue with number " . $this->queueNumber,
                 [
-                    'appointment_id' => $this->appointment_id,
+                    'appointment_id' => $appointment_queue->appointment->id,
                     'queue_number' => $this->queueNumber,
                     'queue_date' => $this->queueDate,
                     'queue_status' => $this->queueStatus,
@@ -107,7 +126,6 @@ class AddQueue extends Component
         } catch (\Exception $e) {
             Log::error('Error adding queue', [
                 'error' => $e->getMessage(),
-                'appointment_id' => $this->appointment_id,
             ]);
 
             event(new UserActivityEvent(
@@ -116,7 +134,6 @@ class AddQueue extends Component
                 "User " . auth()->user()->username . " failed to add a queue",
                 [
                     'error' => $e->getMessage(),
-                    'appointment_id' => $this->appointment_id,
                 ],
                 Carbon::now()->toDateTimeString()
             ));

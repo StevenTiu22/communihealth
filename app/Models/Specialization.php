@@ -26,9 +26,9 @@ class Specialization extends Model
             ->withTimestamps();
     }
 
-    public function appointments(): HasMany
+    public function appointmentTypes(): HasMany
     {
-        return $this->hasMany(Appointment::class);
+        return $this->hasMany(AppointmentType::class);
     }
 
     // Accessors and mutators

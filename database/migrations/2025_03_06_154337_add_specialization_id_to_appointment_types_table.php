@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('specializations', function (Blueprint $table) {
-            $table->foreignId('appointment_type_id')
+        Schema::table('appointment_types', function (Blueprint $table) {
+            $table->foreignId('specialization_id')
                 ->nullable()
                 ->after('name')
-                ->constrained('appointment_types')
+                ->constrained('specializations')
                 ->nullOnDelete();
-            $table->index('appointment_type_id');
+            $table->index('specialization_id');
         });
     }
 
@@ -26,10 +26,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('specializations', function (Blueprint $table) {
-            $table->dropForeign(['appointment_type_id']);
-            $table->dropIndex(['appointment_type_id']);
-            $table->dropColumn('appointment_type_id');
+        Schema::table('appointment_types', function (Blueprint $table) {
+            $table->dropForeign(['specialization_id']);
+            $table->dropIndex(['specialization_id']);
+            $table->dropColumn('specialization_id');
         });
     }
 };
