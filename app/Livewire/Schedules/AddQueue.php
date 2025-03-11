@@ -22,9 +22,6 @@ class AddQueue extends Component
     public CreateAppointmentForm $form;
 
     // Queue properties
-    #[Validate('required', message: "Please specify an appointment. If there's none, add first.")]
-    #[Validate('exists:appointments,id', message: "The appointment ID is invalid.")]
-    public int $appointment_id = 0;
     public int $queueNumber = 0;
 
     #[Validate('required', message: "Please specify a queue date.")]
@@ -56,17 +53,24 @@ class AddQueue extends Component
 
     public function save(QueueService $queue_service): void
     {
+        $this->form->bhw_id = auth()->user()->id;
+        $this->form->appointment_date = Carbon::now()->format('Y-m-d');
+        $this->form->time_in = Carbon::now();
+        $this->queueDate = Carbon::now()->format('Y-m-d');
+
+
         $this->validate();
+        $this->form->validate();
 
         try {
             $appointment_queue = $queue_service->create([
                 'patient_id' => $this->form->patient_id,
                 'bhw_id' => $this->form->bhw_id,
+                'doctor_id' => $this->form->doctor_id,
                 'appointment_type_id' => $this->form->appointment_type_id,
                 'appointment_date' => $this->form->appointment_date,
                 'time_in' => $this->form->time_in,
                 'chief_complaint' => $this->form->chief_complaint,
-                'appointment_id' => $this->appointment_id,
                 'queue_date' => $this->queueDate,
                 'queue_status' => $this->queueStatus,
                 'queue_type' => $this->queueType,

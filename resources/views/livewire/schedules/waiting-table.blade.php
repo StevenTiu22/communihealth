@@ -10,7 +10,7 @@
     <div class="p-3 flex-1 overflow-y-auto space-y-2">
         <!-- Queue Items -->
         @forelse($appointment_queues as $appointment_queue)
-            <div class="p-3 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">
+            <div wire:key="{{ $appointment_queue->id }}" class="p-3 bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">
                 <div class="flex justify-between items-start">
                     <div>
                         <div class="flex items-center gap-2">
@@ -19,18 +19,18 @@
                             <span class="text-xs text-gray-500 dark:text-gray-400">{{ $appointment_queue->created_at->addHours(8)->format('g:i A') }}</span>
                         </div>
                         <h4 class="font-medium mt-1">{{ $appointment_queue->appointment->patient->full_name }}</h4>
-                        <div class="text-sm text-gray-600 dark:text-gray-300">{{ ucwords($appointment_queue->appointment->appointment_type->name) }}</div>
-                        <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ "Added by: BHW " . $appointment_queue->appointment->bhw->user->last_name }}</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-300">{{ ucwords($appointment_queue->appointment->appointmentType->name) }}</div>
+                        <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ "Added by: BHW " . $appointment_queue->appointment->bhw->last_name }}</div>
                     </div>
                     <div class="flex flex-col gap-2">
-                        <x-button
+                        <button
                             type="button"
-                            wire:click="start({{ $appointment->id }})"
-                            class="bg-blue-600 hover:bg-blue-700 focus:ring-blue-300 text-xs px-3 py-1 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-700"
+                            wire:click="start({{ $appointment_queue->id }})"
+                            class="bg-blue-600 hover:bg-blue-700 focus:ring focus:ring-blue-300 rounded-full focus:outline-none dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-700 text-white text-sm px-3 py-1.5 font-medium"
                         >
                             Start
-                        </x-button>
-                        <livewire:cancel-appointment :appointment_id="$appointment_queue->appointment_id" :wire:key="'cancel-'.$appointment_queue->id" />
+                        </button>
+                        <livewire:schedules.cancel-appointment :appointment_id="$appointment_queue->appointment_id" :wire:key="'cancel-'.$appointment_queue->id" />
                     </div>
                 </div>
             </div>

@@ -2,8 +2,10 @@
 
 namespace App\Livewire\Schedules;
 
+use App\Models\Appointment;
 use App\Models\AppointmentQueue;
 use Illuminate\Contracts\View\View;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class WaitingTable extends Component
@@ -11,6 +13,7 @@ class WaitingTable extends Component
     public string $search = '';
     public string $doctor_id = '';
 
+    #[On('schedules-search-updated')]
     public function updatedSearch($search): void
     {
         $this->search = $search;
@@ -19,6 +22,11 @@ class WaitingTable extends Component
     public function updatedDoctorId($doctor_id): void
     {
         $this->doctor_id = $doctor_id;
+    }
+
+    public function show(AppointmentQueue $appointment_queue): void
+    {
+        $this->dispatch('schedules-show-details', $appointment_queue);
     }
 
     public function render(): View
@@ -32,10 +40,7 @@ class WaitingTable extends Component
                 $query->where('first_name', 'like', '%' . $this->search . '%')
                     ->orWhere('middle_name', 'like', '%' . $this->search . '%')
                     ->orWhere('last_name', 'like', '%' . $this->search . '%');
-            })
-                ->orWhereHas('appointment.appointment_type', function ($query) {
-                    $query->where('name', 'like', '%' . $this->search . '%');
-                });
+            });
         }
 
         if (! empty($this->doctor_id)) {
