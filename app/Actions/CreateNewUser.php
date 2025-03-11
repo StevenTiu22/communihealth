@@ -100,9 +100,7 @@ class CreateNewUser implements CreatesNewUsers
                     throw new Exception('Failed to insert doctor information.');
                 }
 
-                $specialization = Specialization::firstOrCreate(['name' => $input['specialization']]);
-
-                $user->doctor->specializations()->attach($specialization->id);
+                $user->doctor->specializations()->attach($input['specialization']);
 
                 if (! $user->doctor->specializations()) {
                     throw new Exception('Failed to insert doctor specialization information.');

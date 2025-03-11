@@ -54,31 +54,6 @@ class AddQueue extends Component
         $this->reset();
     }
 
-    public function updated($propertyName): void
-    {
-        if ($propertyName === 'form.appointment_type_id') {
-            // First get the specialization_id that this appointment type belongs to
-            $appointmentType = AppointmentType::find($this->form->appointment_type_id);
-
-            if ($appointmentType) {
-                $appointmentType = AppointmentType::find($this->form->appointment_type_id);
-
-                if ($appointmentType) {
-                    $this->doctors = User::query()->role('doctor')
-                        ->whereHas('doctor', function ($doctorQuery) use ($appointmentType) {
-                            $doctorQuery->whereHas('specializations', function ($specializationQuery) use ($appointmentType) {
-                                $specializationQuery->where('specializations.id', $appointmentType->specialization_id);
-                            });
-                        })
-                        ->orderBy('last_login_at', 'desc')
-                        ->get();
-                } else {
-                    $this->doctors = collect();
-                }
-            }
-        }
-    }
-
     public function save(QueueService $queue_service): void
     {
         $this->validate();
@@ -150,7 +125,23 @@ class AddQueue extends Component
 
         $patients = Patient::orderBy('last_name', 'desc')->get();
 
-        $this->doctors = User::query()->role('doctor')->orderBy('last_login_at', 'desc')->get();
+        $doctors_query = User::query()->role('doctor');
+
+        // Filter doctors by appointment type if one is selected
+        if (!empty($this->form->appointment_type_id)) {
+            $appointmentType = AppointmentType::find($this->form->appointment_type_id);
+
+            if ($appointmentType) {
+                $doctors_query->whereHas('doctor', function($doctorQuery) use ($appointmentType) {
+                    $doctorQuery->whereHas('specializations', function($specializationQuery) use ($appointmentType) {
+                        $specializationQuery->where('specializations.id', $appointmentType->specialization->id);
+                    });
+                });
+            }
+        }
+
+        // Execute the query and sort by last login
+        $this->doctors = $doctors_query->orderBy('last_login_at', 'desc')->get();
 
         return view('livewire.schedules.add-queue', [
             'appointmentTypes' => $appointment_types,

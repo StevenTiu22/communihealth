@@ -90,19 +90,15 @@ class UpdateUserInformation
                             'license_number' => $input['license_number'],
                         ]);
 
-                        $specialization = Specialization::firstOrCreate(['name' => $input['specialization']]);
-
-                        $user->doctor->specializations()->attach($specialization->id);
+                        $user->doctor->specializations()->attach($input['specialization']);
                     }
                     else
                     {
-                        $user->doctor->forceFill([
+                        $user->doctor->update([
                             'license_number' => $input['license_number'],
-                        ])->save();
+                        ]);
 
-                        $user->doctor->specializations->first()->forceFill([
-                            'name' => $input['specialization']
-                        ])->save();
+                        $user->doctor->specializations()->sync($input['specialization']);
                     }
                     break;
             }

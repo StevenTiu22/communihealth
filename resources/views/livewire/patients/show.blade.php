@@ -157,7 +157,7 @@
 
                                     <div>
                                         <h4 class="font-medium text-gray-300">PhilHealth Number</h4>
-                                        <p class="mt-1 text-white">{{ $mother->philhealth_number ?? 'N/A' }}</p>
+                                        <p class="mt-1 text-white">{{ $mother->philhealth_no == '' ? 'N/A' : $mother->philhealth_no }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -183,7 +183,7 @@
 
                                     <div>
                                         <h4 class="font-medium text-gray-300">PhilHealth Number</h4>
-                                        <p class="mt-1 text-white">{{ $father->philhealth_number ?? 'N/A' }}</p>
+                                        <p class="mt-1 text-white">{{ $father->philhealth_no == '' ? 'N/A' : $father->philhealth_no }}</p>
                                     </div>
                                 </div>
                             </div>
