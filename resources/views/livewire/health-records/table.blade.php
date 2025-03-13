@@ -1,6 +1,6 @@
-<div class="overflow-hidden">
-    <div class="overflow-x-auto rounded-lg shadow-sm">
-        <table class="min-w-full divide-y divide-gray-600">
+<div>
+    <div class="rounded-t-lg shadow-sm">
+        <table class="min-w-full divide-y divide-gray-600 rounded-lg shadow-lg">
             <thead class="bg-gray-900">
             <tr>
                 <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
@@ -104,23 +104,51 @@
                             <div class="text-xs text-gray-400 mt-1">Meds: {{ Str::limit($record->treatmentRecord->medication, 25) }}</div>
                         @endif
                     </td>
-                    <td class="px-4 py-3 whitespace-nowrap text-center text-sm font-medium">
-                        <div class="flex justify-center space-x-2">
-                            <div class="flex justify-center">
-                                <div class="dropdown dropdown-end center">
-                                    <div tabindex="0" role="button" class="btn m-1 bg-inherit border-transparent active:bg-gray-900">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 16 16" id="ellipsis">
-                                            <path fill="currentColor" d="M10 2a2 2 0 1 1-3.999.001A2 2 0 0 1 10 2zM10 8a2 2 0 1 1-3.999.001A2 2 0 0 1 10 8zM10 14a2 2 0 1 1-3.999.001A2 2 0 0 1 10 14z"></path>
-                                        </svg>
-                                    </div>
-                                    <ul class="dropdown-content menu bg-base-100 rounded-box z-[1] w-40 p-2 shadow">
-                                        <li>Edit Vital Signs</li>
-                                        <li>Edit Treatment Record</li>
-                                    </ul>
-                                </div>
-                            </div>
+                    <td class="px-4 py-4 whitespace-nowrap text-center text-sm font-medium">
+                        <div class="dropdown dropdown-left">
+                            <button tabindex="0" class="btn btn-sm btn-circle dark:bg-gray-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+                                    <path fill="currentColor" d="M10 2a2 2 0 1 1-3.999.001A2 2 0 0 1 10 2zM10 8a2 2 0 1 1-3.999.001A2 2 0 0 1 10 8zM10 14a2 2 0 1 1-3.999.001A2 2 0 0 1 10 14z"></path>
+                                </svg>
+                            </button>
+                            <ul tabindex="0" class="dropdown-content menu shadow bg-base-100 dark:bg-gray-800 rounded-box w-52 p-2 mt-1 z-[1]">
+                                <li>
+                                    <a
+                                        class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-sm"
+                                        wire:click="openShowModal({{ $record->id }})"
+                                    >
+                                        View
+                                    </a>
+                                </li>
+
+
+                                @role('bhw')
+                                <li>
+                                    <a
+                                        class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm"
+                                        wire:click="openEditVitalSign({{ $record->id }})"
+                                    >
+                                        Edit Vital Signs
+                                    </a>
+                                </li>
+                                @endrole
+
+                                @role('doctor')
+                                <li>
+                                    <a
+                                        class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm"
+                                        wire:click="openEditTreatmentRecord({{ $record->id }})"
+                                    >
+                                        Edit Treatment Record
+                                    </a>
+                                </li>
+                                @endrole
+                            </ul>
                         </div>
                     </td>
+                    <livewire:health-records.show :wire:key="'show-'.$record->id" />
+                    <livewire:health-records.edit-vital-sign :wire:key="'edit-vital-sign-'.$record->id" />
+                    <livewire:health-records.edit-treatment-record :wire:key="'edit-treatment-record-'.$record->id" />
                 </tr>
             @empty
                 <tr>

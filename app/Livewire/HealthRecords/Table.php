@@ -38,9 +38,27 @@ class Table extends Component
         $this->resetPage();
     }
 
+    public function openShowModal($appointment_id): void
+    {
+        $this->dispatch('health-records-show-open', $appointment_id);
+    }
+
+    public function openEditVitalSign($appointment_id): void
+    {
+        $this->dispatch('health-records-edit-vital-sign-open', $appointment_id);
+    }
+
+    public function openEditTreatmentRecord($appointment_id): void
+    {
+        $this->dispatch('health-records-edit-treatment-record-open', $appointment_id);
+    }
+
     public function render(): View
     {
         $query = Appointment::where('is_cancelled', 0)
+            ->whereNotNull('doctor_id')
+            ->whereNotNull('treatment_record_id')
+            ->whereNotNull('vital_signs_id')
             ->with(['appointmentType', 'patient', 'doctor', 'bhw', 'treatmentRecord', 'vitalSign'])
             ->orderBy('created_at', 'desc');
 
