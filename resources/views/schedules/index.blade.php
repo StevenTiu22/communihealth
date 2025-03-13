@@ -7,7 +7,6 @@
                         <h2 class="text-2xl font-semibold">Schedules</h2>
                     </div>
                     <!-- Search and Action Buttons -->
-                    <!-- Search and Action Buttons -->
                     <div class="flex flex-col gap-4 mb-6">
                         <div class="flex justify-between items-center gap-3">
                             <div class="flex-1">

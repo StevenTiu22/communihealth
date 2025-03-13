@@ -25,14 +25,4 @@ class VitalSign extends Model
     {
         return $this->hasMany(Appointment::class);
     }
-
-    // Accessors and mutators
-    protected function blood_pressure() : Attribute
-    {
-        return Attribute::make(
-            get: function () {
-                return $this->systolic && $this->diastolic ? $this->systolic . '/' . $this->diastolic : null;
-            }
-        );
-    }
 }

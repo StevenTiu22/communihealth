@@ -4,6 +4,7 @@ namespace App\Livewire\Schedules;
 
 use App\Models\AppointmentQueue;
 use Illuminate\Contracts\View\View;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class InProgressTable extends Component
@@ -11,6 +12,7 @@ class InProgressTable extends Component
     public string $search = '';
     public string $doctor_id = '';
 
+    #[On('schedules-search-updated')]
     public function updatedSearch($search): void
     {
         $this->search = $search;
@@ -24,7 +26,7 @@ class InProgressTable extends Component
     public function render(): View
     {
         $appointment_queues = AppointmentQueue::query()
-            ->where('queue_status', 'in_progress')
+            ->where('queue_status', 'in progress')
             ->with(['appointment.patient', 'appointment.appointmentType', 'appointment.doctor']);
 
         if (! empty($this->search)) {

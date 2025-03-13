@@ -18,15 +18,15 @@
                             <span class="bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Completed</span>
                         </div>
                         <h4 class="font-medium mt-1">{{ $appointment_queue->appointment->patient->full_name }}</h4>
-                        <div class="text-sm text-gray-600 dark:text-gray-300">{{ $appointment_queue->appointment->appointment_type->name }}</div>
-                        <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ "Doctor: Dr. " . $appointment_queues->appointment->doctor->user->last_name }}</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-300">{{ $appointment_queue->appointment->appointmentType->name }}</div>
+                        <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ "Doctor: Dr. " . $appointment_queue->appointment->doctor->last_name }}</div>
                     </div>
                 </div>
                 <div class="mt-2 pt-2 border-t border-gray-200 dark:border-gray-600 text-xs text-gray-500 dark:text-gray-400">
                     <div class="grid grid-cols-2 gap-1">
-                        <div>{{ "Time-in: " . $appointment_queues->appointment->time_in->format('g:i A') }}</div>
-                        <div>{{ "Time-in: " . $appointment_queues->appointment->time_out->format('g:i A') }}</div>
-                        <div>{{ "Duration: " . $appointment_queues->appointment->appointment_type->duration . " minutes" }}</div>
+                        <div>{{ "Time-in: " . \Carbon\Carbon::createFromTimestamp($appointment_queue->appointment->time_in)->format('g:i A') }}</div>
+                        <div>{{ "Time-out: " . \Carbon\Carbon::createFromTimestamp($appointment_queue->appointment->time_out)->format('g:i A') ?? 'N/A' }}</div>
+                        <div>{{ "Duration: " . $appointment_queue->appointment->appointmentType->duration_minutes . " minutes" }}</div>
                     </div>
                 </div>
             </div>

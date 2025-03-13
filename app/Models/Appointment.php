@@ -33,13 +33,6 @@ class Appointment extends Model
         'appointment_date' => 'datetime:Y-m-d',
     ];
 
-    public const STATUSES = [
-        'scheduled' => 'Scheduled',
-        'in_progress' => 'In Progress',
-        'completed' => 'Completed',
-        'cancelled' => 'Cancelled'
-    ];
-
     public function patient(): BelongsTo
     {
         return $this->belongsTo(Patient::class);

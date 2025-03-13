@@ -22,7 +22,7 @@ class CancelAppointment extends Component
 
     public function mount($appointment_id): void
     {
-        $this->appointment = Appointment::findOrFail($appointment_id);
+        $this->appointment = Appointment::find($appointment_id);
     }
 
     public function open(): void
@@ -45,7 +45,7 @@ class CancelAppointment extends Component
                 'cancellation_reason' => $this->reason,
             ]);
 
-            $this->appointment->appointment_queue->update([
+            $this->appointment->appointmentQueue->update([
                 'queue_number' => 0,
                 'queue_status' => 'cancelled',
             ]);
@@ -56,11 +56,11 @@ class CancelAppointment extends Component
                 'BHW user ' . auth()->user()->username . ' cancelled appointment for patient ' . $this->appointment->patient->full_name . ' on ' . now()->format('Y-m-d H:i:s'),
                 [
                     'appointment_id' => $this->appointment->id,
-                    'bhw_id' => auth()->id,
+                    'bhw_id' => auth()->user()->id,
                     'patient_id' => $this->appointment->patient->id,
                     'cancellation_reason' => $this->reason,
                 ],
-                Carbon::now()->toDateTimeString(),
+                Carbon::now('UTC')->toDateTimeString(),
             ));
 
             session()->flash('success', 'Appointment cancelled successfully.');
@@ -73,7 +73,7 @@ class CancelAppointment extends Component
                 'BHW user ' . auth()->user()->username . ' failed to cancel appointment for patient ' . $this->appointment->patient->full_name . ' on ' . now()->format('Y-m-d H:i:s'),
                 [
                     'appointment_id' => $this->appointment->id,
-                    'bhw_id' => auth()->id,
+                    'bhw_id' => auth()->user()->id,
                     'patient_id' => $this->appointment->patient->id,
                     'error_message' => $e->getMessage(),
                 ],

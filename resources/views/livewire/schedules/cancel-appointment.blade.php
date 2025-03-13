@@ -1,5 +1,5 @@
 <div>
-    <button wire:click="open" class="bg-red-500 hover:bg-red-600 text-white text-sm px-3 py-1.5 rounded-full font-medium">
+    <button wire:click="open" class="bg-red-500 hover:bg-red-600 text-white text-sm px-2.5 py-1 rounded-full font-medium">
         Cancel
     </button>
 
@@ -48,9 +48,9 @@
                 <x-secondary-button wire:click="close" class="bg-gray-700 dark:bg-gray-700 hover:bg-gray-600 dark:hover:bg-gray-600 text-gray-200 dark:text-gray-200 border-gray-600 dark:border-gray-600">
                     Nevermind
                 </x-secondary-button>
-                <x-button type="button" class="bg-red-600 dark:bg-red-600 hover:bg-red-700 dark:hover:bg-red-700" wire:click="cancel">
+                <x-danger-button wire:click="cancel">
                     Cancel Appointment
-                </x-button>
+                </x-danger-button>
             </div>
         </x-slot>
     </x-dialog-modal>

@@ -1,19 +1,24 @@
 <div>
-    <x-button wire:click="open" class="bg-green-500 hover:bg-green-600">
+    <button
+        type="button"
+        wire:click="open"
+        class="bg-green-600 hover:bg-green-700 focus:ring focus:ring-green-300 rounded-full focus:outline-none dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-green-700 text-white text-sm px-3 py-1 font-medium transition-all duration-150"
+    >
         Complete Appointment
-    </x-button>
+    </button>
 
     <x-dialog-modal wire:model="showModal">
         <x-slot name="title">
-            <h3 class="text-lg font-medium text-gray-900">Complete Appointment</h3>
+            <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Complete Appointment</h3>
         </x-slot>
 
         <x-slot name="content">
             <div class="space-y-4">
-                <p class="text-sm text-gray-600">
+                <p class="text-sm text-gray-600 dark:text-gray-300">
                     Are you sure you want to mark this appointment as complete?
                 </p>
 
+                <!-- Info banner - unchanged as requested -->
                 <div class="bg-blue-50 p-4 rounded-md border border-blue-200">
                     <div class="flex">
                         <div class="flex-shrink-0">
@@ -31,6 +36,7 @@
                     </div>
                 </div>
 
+                <!-- Warning banner - unchanged as requested -->
                 @if(empty($vital_sign_id) || empty($treatment_record_id))
                     <div class="bg-yellow-50 p-4 rounded-md border border-yellow-200">
                         <div class="flex">
@@ -52,17 +58,22 @@
 
         <x-slot name="footer">
             <div class="flex justify-end space-x-3">
-                <x-secondary-button wire:click="close">
-                    Cancel
-                </x-secondary-button>
-                <x-button
+                <button
                     type="button"
-                    class="bg-green-500 hover:bg-green-600"
-                    wire:click="complete"
-                    @if(empty($vital_sign_id) || empty($treatment_record_id)) disabled @endif
+                    wire:click="close"
+                    class="inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition-all duration-200"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="button"
+                    wire:click="save"
+                    {{ empty($vital_sign_id) || empty($treatment_record_id) ? 'disabled' : '' }}
+                    class="inline-flex items-center px-4 py-2 bg-green-500 dark:bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest shadow-sm hover:bg-green-600 dark:hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
                 >
                     Complete Appointment
-                </x-button>
+                </button>
             </div>
         </x-slot>
     </x-dialog-modal>
