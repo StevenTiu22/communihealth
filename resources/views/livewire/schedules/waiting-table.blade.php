@@ -14,7 +14,7 @@
                     <!-- Left side with patient info -->
                     <div class="flex-grow">
                         <div class="flex items-center gap-2">
-                            <span class="bg-amber-100 text-amber-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-amber-900 dark:text-amber-300">In Progress</span>
+                            <span class="bg-amber-100 text-amber-800 text-xs font-medium px-2 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-200">Waiting</span>
                         </div>
                         <h4 class="font-medium mt-1.5">{{ $appointment_queue->appointment->patient->full_name }}</h4>
                         <div class="text-sm text-gray-600 dark:text-gray-300">{{ $appointment_queue->appointment->appointmentType->name }}</div>

@@ -30,7 +30,7 @@
             <!-- Patient Information -->
             <div class="border-b border-gray-200 dark:border-gray-700 pb-5 mb-5">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
+                    <div class="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg">
                         <h4 class="text-base font-semibold text-gray-700 dark:text-gray-300 mb-4">Patient Information</h4>
                         <dl class="grid grid-cols-1 gap-x-4 gap-y-3 sm:grid-cols-2">
                             <div>
@@ -66,7 +66,7 @@
                         </dl>
                     </div>
 
-                    <div>
+                    <div class="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg">
                         <h4 class="text-base font-semibold text-gray-700 dark:text-gray-300 mb-4">Appointment Details</h4>
                         <dl class="grid grid-cols-1 gap-x-4 gap-y-3 sm:grid-cols-2">
                             <div>
@@ -84,7 +84,7 @@
                             <div>
                                 <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Doctor</dt>
                                 <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
-                                    {{ $appointment_queue->appointment->doctor->full_name ?? 'Not assigned' }}
+                                    {{ $appointment_queue->appointment->doctor->last_name ?? 'Not assigned' }}
                                 </dd>
                             </div>
                             <div>
@@ -115,61 +115,14 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Vital Signs (if available) -->
-            @if($appointment_queue->appointment->vitalSign)
-                <div class="border-b border-gray-200 dark:border-gray-700 pb-5 mb-5">
-                    <h4 class="text-base font-semibold text-gray-700 dark:text-gray-300 mb-4">Vital Signs</h4>
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                        <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
-                            <dt class="text-xs font-medium text-gray-500 dark:text-gray-400">Blood Pressure</dt>
-                            <dd class="mt-1 text-sm font-semibold text-gray-900 dark:text-gray-100">
-                                {{ $appointment_queue->appointment->vitalSign->blood_pressure ?? 'N/A' }}
-                            </dd>
-                        </div>
-                        <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
-                            <dt class="text-xs font-medium text-gray-500 dark:text-gray-400">Heart Rate</dt>
-                            <dd class="mt-1 text-sm font-semibold text-gray-900 dark:text-gray-100">
-                                {{ $appointment_queue->appointment->vitalSign->heart_rate ?? 'N/A' }} bpm
-                            </dd>
-                        </div>
-                        <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
-                            <dt class="text-xs font-medium text-gray-500 dark:text-gray-400">Temperature</dt>
-                            <dd class="mt-1 text-sm font-semibold text-gray-900 dark:text-gray-100">
-                                {{ $appointment_queue->appointment->vitalSign->temperature ?? 'N/A' }} °C
-                            </dd>
-                        </div>
-                        <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
-                            <dt class="text-xs font-medium text-gray-500 dark:text-gray-400">Weight</dt>
-                            <dd class="mt-1 text-sm font-semibold text-gray-900 dark:text-gray-100">
-                                {{ $appointment_queue->appointment->vitalSign->weight ?? 'N/A' }} kg
-                            </dd>
-                        </div>
-                    </div>
-                </div>
-            @endif
         </x-slot>
 
         <x-slot name="footer">
-            <div class="flex justify-between items-center w-full">
+            <div class="flex justify-end w-full">
                 <div>
-                    @if($appointment_queue->queue_status === 'waiting')
-                        <x-button
-                            type="button"
-                            wire:click="start({{ $appointment_queue->id }})"
-                            class="bg-blue-600 hover:bg-blue-700"
-                        >
-                            Start Consultation
-                        </x-button>
-                    @elseif($appointment_queue->queue_status === 'in progress')
-                        <x-button
-                            type="button"
-                            wire:click="complete({{ $appointment_queue->id }})"
-                            class="bg-green-600 hover:bg-green-700"
-                        >
-                            Complete Consultation
-                        </x-button>
-                    @endif
+                    <x-secondary-button wire:click="close" wire:loading.attr="disabled">
+                        Close
+                    </x-secondary-button>
                 </div>
             </div>
         </x-slot>
