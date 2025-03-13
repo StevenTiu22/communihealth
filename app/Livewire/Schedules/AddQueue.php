@@ -54,9 +54,9 @@ class AddQueue extends Component
     public function save(QueueService $queue_service): void
     {
         $this->form->bhw_id = auth()->user()->id;
-        $this->form->appointment_date = Carbon::now()->format('Y-m-d');
-        $this->form->time_in = Carbon::now();
-        $this->queueDate = Carbon::now()->format('Y-m-d');
+        $this->form->appointment_date = Carbon::now('UTC')->format('Y-m-d');
+        $this->form->time_in = Carbon::now('UTC');
+        $this->queueDate = Carbon::now('UTC')->format('Y-m-d');
 
 
         $this->validate();

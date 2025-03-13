@@ -13,19 +13,18 @@ class Complete extends Component
 {
     public bool $showModal = false;
 
-    public ?int $appointment_id = null;
+    public ?int $appointment_queue_id = null;
     public ?int $vital_sign_id = null;
     public ?int $treatment_record_id = null;
 
 
-    public function mount($appointment_id): void
+    public function mount($appointment_queue_id): void
     {
-        $this->appointment_id = $appointment_id;
+        $appointment_queue_id = $this->appointment_queue_id;
+        $appointment_queue = AppointmentQueue::findOrFail($appointment_queue_id);
 
-        $appointment = Appointment::find($this->appointment_id);
-
-        $this->vital_sign_id = $appointment->vitalSign->id;
-        $this->treatment_record_id = $appointment->treatmentRecord->id;
+        $this->vital_sign_id = $appointment_queue->appointment->vitalSign->id;
+        $this->treatment_record_id = $appointment_queue->appointment->treatmentRecord->id;
     }
 
     public function open(): void
@@ -40,16 +39,17 @@ class Complete extends Component
 
     public function save(): void
     {
-        $appointment_queue = AppointmentQueue::findOrFail($this->appointment_id);
+        $appointment_queue = AppointmentQueue::findOrFail($this->appointment_queue_id);
 
         if (! empty($this->vital_sign_id) && ! empty($this->treatment_record_id)) {
             try {
+
                 $appointment_queue->update([
                     'queue_status' => 'completed',
                 ]);
 
                 $appointment_queue->appointment->update([
-                    'time_out' => Carbon::now(),
+                    'completed_at' => Carbon::now('UTC'),
                 ]);
 
                 event(new UserActivityEvent(
@@ -57,7 +57,7 @@ class Complete extends Component
                     'Completed appointment for patient: ' . $appointment_queue->appointment->patient->full_name,
                     'Doctor ' . auth()->user()->username . ' completed the appointment for patient: ' . $appointment_queue->appointment->patient->full_name,
                     [
-                        'appointment_id' => $this->appointment_id,
+                        'appointment_id' => $this->appointment_queue_id,
                         'doctor_id' => $appointment_queue->appointment->doctor_id,
                     ],
                     Carbon::now()->toDateTimeString(),
@@ -72,7 +72,7 @@ class Complete extends Component
                     'Failed to complete appointment for patient: ' . $appointment_queue->appointment->patient->full_name,
                     'Doctor ' . auth()->user()->username . ' failed to complete the appointment for patient: ' . $appointment_queue->appointment->patient->full_name,
                     [
-                        'appointment_id' => $this->appointment_id,
+                        'appointment_id' => $this->appointment_queue_id,
                         'doctor_id' => $appointment_queue->appointment->doctor_id,
                     ],
                     Carbon::now()->toDateTimeString(),

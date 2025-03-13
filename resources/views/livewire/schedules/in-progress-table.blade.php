@@ -34,7 +34,7 @@
                             @endif
                         @endrole
 
-                        <livewire:schedules.complete :appointment_id="$appointment_queue->appointment_id" :wire:key="'complete-'.$appointment_queue->id" />
+                        <livewire:schedules.complete :appointment_queue_id="$appointment_queue->id" :wire:key="'complete-'.$appointment_queue->id" />
                     </div>
                 </div>
                 <div class="mt-2 pt-2 border-t border-gray-200 dark:border-gray-600">

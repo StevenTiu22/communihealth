@@ -1,6 +1,6 @@
 <div>
-    <button wire:click="open" class="bg-blue-500 hover:bg-blue-600 text-white text-sm px-3 py-1 rounded-full font-medium">
-        Show
+    <button wire:click="open" class="bg-blue-500 hover:bg-blue-600 text-white text-sm px-4 py-1 rounded-full font-medium">
+        View
     </button>
 
     <x-dialog-modal wire:model="showModal">

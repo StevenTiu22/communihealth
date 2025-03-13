@@ -1,5 +1,5 @@
 <div>
-    <button wire:click="open" class="bg-red-500 hover:bg-red-600 text-white text-sm px-2 py-1 rounded-full font-medium">
+    <button wire:click="open" class="bg-red-500 hover:bg-red-600 text-white text-sm px-2.5 py-1 rounded-full font-medium">
         Cancel
     </button>
 
