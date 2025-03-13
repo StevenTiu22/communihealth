@@ -12,9 +12,12 @@ class MedicineTransaction extends Model
 
     protected $fillable = [
         'medicine_id',
-        'user_id',
+        'bhw_id',
         'patient_id',
         'transaction_date',
+        'transaction_time',
+        'reference_number',
+        'previous_stock_level',
         'quantity'
     ];
 
@@ -30,7 +33,7 @@ class MedicineTransaction extends Model
 
     public function bhw(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'bhw_id');
     }
 
     public function patient(): BelongsTo
@@ -43,4 +46,4 @@ class MedicineTransaction extends Model
     {
         $this->medicine->updateStock($this->quantity, 'in');
     }
-} 
+}

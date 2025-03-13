@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DiseaseDemographicsController;
 use App\Http\Controllers\HealthRecordController;
 use App\Http\Controllers\MedicineController;
+use App\Http\Controllers\MedicineTransactionController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\SchedulesController;
 use App\Http\Controllers\TbPredictionController;
@@ -26,9 +27,7 @@ Route::middleware([...$authMiddleware, 'role:barangay-official|bhw|doctor'])
     ->group(function () {
         Route::get('/patients', [PatientController::class, 'index'])->name('patients.index');
         Route::get('/health-records', [HealthRecordController::class, 'index'])->name('health-records.index');
-        Route::get('/medicine-transactions', function () {
-            return view('medicine-transactions');
-        })->name('medicine-transactions.index');
+        Route::get('/medicine-transactions', [MedicineTransactionController::class, 'index'])->name('medicine-transactions.index');
         Route::get('/medicines', [MedicineController::class, 'index'])->name('medicines.index');
         Route::get('/schedules', [SchedulesController::class, 'index'])->name('schedules.index');
         Route::post('/schedules', [SchedulesController::class, 'index'])->name('schedules.complete');
