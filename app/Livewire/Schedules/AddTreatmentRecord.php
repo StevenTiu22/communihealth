@@ -5,6 +5,7 @@ namespace App\Livewire\Schedules;
 use App\Events\UserActivityEvent;
 use App\Models\Appointment;
 use App\Models\Disease;
+use App\Models\TreatmentRecord;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Validate;
@@ -15,8 +16,6 @@ class AddTreatmentRecord extends Component
     public bool $showModal = false;
     public ?int $appointment_id = null;
 
-    #[Validate('required', message: 'Please select a disease')]
-    #[Validate('exists:diseases,id', message: 'The selected disease does not exist')]
     public ?int $disease_id = null;
 
     #[Validate('required', message: 'Assessment is required')]
@@ -59,15 +58,17 @@ class AddTreatmentRecord extends Component
         $this->validate();
 
         try {
-            $appointment = Appointment::findOrFail($this->appointment_id);
-
-            $appointment->treatment_record->create([
+            $treatment_record = TreatmentRecord::create([
                 'disease_id' => $this->disease_id,
                 'assessment' => $this->assessment,
                 'diagnosis' => $this->diagnosis,
                 'treatment' => $this->treatment,
                 'medication' => $this->medication,
             ]);
+
+            $appointment = Appointment::findOrFail($this->appointment_id);
+            $appointment->treatmentRecord()->associate($treatment_record);
+            $appointment->save();
 
             event(new UserActivityEvent(
                 auth()->user(),
@@ -112,7 +113,7 @@ class AddTreatmentRecord extends Component
 
     public function render(): View
     {
-        $diseases = Disease::all()->orderBy('name', 'asc');
+        $diseases = Disease::orderBy('name', 'asc')->get();
 
         return view('livewire.schedules.add-treatment-record', [
             'diseases' => $diseases,

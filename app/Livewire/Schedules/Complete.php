@@ -3,6 +3,7 @@
 namespace App\Livewire\Schedules;
 
 use App\Events\UserActivityEvent;
+use App\Models\Appointment;
 use App\Models\AppointmentQueue;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
@@ -20,6 +21,11 @@ class Complete extends Component
     public function mount($appointment_id): void
     {
         $this->appointment_id = $appointment_id;
+
+        $appointment = Appointment::find($this->appointment_id);
+
+        $this->vital_sign_id = $appointment->vitalSign->id;
+        $this->treatment_record_id = $appointment->treatmentRecord->id;
     }
 
     public function open(): void
@@ -32,7 +38,7 @@ class Complete extends Component
         $this->showModal = false;
     }
 
-    public function complete(): void
+    public function save(): void
     {
         $appointment_queue = AppointmentQueue::findOrFail($this->appointment_id);
 
@@ -59,7 +65,7 @@ class Complete extends Component
 
                 session()->flash('success', 'Appointment completed successfully.');
 
-                $this->redirect(route('schedules.index'));
+                $this->redirectRoute('schedules.index');
             } catch (\Exception $e) {
                 event(new UserActivityEvent(
                     auth()->user(),
@@ -79,7 +85,7 @@ class Complete extends Component
         } else {
             session()->flash('error', 'Please complete the vital signs and treatment record before completing the appointment.');
 
-            $this->redirect(route('schedules.index'));
+            $this->redirectRoute('schedules.index');
         }
     }
 

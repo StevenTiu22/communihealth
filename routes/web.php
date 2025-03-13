@@ -28,6 +28,7 @@ Route::middleware([...$authMiddleware, 'role:barangay-official|bhw|doctor'])
         Route::get('/health-records', [HealthRecordController::class, 'index'])->name('health-records.index');
         Route::get('/medicines', [MedicineController::class, 'index'])->name('medicines.index');
         Route::get('/schedules', [SchedulesController::class, 'index'])->name('schedules.index');
+        Route::post('/schedules', [SchedulesController::class, 'index'])->name('schedules.complete');
         Route::get('/disease-demographics', [DiseaseDemographicsController::class, 'index'])->name('disease-demographics.index');
         Route::get('/tb-prediction', [TbPredictionController::class, 'index'])->name('tb-prediction.index');
     });

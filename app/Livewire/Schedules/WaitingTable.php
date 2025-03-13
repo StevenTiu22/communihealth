@@ -2,9 +2,12 @@
 
 namespace App\Livewire\Schedules;
 
+use App\Events\UserActivityEvent;
 use App\Models\Appointment;
 use App\Models\AppointmentQueue;
+use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -24,9 +27,52 @@ class WaitingTable extends Component
         $this->doctor_id = $doctor_id;
     }
 
-    public function show(AppointmentQueue $appointment_queue): void
+    public function start($appointment_queue_id): void
     {
-        $this->dispatch('schedules-show-details', $appointment_queue);
+        try {
+            $appointment_queue = AppointmentQueue::find($appointment_queue_id);
+
+            $appointment_queue->update([
+                'queue_status' => 'in progress',
+            ]);
+
+            event(new UserActivityEvent(
+                auth()->user(),
+                "Started an appointment queue",
+                "BHW " . auth()->user()->last_name . " started an appointment queue for " . $appointment_queue->appointment->patient->full_name . " (" . $appointment_queue->queue_number . ")",
+                [
+                    'appointment_queue_id' => $appointment_queue->id,
+                    'appointment_id' => $appointment_queue->appointment->id,
+                    'queue_number' => $appointment_queue->queue_number,
+                    'queue_status' => $appointment_queue->queue_status,
+                ],
+                Carbon::now()->toDateTimeString()
+            ));
+
+            session()->flash('message', 'Appointment queue started successfully.');
+
+            $this->redirect(route('schedules.index'));
+        } catch(\Exception $e) {
+            event(new UserActivityEvent(
+                auth()->user(),
+                "Failed to start an appointment queue",
+                "BHW " . auth()->user()->last_name . " failed to start an appointment queue for " . $appointment_queue->appointment->patient->full_name . " (" . $appointment_queue->queue_number . ")",
+                [
+                    'appointment_queue_id' => $appointment_queue->id,
+                    'appointment_id' => $appointment_queue->appointment->id,
+                    'queue_number' => $appointment_queue->queue_number,
+                    'queue_status' => $appointment_queue->queue_status,
+                ],
+                Carbon::now()->toDateTimeString()
+            ));
+
+            session()->flash('error', 'Failed to start appointment queue. Please try again later.');
+
+            // Optionally, you can log the error message for debugging
+            Log::error('Error starting appointment queue: ' . $e->getMessage());
+
+            $this->redirect(route('schedules.index'));
+        }
     }
 
     public function render(): View

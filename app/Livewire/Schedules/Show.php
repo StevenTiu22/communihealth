@@ -4,7 +4,6 @@ namespace App\Livewire\Schedules;
 
 use App\Models\AppointmentQueue;
 use Illuminate\Contracts\View\View;
-use Livewire\Attributes\On;
 use Livewire\Component;
 
 class Show extends Component
@@ -12,11 +11,14 @@ class Show extends Component
     public ?AppointmentQueue $appointment_queue;
     public bool $showModal = false;
 
-    #[On('schedules-show-details')]
-    public function open($appointment_queue): void
+    public function mount($appointment_queue_id): void
+    {
+        $this->appointment_queue = AppointmentQueue::findOrFail($appointment_queue_id);
+    }
+
+    public function open(): void
     {
         $this->showModal = true;
-        $this->appointment_queue = $appointment_queue;
     }
 
     public function close(): void
@@ -24,7 +26,6 @@ class Show extends Component
         $this->showModal = false;
         $this->resetErrorBag();
         $this->resetValidation();
-        $this->reset();
     }
 
     public function render(): View
