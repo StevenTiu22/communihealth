@@ -9,6 +9,6 @@ class AuditTrailController extends Controller
 {
     public function index(): View
     {
-        return view('barangay-official.audit-trail', ['title' => 'Audit Trail']);
+        return view('audit-trail.index', ['title' => 'Audit Trail']);
     }
 }

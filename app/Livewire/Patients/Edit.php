@@ -33,22 +33,37 @@ class Edit extends Component
 
         $this->form->fill($this->patient->address->toArray());
 
-        if ($this->patient->parents->where('pivot.relationship', 'mother'))
-        {
-            $this->form->mother_id = $this->patient->parents->where('pivot.relationship', 'mother')->first()->id;
-            $this->form->mother_first_name = $this->patient->parents->where('pivot.relationship', 'mother')->first()->first_name;
-            $this->form->mother_middle_name = $this->patient->parents->where('pivot.relationship', 'mother')->first()->middle_name;
-            $this->form->mother_last_name = $this->patient->parents->where('pivot.relationship', 'mother')->first()->last_name;
-            $this->form->mother_philhealth = $this->patient->parents->where('pivot.relationship', 'mother')->first()->philhealth_no;
+        $mother = $this->patient->parents->where('pivot.relationship', 'mother')->first();
+
+        // Check if mother record exists before accessing properties
+        if ($mother) {
+            $this->form->mother_id = $mother->id;
+            $this->form->mother_first_name = $mother->first_name;
+            $this->form->mother_middle_name = $mother->middle_name;
+            $this->form->mother_last_name = $mother->last_name;
+            $this->form->mother_philhealth = $mother->philhealth_no;
         }
 
-        if ($this->patient->parents->where('pivot.relationship', 'father'))
-        {
-            $this->form->father_id = $this->patient->parents->where('pivot.relationship', 'father')->first()->id;
-            $this->form->father_first_name = $this->patient->parents->where('pivot.relationship', 'father')->first()->first_name;
-            $this->form->father_middle_name = $this->patient->parents->where('pivot.relationship', 'father')->first()->middle_name;
-            $this->form->father_last_name = $this->patient->parents->where('pivot.relationship', 'father')->first()->last_name;
-            $this->form->father_philhealth = $this->patient->parents->where('pivot.relationship', 'father')->first()->philhealth_no;
+        $mother = $this->patient->parents->where('pivot.relationship', 'mother')->first();
+
+        // Check if mother record exists before accessing properties
+        if ($mother) {
+            $this->form->mother_id = $mother->id;
+            $this->form->mother_first_name = $mother->first_name;
+            $this->form->mother_middle_name = $mother->middle_name;
+            $this->form->mother_last_name = $mother->last_name;
+            $this->form->mother_philhealth = $mother->philhealth_no;
+        }
+
+        $father = $this->patient->parents->where('pivot.relationship', 'father')->first();
+
+        // Check if father record exists before accessing properties
+        if ($father) {
+            $this->form->father_id = $father->id;
+            $this->form->father_first_name = $father->first_name;
+            $this->form->father_middle_name = $father->middle_name;
+            $this->form->father_last_name = $father->last_name;
+            $this->form->father_philhealth = $father->philhealth_no;
         }
     }
 
