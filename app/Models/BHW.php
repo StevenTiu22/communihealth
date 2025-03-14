@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\User;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,32 +10,17 @@ class BHW extends Model
 {
     use HasFactory;
 
+    protected $table = 'bhw';
+
     protected $fillable = [
         'user_id',
-        'local_government_unit',
-        'issuance_date'
+        'certification_no',
+        'assigned_barangay',
     ];
-
-    protected function casts() : array
-    {
-        return [
-            'issuance_date' => 'date'
-        ];
-    }
 
     // Relationships
     public function user() : BelongsTo
     {
         return $this->belongsTo(User::class);
     }
-
-    // Accessors and Mutators
-    protected function localGovernmentUnit() : Attribute
-    {
-        return Attribute::make(
-            set: fn ($value) => strtolower($value)
-        );
-    }
-
-    // Scopes
 }

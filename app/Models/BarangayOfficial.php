@@ -23,8 +23,8 @@ class BarangayOfficial extends Model
     ];
 
     protected $casts = [
-        'term_start' => 'date',
-        'term_end' => 'date'
+        'term_start' => 'datetime:Y-m-d',
+        'term_end' => 'datetime:Y-m-d'
     ];
 
     // Relationship
@@ -39,22 +39,6 @@ class BarangayOfficial extends Model
         return Attribute::make(
             get: fn ($value) => ucfirst($value),
             set: fn ($value) => strtolower($value)
-        );
-    }
-
-    protected function termStart(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => Carbon::parse($value)->format('F j, Y'),
-            set: fn ($value) => Carbon::parse($value)->format('Y-m-d')
-        );
-    }
-
-    protected function termEnd(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => Carbon::parse($value)->format('F j, Y'),
-            set: fn ($value) => Carbon::parse($value)->format('Y-m-d')
         );
     }
 

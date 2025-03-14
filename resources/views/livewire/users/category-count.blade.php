@@ -5,29 +5,29 @@
         <!-- Barangay Officials -->
         <div class="bg-blue-600 rounded-lg p-4 h-28 flex items-center">
             <div class="flex flex-col">
-                <span class="text-gray-100 text-lg mb-1">Barangay Officials</span>
-                <span class="text-white text-4xl font-bold">15</span>
+                <span class="text-gray-100 text-lg mb-1">{{__('Barangay Officials')}}</span>
+                <span class="text-white text-4xl font-bold">{{ $barangay_official_count }}</span>
             </div>
         </div>
         <!-- BHW -->
         <div class="bg-green-600 rounded-lg p-4 h-28 flex items-center">
             <div class="flex flex-col">
-                <span class="text-gray-100 text-lg mb-1">BHW</span>
-                <span class="text-white text-4xl font-bold">8</span>
+                <span class="text-gray-100 text-lg mb-1">{{__('BHWs')}}</span>
+                <span class="text-white text-4xl font-bold">{{ $bhw_count }}</span>
             </div>
         </div>
         <!-- Doctor -->
         <div class="bg-purple-600 rounded-lg p-4 h-28 flex items-center">
             <div class="flex flex-col">
-                <span class="text-gray-100 text-lg mb-1">Doctor</span>
-                <span class="text-white text-4xl font-bold">3</span>
+                <span class="text-gray-100 text-lg mb-1">{{__('Doctors')}}</span>
+                <span class="text-white text-4xl font-bold">{{ $doctor_count }}</span>
             </div>
         </div>
         <!-- Deleted Accounts -->
         <div class="bg-red-600 rounded-lg p-4 h-28 flex items-center">
             <div class="flex flex-col">
-                <span class="text-gray-100 text-lg mb-1">Deleted Accounts</span>
-                <span class="text-white text-4xl font-bold">2</span>
+                <span class="text-gray-100 text-lg mb-1">{{__('Deleted Accounts')}}</span>
+                <span class="text-white text-4xl font-bold">{{ $deleted_user_count }}</span>
             </div>
         </div>
     </div>

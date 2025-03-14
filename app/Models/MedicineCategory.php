@@ -12,7 +12,8 @@ class MedicineCategory extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name'
+        'name',
+        'description',
     ];
 
     // Relationships

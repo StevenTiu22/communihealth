@@ -12,50 +12,34 @@ class MedicineService
 {
     public function createMedicine(array $data): Medicine
     {
-        return DB::transaction(function () use ($data) {
-            // Format dates properly
-            $data['manufactured_date'] = Carbon::parse($data['manufactured_date'])->format('Y-m-d');
-            $data['delivery_date'] = Carbon::parse($data['delivery_date'])->format('Y-m-d');
-            $data['expiry_date'] = Carbon::parse($data['expiry_date'])->format('Y-m-d');
+        // Calculate stock level
+        $data['stock_level'] = $this->calculateStockLevel(
+            (int) $data['num_of_boxes'],
+            (int) $data['qty_per_boxes']
+        );
 
-            // Calculate initial stock
-            $data['current_stock'] = $this->calculateInitialStock(
-                (int) $data['number_of_boxes'], 
-                (int) $data['quantity_per_boxes']
-            );
-
-            // Create the medicine record
-            $medicine = Medicine::create([
-                'category_id' => $data['category_id'],
-                'name' => $data['name'],
-                'generic_name' => $data['generic_name'],
-                'manufacturer' => $data['manufacturer'],
-                'description' => $data['description'],
-                'tracking_number' => $data['tracking_number'],
-                'delivery_date' => $data['delivery_date'],
-                'manufactured_date' => $data['manufactured_date'], 
-                'expiry_date' => $data['expiry_date'],
-                'number_of_boxes' => $data['number_of_boxes'],
-                'quantity_per_boxes' => $data['quantity_per_boxes'],
-                'source' => $data['source'],
-                'current_stock' => $data['current_stock']
-            ]);
-
-            if (!$medicine) {
-                throw new Exception('Failed to create medicine record');
-            }
-
-            return $medicine;
-        });
+        // Create the medicine record
+        return Medicine::create([
+            'category_id' => $data['category_id'],
+            'name' => $data['name'],
+            'generic_name' => $data['generic_name'],
+            'manufacturer' => $data['manufacturer'],
+            'description' => $data['description'],
+            'tracking_number' => $data['tracking_number'],
+            'delivery_date' => $data['delivery_date'],
+            'manufactured_date' => $data['manufactured_date'],
+            'expiry_date' => $data['expiry_date'],
+            'num_of_boxes' => $data['num_of_boxes'],
+            'qty_per_boxes' => $data['qty_per_boxes'],
+            'unit_of_measure' => $data['unit_of_measure'],
+            'source' => $data['source'],
+            'stock_level' => $data['stock_level']
+        ]);
     }
 
-    private function calculateInitialStock(int $boxes, int $quantity): int
+    private function calculateStockLevel(int $boxes, int $quantity): int
     {
-        $total = $boxes * $quantity;
-        if ($total <= 0) {
-            throw new Exception('Initial stock must be greater than 0');
-        }
-        return $total;
+        return $boxes * $quantity;
     }
 
     private function isExpired(Carbon $date): bool
@@ -63,29 +47,22 @@ class MedicineService
         return $date->isPast();
     }
 
-    public function updateMedicine(Medicine $medicine, array $data): Medicine
+    public function update(Medicine $medicine, array $data): Medicine
     {
-        return DB::transaction(function () use ($medicine, $data) {
-            try {
-                // Format dates properly
-                $data['manufactured_date'] = Carbon::parse($data['manufactured_date'])->startOfDay();
-                $data['delivery_date'] = Carbon::parse($data['delivery_date'])->startOfDay();
-                $data['expiry_date'] = Carbon::parse($data['expiry_date'])->endOfDay();
+        try {
+            // Calculate updated stock
+            $data['stock_level'] = $this->calculateStockLevel(
+                (int) $data['num_of_boxes'],
+                (int) $data['qty_per_boxes']
+            );
 
-                // Calculate updated stock
-                $data['current_stock'] = $this->calculateInitialStock(
-                    (int) $data['number_of_boxes'],
-                    (int) $data['quantity_per_boxes']
-                );
+            // Update the medicine record
+            $medicine->update($data);
 
-                // Update the medicine record
-                $medicine->update($data);
-
-                return $medicine->fresh();
-            } catch (\Exception $e) {
-                throw new Exception('Failed to update medicine: ' . $e->getMessage());
-            }
-        });
+            return $medicine->fresh();
+        } catch (\Exception $e) {
+            throw new Exception('Failed to update medicine: ' . $e->getMessage());
+        }
     }
 
     public function deleteMedicine(Medicine $medicine): bool
@@ -108,7 +85,7 @@ class MedicineService
     {
         return DB::transaction(function () use ($data) {
             $medicine = Medicine::findOrFail($data['medicine_id']);
-            
+
             if ($medicine->isExpired()) {
                 throw new Exception('Cannot dispense expired medicine');
             }
@@ -119,7 +96,7 @@ class MedicineService
 
             $transaction = MedicineTransaction::create($data);
             $medicine->updateStock($data['quantity'], 'out');
-            
+
             return $transaction;
         });
     }
@@ -129,13 +106,13 @@ class MedicineService
         return DB::transaction(function () use ($transaction, $data) {
             // Revert old stock
             $transaction->revertStock();
-            
+
             // Update transaction
             $transaction->update($data);
-            
+
             // Update new stock
             $transaction->medicine->updateStock($data['quantity'], 'out');
-            
+
             return $transaction;
         });
     }
@@ -155,4 +132,4 @@ class MedicineService
             return $transaction->forceDelete();
         });
     }
-} 
+}

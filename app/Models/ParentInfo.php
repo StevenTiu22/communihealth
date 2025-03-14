@@ -23,8 +23,9 @@ class ParentInfo extends Model
     // Relationships
     public function patients() : BelongsToMany
     {
-        return $this->belongsToMany(Patient::class, 'patient_has_parents', 'parent_id', 'patient_id')
-                    ->withTimestamps();
+        return $this->belongsToMany(Patient::class, 'patient_parent', 'parent_id', 'patient_id')
+            ->withPivot('relationship')
+            ->withTimestamps();
     }
 
     // Accessors and mutators

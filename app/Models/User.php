@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Http\Requests\UserRequest;
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -12,16 +11,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory;
     use HasRoles;
+    use LogsActivity;
+    use Notifiable;
     use SoftDeletes;
     use HasProfilePhoto;
     use TwoFactorAuthenticatable;
@@ -40,7 +42,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'contact_no',
         'email',
         'username',
+        'password',
         'profile_photo_path',
+        'last_login_at'
     ];
 
     /**
@@ -51,8 +55,6 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $hidden = [
         'password',
         'remember_token',
-        'two_factor_recovery_codes',
-        'two_factor_secret',
     ];
 
     /**
@@ -72,7 +74,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected function casts(): array
     {
         return [
-            'birth_date' => 'date',
+            'birth_date' => 'datetime:Y-m-d',
             'password' => 'hashed',
             'email_verified_at' => 'datetime',
         ];
@@ -85,59 +87,6 @@ class User extends Authenticatable implements MustVerifyEmail
         static::created(function ($user) {
             $user->roles()->detach();
         });
-    }
-
-    // Validation
-    /**
-     * Validate attributes using UserRequest rules
-     *
-     * @param array $attributes
-     * @throws ValidationException
-     */
-    public static function validateAttributes(array $attributes): void
-    {
-        $request = new UserRequest();
-        $rules = $request->rules();
-
-        // Skip validation for factory-created instances
-        if (app()->environment('testing') && isset($attributes['_skip_validation'])) {
-            unset($attributes['_skip_validation']);
-            return;
-        }
-
-        $validator = Validator::make($attributes, $rules);
-
-        if ($validator->fails()) {
-            throw ValidationException::withMessages($validator->errors()->toArray());
-        }
-    }
-
-    /**
-     * Create a new model instance.
-     *
-     * @param array $attributes
-     * @return static
-     * @throws ValidationException
-     */
-    public static function make($attributes = [])
-    {
-        static::validateAttributes($attributes);
-        return new static($attributes);
-    }
-
-    /**
-     * Create and save a new model instance.
-     *
-     * @param array $attributes
-     * @return static
-     * @throws ValidationException
-     */
-    public static function create(array $attributes = []): User
-    {
-        static::validateAttributes($attributes);
-        $model = new static($attributes);
-        $model->save();
-        return $model;
     }
 
     // Relationships
@@ -162,66 +111,28 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     // Accessors and mutators
-    protected function firstName() : Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => ucfirst($value),
-            set: fn ($value) => strtolower($value)
-        );
-    }
-
-    protected function lastName() : Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => ucfirst($value),
-            set: fn ($value) => strtolower($value)
-        );
-    }
-
-    protected function middleName() : Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => $value ? ucfirst($value) : '',
-            set: fn ($value) => $value ? strtolower($value) : ''
-        );
-    }
-
     protected function fullName() : Attribute
     {
         return Attribute::make(
             get: function () {
                 $middle_initial = $this->middle_name ? $this->middle_name[0] . '.' : '';
-                return "{$this->last_name}, {$this->first_name} {$middle_initial}";
+                return ucwords("{$this->last_name}, {$this->first_name} {$middle_initial}");
             }
         );
     }
 
-    protected function sex(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => $value === 0 ? 'male' : 'female',
-        );
-    }
-
-    protected function birthDate(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => Carbon::parse($value)->format('F j, Y'),
-            set: fn ($value) => Carbon::parse($value)->format('Y-m-d')
-        );
-    }
-
-    protected function contactNo(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => preg_replace('/^(\d{3})(\d{3})(\d{4})/', "($1) $2-$3", $value),
-            set: fn ($value) => preg_replace('/\D/', '', $value)
-        );
-    }
 
     // Scopes
     public function scopeVerifiedUser($query): Builder
     {
         return $query->whereNotNull('email_verified_at');
+    }
+
+    // Logging
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 }

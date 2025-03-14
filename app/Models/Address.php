@@ -26,7 +26,7 @@ class Address extends Model
     // Relationships
     public function addressable() : MorphTo
     {
-        return $this->morphTo();
+        return $this->morphTo(__FUNCTION__, 'addressable_type', 'addressable_id');
     }
 
     // Accessors and mutators

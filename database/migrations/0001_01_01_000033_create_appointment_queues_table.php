@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('appointment_id')->nullable()->constrained('appointments')->nullOnDelete();
             $table->integer('queue_number');
             $table->date('queue_date');
-            $table->enum('queue_status', ['waiting', 'in progress', 'completed', 'no show', 'cancelled'])->default('waiting');
+            $table->enum('queue_status', ['waiting', 'in progress', 'completed', 'cancelled'])->default('waiting');
             $table->string('queue_type')->default('walk-in');
             $table->text('remarks')->nullable();
             $table->timestamp('called_at')->nullable();

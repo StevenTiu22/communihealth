@@ -16,27 +16,26 @@ class Appointment extends Model
         'doctor_id',
         'bhw_id',
         'appointment_type_id',
+        'treatment_record_id',
+        'vital_signs_id',
+        'appointment_date',
+        'time_in',
+        'time_out',
         'chief_complaint',
-        'status',
-        'is_walk_in',
-        'recorded_at'
+        'remarks',
+        'is_cancelled',
+        'cancellation_reason',
     ];
 
     protected $casts = [
-        'is_walk_in' => 'boolean',
-        'recorded_at' => 'datetime'
-    ];
-
-    public const STATUSES = [
-        'scheduled' => 'Scheduled',
-        'in_progress' => 'In Progress',
-        'completed' => 'Completed',
-        'cancelled' => 'Cancelled'
+        'time_in' => 'timestamp',
+        'time_out' => 'timestamp',
+        'appointment_date' => 'datetime:Y-m-d',
     ];
 
     public function patient(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'patient_id');
+        return $this->belongsTo(Patient::class);
     }
 
     public function doctor(): BelongsTo
@@ -54,19 +53,18 @@ class Appointment extends Model
         return $this->belongsTo(AppointmentType::class);
     }
 
-    public function schedule(): HasOne
+    public function vitalSign(): BelongsTo
     {
-        return $this->hasOne(Schedule::class);
+        return $this->belongsTo(VitalSign::class, 'vital_signs_id');
     }
 
-    // Helper methods
-    public function getScheduledDateAttribute()
+    public function treatmentRecord(): BelongsTo
     {
-        return $this->schedule?->date;
+        return $this->belongsTo(TreatmentRecord::class, 'treatment_record_id');
     }
 
-    public function getScheduledTimeAttribute()
+    public function appointmentQueue(): HasOne
     {
-        return $this->schedule?->scheduled_time;
+        return $this->hasOne(AppointmentQueue::class);
     }
-} 
+}

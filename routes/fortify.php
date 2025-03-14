@@ -74,7 +74,7 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
                 ->name('register');
         }
 
-        Route::post(RoutePath::for('user-accounts.store', '/admin/user-accounts/'), [RegisteredUserController::class, 'store']);
+        Route::post(RoutePath::for('user-accounts.store', '/barangay-official/user-accounts/'), [RegisteredUserController::class, 'store']);
             //->middleware(['guest:'.config('fortify.guard')]);
     }
 

@@ -57,6 +57,11 @@ return [
             'throw' => false,
         ],
 
+        'tmp-for-tests' => [
+            'driver' => 'local',
+            'root' => storage_path('app/tmp-for-tests'),
+        ],
+
     ],
 
     /*

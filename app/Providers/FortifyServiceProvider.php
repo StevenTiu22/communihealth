@@ -6,14 +6,27 @@ use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
+use App\Mail\VerifyMail;
+use App\Notifications\VerifyEmailNotification;
+use Carbon\Carbon;
 use http\Client\Curl\User;
+use Illuminate\Auth\Middleware\RedirectIfAuthenticated;
+use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
+use Laravel\Fortify\Contracts\EmailVerificationNotificationSentResponse;
+use Laravel\Fortify\Contracts\LoginResponse;
 use Laravel\Fortify\Fortify;
+use Laravel\Fortify\Http\Responses\VerifyEmailResponse;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -30,11 +43,12 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Fortify::createUsersUsing(CreateNewUser::class);
+        // Fortify::createUsersUsing(CreateNewUser::class);
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
 
+        // Login & Logout
         Fortify::loginView(function () {
             return view('auth.login');
         });
@@ -44,16 +58,89 @@ class FortifyServiceProvider extends ServiceProvider
                 ->orWhere('username', $request->email)
                 ->first();
 
-            if ($user &&
-                Hash::check($request->password, $user->password)) {
+            if ($user && Hash::check($request->password, $user->password)) {
                 return $user;
             }
+
+            return null;
         });
 
         RateLimiter::for('login', function (Request $request) {
             $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())).'|'.$request->ip());
 
-            return Limit::perMinute(3)->by($throttleKey);
+            return Limit::perMinute(1000)->by($throttleKey);
+        });
+
+        $this->app->instance(LoginResponse::class, new class implements LoginResponse {
+            public function toResponse($request): Response|RedirectResponse|JsonResponse
+            {
+                if ($request->user()->hasRole('barangay-official'))
+                {
+                    $path = route('barangay-official.dashboard');
+                }
+                elseif ($request->user()->hasRole('bhw'))
+                {
+                    $path = route('bhw.dashboard');
+                }
+                elseif ($request->user()->hasRole('doctor'))
+                {
+                    $path = route('doctor.dashboard');
+                }
+                else
+                {
+                    $path = route('login');
+                }
+
+                activity()
+                    ->causedBy($request->user())
+                    ->useLog('Successful Login')
+                    ->log("User {$request->user()->username} has logged in.");
+
+                return $request->wantsJson()
+                    ? response()->json(['two_factor' => false])
+                    : redirect()->intended($path);
+            }
+        });
+
+        // Email Verification...
+        Fortify::verifyEmailView(function () {
+            return view('auth.verify-email');
+        });
+
+        $this->app->instance(EmailVerificationNotificationSentResponse::class, new class implements EmailVerificationNotificationSentResponse {
+            public function toResponse($request): Response|RedirectResponse
+            {
+                activity()
+                    ->causedBy($request->user())
+                    ->useLog('Email Verification Notification Sent')
+                    ->log("User {$request->user()->username} has requested an email verification link.");
+
+                return $request->wantsJson()
+                    ? response('', 204)
+                    : back()->with('status', 'verification-link-sent');
+            }
+        });
+
+        $this->app->instance(\Laravel\Fortify\Contracts\VerifyEmailResponse::class, new class implements \Laravel\Fortify\Contracts\VerifyEmailResponse {
+            public function toResponse($request): Response|RedirectResponse
+            {
+                activity()
+                    ->causedBy($request->user())
+                    ->withProperties([
+                        'old' => ['email_verified_at' => null],
+                        'attributes' => ['email_verified_at' => Carbon::now()]
+                    ])
+                    ->useLog('Successful Email Verification')
+                    ->log("User {$request->user()->id} has verified their email address.");
+
+                return $request->wantsJson()
+                    ? response('', 204)
+                    : redirect()->intended(config('fortify.home') . '?verified=1');
+            }
+        });
+
+        RateLimiter::for('verification', function (Request $request) {
+            return Limit::perMinute(3)->by($request->user()->id ?: $request->ip());
         });
 
         RateLimiter::for('two-factor', function (Request $request) {

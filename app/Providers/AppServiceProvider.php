@@ -2,9 +2,16 @@
 
 namespace App\Providers;
 
-use App\Models\User;
+use App\Events\UserActivityEvent;
+use App\Listeners\LogVerifiedUser;
+use App\Listeners\UserActivityLogger;
+use Carbon\Carbon;
+use Illuminate\Auth\Events\Verified;
+use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Gate;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,6 +28,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Event::listen(UserActivityEvent::class, UserActivityLogger::class);
     }
 }
