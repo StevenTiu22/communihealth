@@ -51,9 +51,10 @@
                                         <span x-text="currentTime">{{ now()->setTimezone('Asia/Manila')->format('h:i A') }} (UTC+8)</span>
                                     </div>
                                 </div>
-
+                                @role('bhw')
                                 <!-- Add to Queue Button -->
-                                <livewire:schedules.add-queue />
+                                    <livewire:schedules.add-queue />
+                                @endrole
                             </div>
                         </div>
 

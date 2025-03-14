@@ -39,29 +39,6 @@ Route::middleware([...$authMiddleware, 'role:barangay-official|bhw|doctor'])
 Route::middleware([...$authMiddleware, 'role:barangay-official'])
     ->prefix('barangay-official')
     ->group(function() {
-        Route::get('/dashboard', [DashboardController::class, 'barangayOfficial'])->name('barangay-official.dashboard');
         Route::get('/audit-trail', [AuditTrailController::class, 'index'])->name('audit-trail.index');
         Route::get('/users', [UserController::class, 'index'])->name('users.index');
     });
-
-// BHW Routes
-Route::middleware([...$authMiddleware, 'role:bhw'])
-    ->prefix('bhw')
-    ->name('bhw.')
-    ->group(function() {
-        Route::get('/dashboard', [DashboardController::class, 'bhw'])->name('dashboard');
-    });
-
-// Doctor Routes
-Route::middleware([...$authMiddleware, 'role:doctor'])
-    ->prefix('doctor')
-    ->name('doctor.')
-    ->group(function() {
-        Route::get('/dashboard', [DashboardController::class, 'doctor'])->name('dashboard');
-    });
-
-// Test Routes
-Route::get('/test-email', function () {
-    \Illuminate\Support\Facades\Mail::to('steventiu22@gmail.com')->send(new \App\Mail\TestEmail());
-    return 'Email sent!';
-});

@@ -4,7 +4,7 @@
         <div class="flex justify-between h-16">
             <div class="flex items-center px-4 w-full justify-between">
                 <div class="flex items-center space-x-3">
-                    <a href="{{ route('barangay-official.dashboard') }}" class="flex items-center space-x-3">
+                    <a href="{{ route('disease-demographics.index') }}" class="flex items-center space-x-3">
                         <x-application-logo class="h-9 w-auto" />
                         <span class="text-lg font-semibold text-gray-900 dark:text-gray-100">
                             {{__('CommuniHealth+')}}
@@ -134,8 +134,8 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link href="{{ route('barangay-official.dashboard') }}" :active="request()->routeIs('barangay-official.dashboard')">
-                {{ __('Dashboard') }}
+            <x-responsive-nav-link href="{{ route('disease-demographics.index') }}" :active="request()->routeIs('barangay-official.dashboard')">
+                {{ __('Analytics') }}
             </x-responsive-nav-link>
         </div>
 

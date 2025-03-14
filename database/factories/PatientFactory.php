@@ -21,10 +21,10 @@ class PatientFactory extends Factory
             'middle_name' => $this->faker->optional(0.7)->lastName(),
             'last_name' => $this->faker->lastName(),
             'gender' => $this->faker->randomElement(['0', '1']),
-            'birth_date' => $this->faker->dateTimeBetween('-50 years', '-1 year'),
+            'birth_date' => $this->faker->date(),
             'contact_number' => '09' . $this->faker->numerify('#########'),
-            'is_4ps' => $this->faker->boolean(30), // 30% chance of being true
-            'is_NHTS' => $this->faker->boolean(30),
+            'is_4ps' => $this->faker->randomElement([0, 1]),
+            'is_NHTS' => $this->faker->randomElement([0, 1]),
             'profile_photo_path' => 'images/default-avatar.png'
         ];
     }

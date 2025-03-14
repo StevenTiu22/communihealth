@@ -140,25 +140,31 @@
                             <div class="col-span-1">
                                 <h3 class="text-base font-medium text-white mb-4">Mother's Information</h3>
                                 <div class="grid grid-cols-1 gap-4">
-                                    <div>
-                                        <h4 class="font-medium text-gray-300">First Name</h4>
-                                        <p class="mt-1 text-white capitalize">{{ $mother->first_name ?? 'N/A' }}</p>
-                                    </div>
+                                    @if(isset($mother))
+                                        <div>
+                                            <h4 class="font-medium text-gray-300">First Name</h4>
+                                            <p class="mt-1 text-white capitalize">{{ $mother->first_name ?? 'N/A' }}</p>
+                                        </div>
 
-                                    <div>
-                                        <h4 class="font-medium text-gray-300">Middle Name</h4>
-                                        <p class="mt-1 text-white capitalize">{{ $mother->middle_name ?? 'N/A' }}</p>
-                                    </div>
+                                        <div>
+                                            <h4 class="font-medium text-gray-300">Middle Name</h4>
+                                            <p class="mt-1 text-white capitalize">{{ $mother->middle_name ?? 'N/A' }}</p>
+                                        </div>
 
-                                    <div>
-                                        <h4 class="font-medium text-gray-300">Last Name</h4>
-                                        <p class="mt-1 text-white capitalize">{{ $mother->last_name ?? 'N/A' }}</p>
-                                    </div>
+                                        <div>
+                                            <h4 class="font-medium text-gray-300">Last Name</h4>
+                                            <p class="mt-1 text-white capitalize">{{ $mother->last_name ?? 'N/A' }}</p>
+                                        </div>
 
-                                    <div>
-                                        <h4 class="font-medium text-gray-300">PhilHealth Number</h4>
-                                        <p class="mt-1 text-white">{{ $mother->philhealth_no == '' ? 'N/A' : $mother->philhealth_no }}</p>
-                                    </div>
+                                        <div>
+                                            <h4 class="font-medium text-gray-300">PhilHealth Number</h4>
+                                            <p class="mt-1 text-white">{{ $mother->philhealth_no == '' ? 'N/A' : $mother->philhealth_no }}</p>
+                                        </div>
+                                    @else
+                                        <div>
+                                            <p class="text-white">No mother's information available.</p>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
 
@@ -166,25 +172,31 @@
                             <div class="col-span-1">
                                 <h3 class="text-base font-medium text-white mb-4">Father's Information</h3>
                                 <div class="grid grid-cols-1 gap-4">
-                                    <div>
-                                        <h4 class="font-medium text-gray-300">First Name</h4>
-                                        <p class="mt-1 text-white capitalize">{{ $father->first_name ?? 'N/A' }}</p>
-                                    </div>
+                                    @if(isset($father))
+                                        <div>
+                                            <h4 class="font-medium text-gray-300">First Name</h4>
+                                            <p class="mt-1 text-white capitalize">{{ $father->first_name ?? 'N/A' }}</p>
+                                        </div>
 
-                                    <div>
-                                        <h4 class="font-medium text-gray-300">Middle Name</h4>
-                                        <p class="mt-1 text-white capitalize">{{ $father->middle_name ?? 'N/A' }}</p>
-                                    </div>
+                                        <div>
+                                            <h4 class="font-medium text-gray-300">Middle Name</h4>
+                                            <p class="mt-1 text-white capitalize">{{ $father->middle_name ?? 'N/A' }}</p>
+                                        </div>
 
-                                    <div>
-                                        <h4 class="font-medium text-gray-300">Last Name</h4>
-                                        <p class="mt-1 text-white capitalize">{{ $father->last_name ?? 'N/A' }}</p>
-                                    </div>
+                                        <div>
+                                            <h4 class="font-medium text-gray-300">Last Name</h4>
+                                            <p class="mt-1 text-white capitalize">{{ $father->last_name ?? 'N/A' }}</p>
+                                        </div>
 
-                                    <div>
-                                        <h4 class="font-medium text-gray-300">PhilHealth Number</h4>
-                                        <p class="mt-1 text-white">{{ $father->philhealth_no == '' ? 'N/A' : $father->philhealth_no }}</p>
-                                    </div>
+                                        <div>
+                                            <h4 class="font-medium text-gray-300">PhilHealth Number</h4>
+                                            <p class="mt-1 text-white">{{ $father->philhealth_no == '' ? 'N/A' : $father->philhealth_no }}</p>
+                                        </div>
+                                    @else
+                                        <div>
+                                            <p class="text-white">No father's information available.</p>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>

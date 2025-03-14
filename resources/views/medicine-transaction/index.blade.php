@@ -4,8 +4,9 @@
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200">
                 {{ __('Medicine Transactions') }}
             </h2>
-
+            @role('bhw')
             <livewire:medicine-transaction.dispense />
+            @endrole
         </div>
 
         <!-- Search and Filter Section -->
