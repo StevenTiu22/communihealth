@@ -74,22 +74,7 @@ class FortifyServiceProvider extends ServiceProvider
         $this->app->instance(LoginResponse::class, new class implements LoginResponse {
             public function toResponse($request): Response|RedirectResponse|JsonResponse
             {
-                if ($request->user()->hasRole('barangay-official'))
-                {
-                    $path = route('barangay-official.dashboard');
-                }
-                elseif ($request->user()->hasRole('bhw'))
-                {
-                    $path = route('bhw.dashboard');
-                }
-                elseif ($request->user()->hasRole('doctor'))
-                {
-                    $path = route('doctor.dashboard');
-                }
-                else
-                {
-                    $path = route('login');
-                }
+                $path = route('disease-demographics.index');
 
                 activity()
                     ->causedBy($request->user())
