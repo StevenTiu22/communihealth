@@ -7,6 +7,7 @@ use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\MedicineTransactionController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\SchedulesController;
+use App\Http\Controllers\TBPredictionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
