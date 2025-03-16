@@ -1,14 +1,12 @@
 <?php
 
 use App\Http\Controllers\AuditTrailController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DiseaseDemographicsController;
 use App\Http\Controllers\HealthRecordController;
 use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\MedicineTransactionController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\SchedulesController;
-use App\Http\Controllers\TbPredictionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -32,7 +30,7 @@ Route::middleware([...$authMiddleware, 'role:barangay-official|bhw|doctor'])
         Route::get('/schedules', [SchedulesController::class, 'index'])->name('schedules.index');
         Route::post('/schedules', [SchedulesController::class, 'index'])->name('schedules.complete');
         Route::get('/disease-demographics', [DiseaseDemographicsController::class, 'index'])->name('disease-demographics.index');
-        Route::get('/tb-prediction', [TbPredictionController::class, 'index'])->name('tb-prediction.index');
+        Route::get('/tb-prediction', [TBPredictionController::class, 'index'])->name('tb-prediction.index');
     });
 
 // Barangay Official Routes
