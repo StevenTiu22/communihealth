@@ -15,7 +15,7 @@
                     </div>
                 </div>
             </div>
-            <livewire:tb-forecast-table />
+            <livewire:t-b-forecast-table />
         </div>
     </div>
 </x-app-layout>
