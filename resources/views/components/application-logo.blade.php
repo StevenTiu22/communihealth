@@ -1,1 +1,1 @@
-<img src="{{ asset('logo/sjc.png') }}" {{ $attributes }} alt="SJC Logo">
+<img src="{{ Storage::URL('logo/sjc.png') }}" {{ $attributes }} alt="SJC Logo">
