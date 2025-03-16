@@ -45,9 +45,9 @@ class Add extends Component
     {
         // Profile photo handling
         if ($this->profile_photo === null)
-            $this->form->profile_photo_path = 'images/default-avatar.png';
+            $this->form->profile_photo_path = 'profile-photos/default-avatar.png';
         else
-            $this->form->profile_photo_path = $this->profile_photo->store('images', 'public');
+            $this->form->profile_photo_path = $this->profile_photo->store('profile-photos', 'public');
 
         // Validating form data
         $validated_data = $this->form->validate();

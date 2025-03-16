@@ -8,7 +8,7 @@
         <title>{{ $title }} | CommuniHealth+</title>
 
         <!-- Favicon -->
-        <link rel="shortcut icon" type="image/png" href="{{ asset('logo/sjc.png') }}">
+        <link rel="shortcut icon" type="image/png" href="{{ asset('storage/public/logo/sjc.png') }}">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
