@@ -26,8 +26,11 @@ class InProgressTable extends Component
     public function render(): View
     {
         $appointment_queues = AppointmentQueue::query()
-            ->where('queue_status', 'in progress')
-            ->with(['appointment.patient', 'appointment.appointmentType', 'appointment.doctor']);
+            ->where('queue_status', 'in_progress')
+            ->with(['appointment', 'appointment.patient', 'appointment.doctor', 'appointment.appointmentType'])
+            ->whereHas('appointment', function ($query) {
+                $query->where('appointment_date', '=', now()->format('Y-m-d'));
+            });
 
         if (! empty($this->search)) {
             $appointment_queues->whereHas('appointment.patient', function ($query) {
