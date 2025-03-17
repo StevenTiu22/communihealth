@@ -62,6 +62,96 @@
                     </div>
                 </div>
 
+
+                <!-- Model Version Info - ADD THIS SECTION -->
+                <div class="bg-gray-800 border border-gray-700 rounded-md mb-6 overflow-hidden">
+                    <div x-data="{ open: false }" class="w-full">
+                        <button @click="open = !open" class="flex justify-between items-center w-full px-4 py-3 text-left focus:outline-none">
+                            <div class="flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                                <span class="text-sm font-medium text-gray-200">
+                                    Model: <span class="text-blue-400">{{ $currentModel->version_date->format('Y-m-d') ?? 'Unknown' }}</span>
+                                    <!-- Show order if available -->
+                                    @if(isset($currentModel) && isset($currentModel->order_p))
+                                        <span class="text-gray-400 ml-1">(ARIMA({{ $currentModel->order_p }},{{ $currentModel->order_d }},{{ $currentModel->order_q }}))</span>
+                                    @endif
+                                </span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <!-- Model Freshness Indicator -->
+                                @if(isset($currentModel) && $currentModel->last_data_date)
+                                    @php
+                                        $daysSinceUpdate = \Carbon\Carbon::parse($currentModel->last_data_date)->diffInDays(\Carbon\Carbon::now());
+                                    @endphp
+
+                                    @if($daysSinceUpdate < 30)
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-900 text-green-300">
+                            <svg class="-ml-0.5 mr-1.5 h-2 w-2 text-green-400" fill="currentColor" viewBox="0 0 8 8">
+                                <circle cx="4" cy="4" r="3" />
+                            </svg>
+                            Recent
+                        </span>
+                                    @elseif($daysSinceUpdate < 60)
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-900 text-yellow-300">
+                            <svg class="-ml-0.5 mr-1.5 h-2 w-2 text-yellow-400" fill="currentColor" viewBox="0 0 8 8">
+                                <circle cx="4" cy="4" r="3" />
+                            </svg>
+                            Moderate
+                        </span>
+                                    @else
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-900 text-red-300">
+                            <svg class="-ml-0.5 mr-1.5 h-2 w-2 text-red-400" fill="currentColor" viewBox="0 0 8 8">
+                                <circle cx="4" cy="4" r="3" />
+                            </svg>
+                            Needs Update
+                        </span>
+                                    @endif
+                                @endif
+
+                                <!-- Dropdown Arrow -->
+                                <svg :class="{'transform rotate-180': open}" class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                        </button>
+                        <div x-show="open" x-collapse>
+                            <div class="px-4 pt-0 pb-4">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                                    <!-- Training Information -->
+                                    <div class="bg-gray-700/50 p-3 rounded">
+                                        <h4 class="text-xs text-gray-400 uppercase mb-1">Training</h4>
+                                        <p class="text-sm text-gray-200">
+                                            Trained: {{ isset($currentModel) && $currentModel->training_date ? $currentModel->training_date->format('Y-m-d') : 'Unknown' }}
+                                        </p>
+                                        <p class="text-sm text-gray-200">
+                                            Last Data: {{ isset($currentModel) && $currentModel->last_data_date ? $currentModel->last_data_date->format('Y-m-d') : 'Unknown' }}
+                                        </p>
+                                    </div>
+
+                                    <!-- Model Metrics -->
+                                    <div class="bg-gray-700/50 p-3 rounded">
+                                        <h4 class="text-xs text-gray-400 uppercase mb-1">Metrics</h4>
+                                        <div class="grid grid-cols-2 gap-2">
+                                            <p class="text-sm text-gray-200">AIC: <span class="text-blue-300">{{ isset($currentModel) && $currentModel->aic ? number_format($currentModel->aic, 2) : 'N/A' }}</span></p>
+                                            <p class="text-sm text-gray-200">BIC: <span class="text-blue-300">{{ isset($currentModel) && $currentModel->bic ? number_format($currentModel->bic, 2) : 'N/A' }}</span></p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Notes -->
+                                    <div class="bg-gray-700/50 p-3 rounded">
+                                        <h4 class="text-xs text-gray-400 uppercase mb-1">Notes</h4>
+                                        <p class="text-sm text-gray-200 line-clamp-2">
+                                            {{ isset($currentModel) && $currentModel->notes ? $currentModel->notes : 'No additional information.' }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Chart Container -->
                 <div class="bg-gray-900 p-4 rounded-lg mb-8">
                     <div wire:ignore

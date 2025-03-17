@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\ARIMAModelVersion;
 use Livewire\Component;
 use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Facades\Log;
@@ -14,9 +15,11 @@ class TBForecastTable extends Component
     public $isLoading = false;
     public $error = null;
     public $lastUpdated;
+    public $currentModel = null;
 
     public function mount()
     {
+        $this->currentModel = ARIMAModelVersion::latest()->first();
         $this->lastUpdated = now()->format('Y-m-d H:i:s');
         $this->generateForecast();
     }
@@ -28,7 +31,7 @@ class TBForecastTable extends Component
 
         try {
             // Call Python script
-            $process = Process::timeout(60)->run('python ' . '../python_scripts/forecast.py' . ' ' . json_encode($this->forecastMonths));
+            $process = Process::timeout(60)->run('python ' . '../python_scripts/forecast.py' . ' ' . json_encode($this->forecastMonths) . ' ' . $this->currentModel->file_path);
 
             if ($process->failed()) {
                 throw new \Exception("Python process failed: " . $process->errorOutput());

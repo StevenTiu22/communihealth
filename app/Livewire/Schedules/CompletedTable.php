@@ -25,7 +25,10 @@ class CompletedTable extends Component
     {
         $appointment_queues = AppointmentQueue::query()
             ->where('queue_status', 'completed')
-            ->with(['appointment', 'appointment.patient', 'appointment.doctor', 'appointment.appointmentType']);
+            ->with(['appointment', 'appointment.patient', 'appointment.doctor', 'appointment.appointmentType'])
+            ->whereHas('appointment', function ($query) {
+                $query->where('appointment_date', '=', now()->format('Y-m-d'));
+            });
 
         if (! empty($this->search)) {
             $appointment_queues->whereHas('appointment.patient', function ($query) {

@@ -1,12 +1,9 @@
 import sys
 import json
 import joblib
-import os
-import pandas as pd
-import numpy as np
 from datetime import datetime, timedelta
 
-def forecast(data, model_path="../python_scripts/arima_model.pkl"):
+def forecast(data, model_path):
     try:
         # Load the model
         model = joblib.load(model_path)
@@ -65,9 +62,10 @@ if __name__ == "__main__":
         if len(sys.argv) > 1:
             json_input = sys.argv[1]
             data = json.loads(json_input)
+            model_path = '../python_scripts/' + sys.argv[2] if len(sys.argv) > 2 else 'model.pkl'  # Default model path
 
             # Call the forecast function with the number of months
-            result = forecast(data)
+            result = forecast(data, model_path)
 
             # Output the result
             print(json.dumps(result))
