@@ -1,6 +1,6 @@
 <x-app-layout :title="$title">
     <div class="flex justify-between items-center">
-        <h2 class="font-semibold text-xl text-white leading-tight">
+        <h2 class="font-semibold text-xl text-gray-900 dark:text-white leading-tight">
             {{ __('Patient and Disease Demographics') }}
         </h2>
     </div>

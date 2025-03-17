@@ -32,7 +32,7 @@
                         {{ $log->created_at->format('Y-m-d H:i:s') }}
                     </th>
                     <td class="px-6 py-4">
-                        {{ $log->causer ? $log->causer->name : 'System' }}
+                        {{ $log->causer ? $log->causer->username : 'System' }}
                     </td>
                     <td class="px-6 py-4">
                         {{ ucfirst($log->description) }}
