@@ -9,9 +9,10 @@
             @role('bhw')
                 <livewire:medicine-transaction.dispense />
             @endrole
+                <livewire:medicine-transaction.generate-report />
             </div>
 
-            <livewire:medicine-transaction.generate-report />
+
         </div>
 
         <!-- Search and Filter Section -->
