@@ -62,7 +62,7 @@ if __name__ == "__main__":
         if len(sys.argv) > 1:
             json_input = sys.argv[1]
             data = json.loads(json_input)
-            model_path = '../python_scripts/' + sys.argv[2] if len(sys.argv) > 2 else 'model.pkl'  # Default model path
+            model_path = '../python_scripts/' + sys.argv[2] if len(sys.argv) > 2 else '../python_scripts/arima-model.pkl'  # Default model path
 
             # Call the forecast function with the number of months
             result = forecast(data, model_path)

@@ -60,7 +60,7 @@ class Table extends Component
             ->whereNotNull('treatment_record_id')
             ->whereNotNull('vital_signs_id')
             ->with(['appointmentType', 'patient', 'doctor', 'bhw', 'treatmentRecord', 'vitalSign'])
-            ->orderBy('created_at', 'desc');
+            ->orderBy('appointment_date', 'desc');
 
         if (! empty($this->search)) {
             $query->where(function ($query) {

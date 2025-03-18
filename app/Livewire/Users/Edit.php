@@ -31,10 +31,11 @@ class Edit extends Component
 
         // Fill the form with the existing basic information
         $this->form->user_id = $user_id;
+
         $this->form->fill($this->user->toArray());
 
         // Fill the form with the address information
-        if ($this->user->address)
+        if (! isset($this->user->address))
         {
             $this->form->fill($this->user->address->toArray());
         }

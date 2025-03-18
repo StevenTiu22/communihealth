@@ -90,46 +90,48 @@
                     </div>
                 </div>
 
-                <!-- Right Half - Address Information -->
-                <div class="col-span-1">
-                    <h2 class="text-lg font-medium mb-4 text-white">Address Information</h2>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="col-span-1">
-                            <h3 class="font-medium text-gray-300">House Number</h3>
-                            <p class="mt-1 text-white capitalize">{{ $address->house_number ?: 'N/A' }}</p>
-                        </div>
+                @if($patient->address)
+                    <!-- Right Half - Address Information -->
+                    <div class="col-span-1">
+                        <h2 class="text-lg font-medium mb-4 text-white">Address Information</h2>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="col-span-1">
+                                <h3 class="font-medium text-gray-300">House Number</h3>
+                                <p class="mt-1 text-white capitalize">{{ $address->house_number ?: 'N/A' }}</p>
+                            </div>
 
-                        <div class="col-span-1">
-                            <h3 class="font-medium text-gray-300">Street</h3>
-                            <p class="mt-1 text-white capitalize">{{ $address->street ?: 'N/A' }}</p>
-                        </div>
+                            <div class="col-span-1">
+                                <h3 class="font-medium text-gray-300">Street</h3>
+                                <p class="mt-1 text-white capitalize">{{ $address->street ?: 'N/A' }}</p>
+                            </div>
 
-                        <div class="col-span-1">
-                            <h3 class="font-medium text-gray-300">Barangay</h3>
-                            <p class="mt-1 text-white capitalize">{{ $address->barangay ?: 'N/A' }}</p>
-                        </div>
+                            <div class="col-span-1">
+                                <h3 class="font-medium text-gray-300">Barangay</h3>
+                                <p class="mt-1 text-white capitalize">{{ $address->barangay ?: 'N/A' }}</p>
+                            </div>
 
-                        <div class="col-span-1">
-                            <h3 class="font-medium text-gray-300">City</h3>
-                            <p class="mt-1 text-white capitalize">{{ $address->city ?: 'N/A' }}</p>
-                        </div>
+                            <div class="col-span-1">
+                                <h3 class="font-medium text-gray-300">City</h3>
+                                <p class="mt-1 text-white capitalize">{{ $address->city ?: 'N/A' }}</p>
+                            </div>
 
-                        <div class="col-span-1">
-                            <h3 class="font-medium text-gray-300">Province</h3>
-                            <p class="mt-1 text-white capitalize">{{ $address->province ?: 'N/A' }}</p>
-                        </div>
+                            <div class="col-span-1">
+                                <h3 class="font-medium text-gray-300">Province</h3>
+                                <p class="mt-1 text-white capitalize">{{ $address->province ?: 'N/A' }}</p>
+                            </div>
 
-                        <div class="col-span-1">
-                            <h3 class="font-medium text-gray-300">Region</h3>
-                            <p class="mt-1 text-white capitalize">{{ $address->region ?: 'N/A' }}</p>
-                        </div>
+                            <div class="col-span-1">
+                                <h3 class="font-medium text-gray-300">Region</h3>
+                                <p class="mt-1 text-white capitalize">{{ $address->region ?: 'N/A' }}</p>
+                            </div>
 
-                        <div class="col-span-2">
-                            <h3 class="font-medium text-gray-300">Country</h3>
-                            <p class="mt-1 text-white capitalize">{{ $address->country ?: 'N/A' }}</p>
+                            <div class="col-span-2">
+                                <h3 class="font-medium text-gray-300">Country</h3>
+                                <p class="mt-1 text-white capitalize">{{ $address->country ?: 'N/A' }}</p>
+                            </div>
                         </div>
                     </div>
-                </div>
+                @endif
 
                 <div class="col-span-2">
                     <div class="mt-8">

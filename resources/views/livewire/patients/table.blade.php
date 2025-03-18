@@ -23,7 +23,7 @@
                                     </div>
                                 </td>
                                 <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    {{ $patient->address->full_address }}
+                                    {{ $patient->address->full_address ?? 'N/A' }}
                                 </td>
                                 <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     {{ $patient->age }}

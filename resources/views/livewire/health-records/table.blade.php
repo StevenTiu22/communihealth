@@ -146,9 +146,6 @@
                             </ul>
                         </div>
                     </td>
-                    <livewire:health-records.show :wire:key="'show-'.$record->id" />
-                    <livewire:health-records.edit-vital-sign :wire:key="'edit-vital-sign-'.$record->id" />
-                    <livewire:health-records.edit-treatment-record :wire:key="'edit-treatment-record-'.$record->id" />
                 </tr>
             @empty
                 <tr>
@@ -160,6 +157,10 @@
             </tbody>
         </table>
     </div>
+
+    <livewire:health-records.show />
+    <livewire:health-records.edit-vital-sign />
+    <livewire:health-records.edit-treatment-record />
 
     <!-- Pagination -->
     <div class="bg-gray-800 px-4 py-3 border-t border-gray-600">
