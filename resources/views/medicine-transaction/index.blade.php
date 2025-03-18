@@ -5,7 +5,10 @@
                 {{ __('Medicine Transactions') }}
             </h2>
             @role('bhw')
-            <livewire:medicine-transaction.dispense />
+            <div class="flex items-center space-x-3 mr-6">
+                <livewire:medicine-transaction.generate-report />
+                <livewire:medicine-transaction.dispense />
+            </div>
             @endrole
         </div>
 

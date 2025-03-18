@@ -19,7 +19,7 @@ class MedicineCategory extends Model
     // Relationships
     public function medicines(): HasMany
     {
-        return $this->hasMany(Medicine::class);
+        return $this->hasMany(Medicine::class, 'category_id');
     }
 
     // Accessors & Mutators

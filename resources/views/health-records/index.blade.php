@@ -4,6 +4,7 @@
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 ml-8">
                 {{__('Health Records')}}
             </h2>
+            <livewire:health-records.generate-report />
         </div>
 
         <div class="w-full mx-auto sm:px-6 lg:px-8">
