@@ -31,7 +31,11 @@ class TBForecastTable extends Component
 
         try {
             // Call Python script
-            $process = Process::timeout(60)->run('python ' . '../python_scripts/forecast.py' . ' ' . json_encode($this->forecastMonths) . ' ' . $this->currentModel->file_path);
+            if ($this->currentModel) {
+                $process = Process::timeout(60)->run('python ' . '../python_scripts/forecast.py' . ' ' . json_encode($this->forecastMonths) . ' ' . $this->currentModel->file_path);
+            } else {
+                $process = Process::timeout(60)->run('python ' . '../python_scripts/forecast.py' . ' ' . json_encode($this->forecastMonths));
+            }
 
             if ($process->failed()) {
                 throw new \Exception("Python process failed: " . $process->errorOutput());

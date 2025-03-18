@@ -29,41 +29,60 @@ class Edit extends Component
     {
         $this->patient = Patient::find($patient_id);
 
-        $this->form->fill($this->patient->toArray());
+        $patient_data = $this->patient->toArray();
 
-        $this->form->fill($this->patient->address->toArray());
-
-        $mother = $this->patient->parents->where('pivot.relationship', 'mother')->first();
-
-        // Check if mother record exists before accessing properties
-        if ($mother) {
-            $this->form->mother_id = $mother->id;
-            $this->form->mother_first_name = $mother->first_name;
-            $this->form->mother_middle_name = $mother->middle_name;
-            $this->form->mother_last_name = $mother->last_name;
-            $this->form->mother_philhealth = $mother->philhealth_no;
+        if ($patient_data['middle_name'] == null) {
+            $patient_data['middle_name'] = '';
         }
 
-        $mother = $this->patient->parents->where('pivot.relationship', 'mother')->first();
-
-        // Check if mother record exists before accessing properties
-        if ($mother) {
-            $this->form->mother_id = $mother->id;
-            $this->form->mother_first_name = $mother->first_name;
-            $this->form->mother_middle_name = $mother->middle_name;
-            $this->form->mother_last_name = $mother->last_name;
-            $this->form->mother_philhealth = $mother->philhealth_no;
+        if ($patient_data['profile_photo_path'] == null) {
+            $patient_data['profile_photo_path'] = '';
         }
 
-        $father = $this->patient->parents->where('pivot.relationship', 'father')->first();
+        $this->form->fill($patient_data);
 
-        // Check if father record exists before accessing properties
-        if ($father) {
-            $this->form->father_id = $father->id;
-            $this->form->father_first_name = $father->first_name;
-            $this->form->father_middle_name = $father->middle_name;
-            $this->form->father_last_name = $father->last_name;
-            $this->form->father_philhealth = $father->philhealth_no;
+        if(isset($this->patient->address)) {
+            $this->form->house_number = '';
+            $this->form->street = '';
+            $this->form->barangay = '';
+            $this->form->city = '';
+            $this->form->province = '';
+            $this->form->country = '';
+        }
+
+        if (isset($this->patient->parents)) {
+            $mother = $this->patient->parents->where('pivot.relationship', 'mother')->first();
+
+            // Check if mother record exists before accessing properties
+            if ($mother) {
+                $this->form->mother_id = $mother->id;
+                $this->form->mother_first_name = $mother->first_name;
+                $this->form->mother_middle_name = $mother->middle_name;
+                $this->form->mother_last_name = $mother->last_name;
+                $this->form->mother_philhealth = $mother->philhealth_no;
+            }
+
+            $mother = $this->patient->parents->where('pivot.relationship', 'mother')->first();
+
+            // Check if mother record exists before accessing properties
+            if ($mother) {
+                $this->form->mother_id = $mother->id;
+                $this->form->mother_first_name = $mother->first_name;
+                $this->form->mother_middle_name = $mother->middle_name;
+                $this->form->mother_last_name = $mother->last_name;
+                $this->form->mother_philhealth = $mother->philhealth_no;
+            }
+
+            $father = $this->patient->parents->where('pivot.relationship', 'father')->first();
+
+            // Check if father record exists before accessing properties
+            if ($father) {
+                $this->form->father_id = $father->id;
+                $this->form->father_first_name = $father->first_name;
+                $this->form->father_middle_name = $father->middle_name;
+                $this->form->father_last_name = $father->last_name;
+                $this->form->father_philhealth = $father->philhealth_no;
+            }
         }
     }
 

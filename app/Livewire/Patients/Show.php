@@ -19,9 +19,15 @@ class Show extends Component
     public function mount($patient_id): void
     {
         $this->patient = Patient::findOrFail($patient_id);
-        $this->address = $this->patient->address;
-        $this->father = $this->patient->parents->where('pivot.relationship', 'father')->first();
-        $this->mother = $this->patient->parents->where('pivot.relationship', 'mother')->first();
+
+        if (isset($this->patient->address)) {
+            $this->address = $this->patient->address;
+        }
+
+        if (isset($this->patient->parents)) {
+            $this->father = $this->patient->parents->where('pivot.relationship', 'father')->first();
+            $this->mother = $this->patient->parents->where('pivot.relationship', 'mother')->first();
+        }
     }
 
     public function open(): void
